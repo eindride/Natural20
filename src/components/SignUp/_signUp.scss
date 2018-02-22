@@ -1,0 +1,41 @@
+.hidden {
+    display: none;
+}
+.wrapper {
+    background: lightgray;
+    width: fit-content;
+    padding: 25px;
+    border-radius: 10px;
+    border: 2px solid grey;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+
+    .signUpForm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        input {
+            height: 50px;
+            width: 300px;
+            margin-bottom: 25px;
+
+            padding: 12px;
+
+            font-size: 22px;
+        }
+
+        button {
+            width: fit-content;
+            padding: 12px;
+            font-size: 22px;
+        }
+    }
+
+    .error {
+        color: red;
+        display: block;
+    }
+}

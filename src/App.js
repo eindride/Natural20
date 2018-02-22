@@ -1,15 +1,40 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Main from './components/Main/Main';
+import { firebase, auth } from './firebase/index';
+
+import './App.scss';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      authUser: null,
+    }
+  }
+
+  componentDidMount() {
+    firebase.auth.onAuthStateChanged(authUser => {
+      authUser
+        ? this.setState((state) => ({
+          ...state,
+          authUser,
+        }))
+        : this.setState((state) => ({
+          ...state,
+          authUser: null
+        }));
+    });
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Buna Crina!</h1>
+          {/* <h1 className="App-title">Buna Crina!</h1> */}
+          <button type="button" onClick={auth.doSignOut}>Sign out</button>
         </header>
+        <Main authUser={this.state.authUser} />
       </div>
     );
   }
