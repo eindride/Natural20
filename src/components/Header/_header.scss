@@ -1,0 +1,59 @@
+@import "../../sass/variables.scss";
+
+header {
+  height: calc(35% + 75px);
+  .bar {
+    background-color: $main-color;
+    height: 25px;
+    padding: 25px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+      .buttonContainer {
+        .headerButton {
+          background: none;
+          border: none;
+          color: #fff;
+          font-size: $body;
+          cursor: pointer;
+          outline: none;
+        }
+        a:not(:last-child) {
+          border-right: 2px solid #fff;
+        }
+      }
+    }
+
+  .banner {
+    height: calc(100% - 75px);
+    background-color: lightgray;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .menuContainer {
+      height: fit-content;
+      display: flex;
+      justify-content: flex-end;
+      padding: 25px;
+
+      .menuItem {
+        background-color: rgba(0,0,0,.5);
+        border: none;
+        margin: 0 5px;
+        width: 100px;
+        height: 100px;
+        padding: 10px;
+        color: #fff;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+
+        outline: none;
+      }
+    }
+  }
+}

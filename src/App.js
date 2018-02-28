@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { firebase } from './firebase/index';
+
 import Main from './components/Main/Main';
-import { firebase, auth } from './firebase/index';
+import Header from './components/Header/Header';
 
 import './App.scss';
 
@@ -28,12 +30,10 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state.authUser);
     return (
       <div className="App">
-        <header className="App-header">
-          {/* <h1 className="App-title">Buna Crina!</h1> */}
-          <button type="button" onClick={auth.doSignOut}>Sign out</button>
-        </header>
+        <Header authUser={this.state.authUser} />
         <Main authUser={this.state.authUser} />
       </div>
     );

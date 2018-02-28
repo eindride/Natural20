@@ -53,6 +53,7 @@ class LogIn extends Component {
           console.log(error);
           this.setState({
             ...this.state,
+            password: '',
             error: error.message,
           });
         });
@@ -64,8 +65,8 @@ class LogIn extends Component {
       <div className="wrapper">
         <h1>Log In</h1>
         <form onSubmit={this.handleSubmit} className="logInForm" noValidate>
-          <input type="email" placeholder="Email" name="email" onInput={this.handleInput} />
-          <input type="password" placeholder="Password" name="password" onInput={this.handleInput} />
+          <input type="email" placeholder="Email" name="email" value={this.state.email} onInput={this.handleInput} />
+          <input type="password" placeholder="Password" name="password" value={this.state.password} onInput={this.handleInput} />
           <button type="submit">Log In</button>
         </form>
         <span className={"error " + (this.state.error && "hidden")}>{this.state.error}</span>
