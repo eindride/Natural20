@@ -42,6 +42,11 @@ class CharacterBuilder extends Component {
 
     const {
       characterName,
+      race,
+      characterClass,
+      background,
+      alignment,
+      level,
     } = this.state;
 
     const {
@@ -49,7 +54,12 @@ class CharacterBuilder extends Component {
     } = this.props;
 
     firebase.db.collection("characters").add({
-      characterName: characterName,
+      characterName,
+      race,
+      characterClass,
+      background,
+      alignment,
+      level,
       author: authUser.email,
     })
       .then(function (docRef) {
