@@ -1,7 +1,8 @@
 @import "../../sass/variables.scss";
 
 header {
-  height: calc(35% + 75px);
+  // height: calc(35% + 75px);
+  height: 75px;
   .bar {
     background-color: $main-color;
     height: 25px;

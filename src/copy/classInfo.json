@@ -1,5 +1,312 @@
-{
-    "class": [
-        {}
+[
+  {
+    "name": "Barbarian",
+    "classCopy": "People of towns and cities take pride in how their civilized ways set them apart from animals, as if denying one’s own nature was a mark of superiority. To a barbarian, though, civilization is no virtue, but a sign of weakness. The strong embrace their animal nature—keen instincts, primal physicality, and ferocious rage. Barbarians are uncomfortable when hedged in by walls and crowds. They thrive in the wilds of their homelands: the tundra, jungle, or grasslands where their tribes live and hunt. Barbarians come alive in the chaos of combat. They can enter a berserk state where rage takes over, giving them superhuman strength and resilience. A barbarian can draw on this reservoir of fury only a few times without resting, but those few rages are usually sufficient to defeat whatever threats arise.",
+    "hitDice": "1d12",
+    "startingHitPoints": 12,
+    "mediumHitPointsIncrease": 7,
+    "proficiencies": {
+      "armor": {
+        "fixed": [
+          "Light Armor",
+          "Medium Armor",
+          "Shields"
+        ]
+      },
+      "weapons": {
+        "fixed": [
+          "Simple Weapons",
+          "Martial Weapons"
+        ]
+      },
+      "tools": {
+        "fixed": []
+      },
+      "skills": {
+        "choose": [
+          2
+        ],
+        "from": [
+          [
+            "Animal Handling",
+            "Athletics",
+            "Intimidation",
+            "Nature",
+            "Perception",
+            "Survival"
+          ]
+        ]
+      }
+    },
+    "savingThrows": [
+      "Strength",
+      "Constitution"
+    ],
+    "equipment": {
+      "fixed": [
+        "an explorer's pack",
+        "4 javelins"
+      ]
+    },
+    "weapons": {
+      "fixed": [
+        "Javelin"
+      ],
+      "choose": [
+        1,
+        1
+      ],
+      "from": [
+        [
+          "greataxe",
+          "battleaxe",
+          "flail",
+          "glaive",
+          "greatsword",
+          "halberd",
+          "lance",
+          "longsword",
+          "maul",
+          "morningstar",
+          "pike",
+          "rapier",
+          "scimitar",
+          "shortsword",
+          "trident",
+          "war pick",
+          "warhammer",
+          "whip"
+        ],
+        [
+          "2 handaxe",
+          "club",
+          "dagger",
+          "greatclub",
+          "javelin",
+          "light hammer",
+          "mace",
+          "quarterstaff",
+          "sickle",
+          "spear"
+        ]
+      ]
+    },
+    "additionalFeatsToBePrinted": [
+      {
+        "level": 1,
+        "name": "Rage",
+        "body": "In battle, you fight with primal ferocity. On Your Turn, you can enter a rage as a Bonus Action. \nWhile raging, you gain the following benefits if you aren't wearing heavy armor:\n* You have advantage on Strength Checks and Strength saving throws.\n* When you make a melee weapon Attack using Strength, you gain a +2 bonus to the damage roll. This bonus increases as you level.\n* You have Resistance to bludgeoning, piercing, and slashing damage.\nIf you are able to cast Spells, you can't cast them or concentrate on them while raging.\nYour rage lasts for 1 minute. It ends early if you are knocked Unconscious or if Your Turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on Your Turn as a Bonus Action.\nOnce you have raged the maximum number of times for your barbarian level, you must finish a Long Rest before you can rage again. You may rage 2 times at 1st level, 3 at 3rd, 4 at 6th, 5 at 12th, and 6 at 17th."
+      },
+      {
+        "level": 1,
+        "name": "Unarmored defense",
+        "body": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a Shield and still gain this benefit."
+      },
+      {
+        "level": 2,
+        "name": "Reckless attack",
+        "body": "Starting at 2nd level, you can throw aside all concern for defense to Attack with fierce desperation. When you make your first Attack on Your Turn, you can decide to Attack recklessly. Doing so gives you advantage on melee weapon Attack rolls using Strength during this turn, but Attack rolls against you have advantage until your next turn."
+      },
+      {
+        "level": 2,
+        "name": "Danger sense",
+        "body": "At 2nd level, you gain an uncanny sense of when things nearby aren't as they should be, giving you an edge when you dodge away from danger.\nYou have advantage on Dexterity saving throws against effects that you can see, such as traps and Spells. To gain this benefit, you can't be Blinded, Deafened, or Incapacitated."
+      },
+      {
+        "level": 5,
+        "name": "Extra Attack",
+        "body": "Beginning at 5th level, you can Attack twice, instead of once, whenever you take the Attack action on Your Turn."
+      },
+      {
+        "level": 5,
+        "name": "Fast movement",
+        "body": "Starting at 5th level, your speed increases by 10 feet while you aren't wearing Heavy Armor."
+      },
+      {
+        "level": 7,
+        "name": "Feral instinct",
+        "body": "By 7th level, your instincts are so honed that you have advantage on initiative rolls.\nAdditionally, if you are surprised at the beginning of Combat and aren't Incapacitated, you can act normally on your first turn, but only if you enter your rage before doing anything else on that turn."
+      },
+      {
+        "level": 9,
+        "name": "Brutal critical",
+        "body": "Beginning at 9th level, you can roll one additional weapon damage die when determining the extra damage for a critical hit with a melee Attack.\nThis increases to two additional dice at 13th level and three additional dice at 17th level."
+      },
+      {
+        "level": 11,
+        "name": "Relentless rage",
+        "body": "Starting at 11th level, your rage can keep you fighting despite grievous wounds. If you drop to 0 hit points while you're raging and don't die outright, you can make a DC 10 Constitution saving throw. If you succeed, you drop to 1 hit point instead.\nEach time you use this feature after the first, the DC increases by 5. When you finish a short or Long Rest, the DC resets to 10."
+      },
+      {
+        "level": 15,
+        "name": "Persistent rage",
+        "body": "Beginning at 15th level, your rage is so fierce that it ends early only if you fall Unconscious or if you choose to end it."
+      },
+      {
+        "level": 18,
+        "name": "Indomitable might",
+        "body": "Beginning at 18th level, if your total for a Strength check is less than your Strength score, you can use that score in place of the total."
+      },
+      {
+        "level": 20,
+        "name": "Primal champion",
+        "body": "At 20th level, you embody the power of the wilds. Your Strength and Constitution scores increase by 4. Your maximum for those scores is now 24."
+      }
+    ],
+    "additionalFeats": [
+      {
+        "level": 3,
+        "name": "Primal path",
+        "body": "At 3rd level. you choose a path that shapes the nature of your rage. Choose the Path of the Berserker or the Path of the Totem Warrior. Your choice grants you features at 3rd level and again at 6th, 10th, and 14th levels."
+      }
+    ],
+    "classPath": {
+      "name": "Primal paths",
+      "classPathCopy": "Rage burns in every barbarian's heart, a furnace that drives him or her toward greatness. Different barbarians attribute their rage to different sources, however. For some, it is an internai reservoir where pain, grief, and anger are forged into a fury hard as steel. Others see it as a spiritual blessing, a gift of a totem animal.",
+      "paths": [
+        {
+          "name": "Path of the berserker",
+          "pathCopy": "For some barbarians, rage is a means to an end— that end being violence. The Path of the Berserker is a path of untrammeled fury, slick with blood. As you enter the berserker’s rage, you thrill in the chaos of battle, heedless of your own health or well-being.",
+          "additionalFeatsToBePrinted": [
+            {
+              "level": 3,
+              "name": "Frenzy",
+              "body": "Starting when you choose this path at 3rd level, you can go into a frenzy when you rage. If you do so, for the Duration of your rage you can make a single melee weapon Attack as a Bonus Action on each of your turns after this one. When your rage ends, you suffer one level of Exhaustion (as described in Conditions)."
+            },
+            {
+              "level": 6,
+              "name": "Mindless rage",
+              "body": "Beginning at 6th level, you can’t be Charmed or Frightened while raging. If you are Charmed or Frightened when you enter your rage, the effect is suspended for the Duration of the rage."
+            },
+            {
+              "level": 10,
+              "name": "Intimidating presence",
+              "body": "Beginning at 10th level, you can use your action to frighten someone with your menacing presence. When you do so, choose one creature that you can see within 30 feet of you. If the creature can see or hear you, it must succeed on a Wisdom saving throw (DC equal to 8 + your proficiency bonus + your Charisma modifier) or be Frightened of you until the end of your next turn. On subsequent turns, you can use your action to extend the Duration of this effect on the Frightened creature until the end of your next turn. This effect ends if the creature ends its turn out of line of sight or more than 60 feet away from you.\nIf the creature succeeds on its saving throw, you can’t use this feature on that creature again for 24 hours."
+            },
+            {
+              "level": 14,
+              "name": "Retaliation",
+              "body": "Starting at 14th level, when you take damage from a creature that is within 5 feet of you, you can use your reaction to make a melee weapon Attack against that creature."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Bard",
+    "classCopy": "In the worlds of D&D, words and music are not just vibrations of air, but vocalizations with power all their own. The bard is a master of song, speech, and the magic they contain. Bards say that the multiverse was spoken into existence, that the words of the gods gave it shape, and that echoes of these primordial Words of Creation still resound throughout the cosmos. The music of bards is an attempt to snatch and harness those echoes, subtly woven into their spells and powers.",
+    "hitDice": "1d8",
+    "startingHitPoints": 8,
+    "mediumHitPointsIncrease": 5,
+    "proficiencies": {
+      "armor": {
+        "fixed": [
+          "Light armor"
+        ]
+      },
+      "weapons": {
+        "fixed": [
+          "Simple Weapons",
+          "Hand crossbows",
+          "Longswords",
+          "Rapiers",
+          "Shortswords"
+        ]
+      },
+      "tools": {
+        "choose": [
+          3
+        ],
+        "from": [
+          [
+            "Bagpipes",
+            "Drum",
+            "Dulcimer",
+            "Flute",
+            "Lute",
+            "Lyre",
+            "Horn",
+            "Pan flute",
+            "Shawn",
+            "Viol"
+          ]
+        ]
+      },
+      "skills": {
+        "choose": [
+          3
+        ],
+        "from": [
+          [
+            "Acrobatics",
+            "Animal Handling",
+            "Arcana",
+            "Athletics",
+            "Deception",
+            "History",
+            "Insight",
+            "Intimidation",
+            "Investigation",
+            "Medicine",
+            "Nature",
+            "Perception",
+            "Performance",
+            "Persuasion",
+            "Religion",
+            "Sleight of hand",
+            "Stealth",
+            "Survival"
+          ]
+        ]
+      }
+    },
+    "savingThrows": [
+      "Dexterity",
+      "Charisma"
+    ],
+    "equipment": {
+      "choose": [
+        1,
+        1
+      ],
+      "from": [
+        [
+          "a diplomat's pack",
+          "an entertainer's pack"
+        ],
+        [
+          "a lute",
+          "any instrument"
+        ]
+      ]
+    },
+    "weapons": {
+      "fixed": [
+        "dagger"
+      ],
+      "choose": [
+        1
+      ],
+      "from": [
+        [
+          "rapier",
+          "longsword",
+          "any simple"
+        ]
+      ]
+    },
+    "armor": {
+      "fixed": [
+        "leather armor"
+      ]
+    },
+    "additionalFeatsToBePrinted": [
+      {
+        "level": 1,
+        "name": "Bardic inspiration",
+        "body": "You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6.\n* Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.\n* You can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest.\n* Your Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level."
+      }
     ]
-}
+  }
+]

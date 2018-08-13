@@ -1,29 +1,78 @@
-{
-    "race": [
-        {
-            "name": "Human",
-            "abilityScoreIncreaseCopy": "Your ability scores each increase by 1.",
-            "abilityScoreIncrease": {
-                "strength": 1,
-                "dexterity": 1,
-                "constitution": 1,
-                "intelligence": 1,
-                "wisdom": 1,
-                "charisma": 1
+[
+    {
+        "name": "Human",
+        "raceCopy": "In the reckonings of most worlds, humans are the youngest of the common races, late to arrive on the world scene and short-lived in comparison to dwarves, elves, and dragons. Perhaps it is because of their shorter lives that they strive to achieve as much as they can in the years they are given. Or maybe they feel they have something to prove to the elder races, and that’s why they build their mighty empires on the foundation of conquest and trade. Whatever drives them, humans are the innovators, the achievers, and the pioneers of the worlds.",
+        "abilityScoreIncreaseCopy": "Your ability scores each increase by 1.",
+        "abilityScoreIncrease": {
+            "strength": 1,
+            "dexterity": 1,
+            "constitution": 1,
+            "intelligence": 1,
+            "wisdom": 1,
+            "charisma": 1
+        },
+        "ageCopy": "Humans reach adulthood in their late teens and live less than a century.",
+        "alignmentCopy": "Humans tend toward no particular alignment. The best and the worst are found among them.",
+        "alignmentRestriction": [],
+        "sizeCopy": "Humans vary widely in height and build, from barely 5 feet to well over 6 feet tall. Regardless of your position in that range, your size is Medium.",
+        "size": "medium",
+        "baseHeight": 5,
+        "speedCopy": "Your base walking speed is 30 feet.",
+        "speed": 30,
+        "languagesCopy": "You can speak, read, and write Common and one extra language of your choice. Humans typically learn the languages of other peoples they deal with, including obscure dialects. They are fond of sprinkling their speech with words borrowed from other tongues: Orc curses, Elvish musical expressions, Dwarvish military phrases, and so on.",
+        "languages": [
+            "Common"
+        ],
+        "languagesOfChoice": 1
+    },
+    {
+        "name": "Elf",
+        "raceCopy": "Elves are a magical people of otherworldly grace, living in the world but not entirely part of it. They live in places of ethereal beauty, in the midst of ancient forests or in silvery spires glittering with faerie light, where soft music drifts through the air and gentle fragrances waft on the breeze. Elves love nature and magic, art and artistry, music and poetry, and the good things of the world.",
+        "abilityScoreIncreaseCopy": "Your Dexterity score increases by 2.",
+        "abilityScoreIncrease": {
+            "strength": 0,
+            "dexterity": 2,
+            "constitution": 0,
+            "intelligence": 0,
+            "wisdom": 0,
+            "charisma": 0
+        },
+        "ageCopy": "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.",
+        "alignmentCopy": "Elves love freedom, variety, and self-expression, so they lean strongly toward the gentler aspects of chaos. They value and protect others’ freedom as well as their own, and they are more often good than not. The drow are an exception; their exile into the Underdark has made them vicious and dangerous. Drow are more often evil than not.",
+        "alignmentRestriction": [],
+        "sizeCopy": "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.",
+        "size": "medium",
+        "baseHeight": 5,
+        "speedCopy": "Your base walking speed is 30 feet.",
+        "speed": 30,
+        "languagesCopy": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.",
+        "languages": [
+            "Common",
+            "Elvish"
+        ],
+        "languagesOfChoice": 0,
+        "proficiencies": {
+            "skills": {
+                "fixed": [
+                    "perception"
+                ]
+            }
+        },
+        "additionalFeatsToBePrinted": [
+            {
+                "name": "Fey Ancestry",
+                "body": "You have advantage on saving throws against being charmed, and magic can’t put you to sleep."
             },
-            "ageCopy": "Humans reach adulthood in their late teens and live less than a century.",
-            "alignmentCopy": "Humans tend toward no particular alignment. The best and the worst are found among them.",
-            "alignmentRestriction": [],
-            "sizeCopy": "Humans vary widely in height and build, from barely 5 feet to well over 6 feet tall. Regardless of your position in that range, your size is Medium.",
-            "size": "medium",
-            "baseHeight": 5,
-            "speedCopy": "Your base walking speed is 30 feet.",
-            "speed": 30,
-            "languagesCopy": "You can speak, read, and write Common and one extra language of your choice. Humans typically learn the languages of other peoples they deal with, including obscure dialects. They are fond of sprinkling their speech with words borrowed from other tongues: Orc curses, Elvish musical expressions, Dwarvish military phrases, and so on.",
-            "languages": [
-                "Common"
-            ],
-            "languagesOfChoice": 1
-        }
-    ]
-}
+            {
+                "name": "Trance",
+                "body": "Elves don’t need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is “trance.”) While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep."
+            }
+        ],
+        "additionalFeats": [
+            {
+                "name": "Keen senses",
+                "body": "You have proficiency in the Perception skill."
+            }
+        ]
+    }
+]
