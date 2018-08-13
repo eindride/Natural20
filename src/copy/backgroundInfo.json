@@ -1,0 +1,77 @@
+[
+    {
+        "name": "Acolyte",
+        "backgroundCopy": "You have spent your life in the service of a temple to a specific god or pantheon of gods.You act as an intermediary between the realm of the holy and the mortal world, performing sacred rites and offering sacrifices in order to conduct worshipers into the presence of the divine.You are not necessarily a cleric - performing sacred rites is not the same thing as channeling divine power. Choose a god, a pantheon of gods, or some other quasi-divine being from among those listed in appendix B or those specified by your DM, and work with your DM to detail the nature of your religious service. Were you a lesser functionary in a temple, raised from childhood to assist the priests in the sacred rites? Or were you a high priest who suddenly experienced a call to serve your god in a different way? Perhaps you were the leader of a small cult outside of any established temple structure, or even an occult group that served a fiendish master that you now deny.",
+        "proficiencies": {
+            "skills": {
+                "fixed": [
+                    "Insight",
+                    "Religion"
+                ]
+            }
+        },
+        "languagesOfChoice": 2,
+        "equipment": {
+            "fixed": [
+                "a holy symbol",
+                "a prayer book",
+                "5 sticks of incense",
+                "vestments",
+                "a set of common clothes",
+                "a belt pouch"
+            ]
+        },
+        "gp": 15,
+        "additionalFeatsToBePrinted": [
+            {
+                "name": "Shelter of the faithful",
+                "body": "As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+            }
+        ],
+        "suggestedCharacteristicsCopy": "Acolytes are shaped by their experience in temples or other religious communities. Their study of the history and tenets of their faith and their relationships to temples, shrines, or hierarchies affect their mannerisms and ideals. Their flaws might be some hidden hypocrisy or heretical idea, or an ideal or bond taken to an extreme."
+    },
+    {
+        "name": "Charlatan",
+        "backgroundCopy": "You have always had a way with people.You know what makes them tick, you can tease out their heart’s desires after a few minutes of conversation, and with a few leading questions you can read them like they were children's books. It’s a useful talent, and one that you’re perfectly willing to use for your advantage. You know what people want and you deliver, or rather, you promise to deliver. Common sense should steer people away from things that sound too good to be true, but common sense seems to be in short supply when you’re around. The bottle of pink coloured liquid will surely cure that unseemly rash, this ointment—nothing more than a bit of fat with a sprinkle of silver dust—can restore youth and vigor, and there’s a bridge in the city that just happens to be for sale. These marvels sound implausible, but you make them sound like the real deal.",
+        "proficiencies": {
+            "skills": {
+                "fixed": [
+                    "Deception",
+                    "Sleight of Hand"
+                ]
+            },
+            "tools": {
+                "fixed": [
+                    "Disguise kit",
+                    "Forgery kit"
+                ]
+            }
+        },
+        "equipment": {
+            "fixed": [
+                "a set of fine clothes",
+                "a desguise kit",
+                "a belt pouch"
+            ],
+            "choose": [
+                1
+            ],
+            "from": [
+                [
+                    "ten stoppered bottles filled with colored liquid",
+                    "a set of weighted dice",
+                    "a deck of marked cards",
+                    "a signet ring of an imaginary duke"
+                ]
+            ]
+        },
+        "gp": 15,
+        "additionalFeatsToBePrinted": [
+            {
+                "name": "False identity",
+                "body": "You have created a second identity that includes documentation, established acquaintances, and disguises that allow you to assume that persona. Additionally, you can forge documents including official papers and personal letters, as long as you have seen an example of the kind of document or the handwriting you are trying to copy."
+            }
+        ],
+        "suggestedCharacteristicsCopy": "Charlatans are colorful characters who conceal their true selves behind the masks they construct. They reflect what people want to see, what they want to believe, and how they see the world. But their true selves are sometimes plagued by an uneasy conscience, an old enemy, or deep-seated trust issues."
+    }
+]

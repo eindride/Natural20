@@ -1,43 +1,46 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from "react-redux";
 import { firebase } from './firebase/index';
 
 import Main from './components/Main/Main';
 import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+
+import { setLoggedInUser } from './actions';
 
 import './App.scss';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+	componentDidMount() {
+		const {
+			setLoggedInUser
+		} = this.props;
+		firebase.auth.onAuthStateChanged(authUser => {
+			authUser
+				? setLoggedInUser(authUser)
+				: setLoggedInUser(null);
+		});
+	}
 
-    this.state = {
-      authUser: null,
-    }
-  }
-
-  componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser => {
-      authUser
-        ? this.setState((state) => ({
-          ...state,
-          authUser,
-        }))
-        : this.setState((state) => ({
-          ...state,
-          authUser: null
-        }));
-    });
-  }
-
-  render() {
-    console.log(this.state.authUser);
-    return (
-      <div className="App">
-        <Header authUser={this.state.authUser} />
-        <Main authUser={this.state.authUser} />
-      </div>
-    );
-  }
+	render() {
+		const {
+			authUser
+		} = this.props;
+		return (
+			<div className="App">
+				<Header />
+				<Main />
+				<Footer />
+			</div>
+		);
+	}
 }
 
-export default App;
+const mapStateToProps = ({ authUser }) => ({ authUser });
+
+const mapDispatchToProps = dispatch => ({
+	setLoggedInUser: (authUser) => dispatch(setLoggedInUser(authUser)),
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

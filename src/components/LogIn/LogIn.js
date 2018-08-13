@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { auth } from '../../firebase/index';
 import './_logIn.scss';
 
@@ -47,6 +48,7 @@ class LogIn extends Component {
     if (this.isEmailValid(email)) {
       auth.signInWithEmailAndPassword(email, password)
         .then(authUser => {
+          localStorage.setItem("authUserUid", authUser.uid);
           history.push('/');
         })
         .catch(error => {
@@ -75,4 +77,4 @@ class LogIn extends Component {
   }
 }
 
-export default LogIn;
+export default withRouter(LogIn);

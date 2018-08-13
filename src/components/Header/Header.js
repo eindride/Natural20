@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { auth } from '../../firebase/index';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Logo from '../Logo/Logo';
 import Icon from '../Icon/Icon';
@@ -8,28 +10,28 @@ import Icon from '../Icon/Icon';
 import './_header.scss';
 
 class Header extends Component {
-  render() {
-    const {
-      authUser,
-    } = this.props;
-    const authButtons = (
-      authUser
-        ? (
-          <button type="button" className="headerButton" onClick={auth.doSignOut}>Sign out</button>
-        ) : (
-          <div className="buttonContainer">
-            <Link to="/login"><button type="button" className="headerButton">Log In</button></Link>
-            <Link to="/signup"><button type="button" className="headerButton">Sign Up</button></Link>
-          </div>
-        )
-    );
-    return (
-      <header>
-        <div className="bar">
-          <Logo />
-          {authButtons}
-        </div>
-        <div className="banner">
+	render() {
+		const {
+			authUser,
+		} = this.props;
+		const authButtons = (
+			authUser
+				? (
+					<button type="button" className="headerButton" onClick={auth.doSignOut}>Sign out</button>
+				) : (
+					<div className="buttonContainer">
+						<Link to="/login"><button type="button" className="headerButton">Log In</button></Link>
+						<Link to="/signup"><button type="button" className="headerButton">Sign Up</button></Link>
+					</div>
+				)
+		);
+		return (
+			<header>
+				<div className="bar">
+					<Logo />
+					{authButtons}
+				</div>
+				{/* <div className="banner">
           <div className="menuContainer">
             <Link to="/character-builder">
               <button className="menuItem">
@@ -53,10 +55,13 @@ class Header extends Component {
           <div className="navWrapper">
             <h1>Title</h1>
           </div>
-        </div>
-      </header>
-    );
-  }
+        </div> */}
+			</header>
+		);
+	}
 }
 
-export default Header;
+
+const mapStateToProps = ({ authUser }) => ({ authUser });
+
+export default withRouter(connect(mapStateToProps)(Header));
