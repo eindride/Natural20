@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import SignUp from '../SignUp/SignUp';
 import Home from '../../pages/Home/Home';
 import LogIn from '../LogIn/LogIn';
+import SpellCreatorPage from '../../pages/SpellCreatorPage/SpellCreatorPage';
 
 const Main = (props) => (
 	<main>
@@ -26,6 +27,9 @@ const Main = (props) => (
 				) : (
 						<LogIn />
 					)
+			)} />
+			<Route path='/spell-creator' render={() => (
+				<SpellCreatorPage />
 			)} />
 		</Switch>
 	</main>

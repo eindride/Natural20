@@ -27,6 +27,8 @@ class Home extends Component {
 	}
 
 	render() {
+		const { history } = this.props;
+		console.log({ history });
 		return (
 			<div className="home__wrapper">
 				<div className="home__carousel-placeholder">Carousel will be here</div>
@@ -43,7 +45,7 @@ class Home extends Component {
 							<p className="home__grid--overlay-description home__hidden">Bacon ipsum dolor amet kevin</p>
 						</div>
 					</div>
-					<div className="home__grid--spell" onMouseOver={this.mouseEnterOverlay} onMouseLeave={this.mouseLeaveOverlay} >
+					<div className="home__grid--spell" onMouseOver={this.mouseEnterOverlay} onMouseLeave={this.mouseLeaveOverlay} onClick={() => history.push('/spell-creator')}>
 						<div className="home__grid--element-overlay">
 							<h3 className="home__grid--overlay-title">Spell Creator</h3>
 							<p className="home__grid--overlay-description home__hidden">Bacon ipsum dolor amet kevin</p>
