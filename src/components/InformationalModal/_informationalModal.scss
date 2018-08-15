@@ -1,0 +1,67 @@
+@import "../../sass/variables.scss";
+
+.imodal__overlay {
+	position: absolute;
+	background: $transparentBlack;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.imodal__container {
+	position: relative;
+	background: $white;
+	width: 50%;
+	height: fit-content;
+	max-height: 70%;
+	overflow: auto;
+	padding: 50px;
+	border-radius: 5px;
+}
+
+.imodal__close-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: none;
+	background: $black;
+	color: $white;
+	height: 40px;
+	width: 40px;
+	text-transform: uppercase;
+	font-size: 16px;
+}
+
+.imodal__title {
+	border-bottom: 1px solid $darkGrey;
+	width: 80%;
+	padding-bottom: 5px;
+}
+
+.imodal__ul {
+	list-style: none;
+}
+
+.imodal__li {
+	margin-bottom: 15px;
+}
+
+.imodal__li-title {
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+.imodal__separator {
+	width: 80%;
+	color: $darkGrey;
+	margin-left: 0;
+	margin-top: 40px;
+}
+
+.imodal__hidden {
+	display: none;
+}

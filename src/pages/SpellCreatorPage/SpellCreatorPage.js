@@ -2,7 +2,9 @@ import React from 'react';
 import JSPdf from 'jspdf';
 import html2canvas from 'html2canvas';
 
-import { officialClasses } from '../../copy/general';
+import InformationalModal from '../../components/InformationalModal/InformationalModal';
+
+import { officialClasses, dummyContent } from '../../copy/general';
 import './_spellCreatorPage.scss';
 
 class SpellCreatorPage extends React.Component {
@@ -21,6 +23,7 @@ class SpellCreatorPage extends React.Component {
 		classes: [],
 		description: '',
 		higherLevel: '',
+		modalIsOpen: false,
 	};
 	handleInputChange = event => {
 		const value = event.target.value;
@@ -150,11 +153,36 @@ class SpellCreatorPage extends React.Component {
 		}
 	}
 
+	toggleModal = e => {
+		this.setState(state => ({
+			...state,
+			modalIsOpen: !state.modalIsOpen,
+		}))
+	}
+
 	render() {
-		const { name, level, levelString, school, range, rangeInputDisabled, verbal, somatic, material, materials, duration, classes, description, higherLevel, castingTime } = this.state;
+		const {
+			name,
+			level,
+			levelString,
+			school,
+			range,
+			rangeInputDisabled,
+			verbal,
+			somatic,
+			material,
+			materials,
+			duration,
+			classes,
+			description,
+			higherLevel,
+			castingTime,
+			modalIsOpen,
+		} = this.state;
 
 		return (
 			<div className="spell-creator">
+				<InformationalModal isOpen={modalIsOpen} toggleFunc={this.toggleModal} content={dummyContent} />
 				<div className="spell-creator__form-wrapper">
 					<form onSubmit={() => console.log('form submited')}>
 						<label for="input-name">Spell's name: </label>
@@ -214,6 +242,7 @@ class SpellCreatorPage extends React.Component {
 						<button>Save</button>
 						<div onClick={this.savePDF}>Download PDF</div>
 					</form>
+					<button onClick={this.toggleModal}>open modal</button>
 				</div>
 
 				<div className="spell-creator__preview-wrapper">
