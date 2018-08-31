@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { auth } from '../../firebase/index';
 import './_logIn.scss';
-
+/* eslint-disable */
 class LogIn extends Component {
   constructor(props) {
     super(props);

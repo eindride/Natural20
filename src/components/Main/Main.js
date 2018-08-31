@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 
 import SignUp from '../SignUp/SignUp';
 import Home from '../../pages/Home/Home';
 import LogIn from '../LogIn/LogIn';
 import SpellCreatorPage from '../../pages/SpellCreatorPage/SpellCreatorPage';
-
+import MonsterCreatorPage from '../../pages/MonsterCreatorPage/MonsterCreatorPage';
+/* eslint-disable */
 const Main = (props) => (
 	<main>
 		<Switch>
@@ -30,6 +30,9 @@ const Main = (props) => (
 			)} />
 			<Route path='/spell-creator' render={() => (
 				<SpellCreatorPage />
+			)} />
+			<Route path='/monster-creator' render={() => (
+				<MonsterCreatorPage />
 			)} />
 		</Switch>
 	</main>

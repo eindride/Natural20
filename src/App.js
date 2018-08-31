@@ -10,37 +10,35 @@ import Footer from './components/Footer/Footer';
 import { setLoggedInUser } from './actions';
 
 import './App.scss';
-
+/* eslint-disable */
 class App extends Component {
-	componentDidMount() {
-		const {
-			setLoggedInUser
-		} = this.props;
-		firebase.auth.onAuthStateChanged(authUser => {
-			authUser
-				? setLoggedInUser(authUser)
-				: setLoggedInUser(null);
-		});
-	}
+  componentDidMount() {
+    const { setLoggedInUser } = this.props;
+    firebase.auth.onAuthStateChanged(authUser => {
+      authUser
+        ? setLoggedInUser(authUser)
+        : setLoggedInUser(null);
+    });
+  }
 
-	render() {
-		const {
-			authUser
-		} = this.props;
-		return (
-			<div className="App">
-				<Header />
-				<Main />
-				<Footer />
-			</div>
-		);
-	}
+  render() {
+    const {
+      authUser
+    } = this.props;
+    return (
+      <div className="App">
+        <Header />
+        <Main />
+        <Footer />
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = ({ authUser }) => ({ authUser });
 
 const mapDispatchToProps = dispatch => ({
-	setLoggedInUser: (authUser) => dispatch(setLoggedInUser(authUser)),
+  setLoggedInUser: (authUser) => dispatch(setLoggedInUser(authUser)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
