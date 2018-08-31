@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { auth } from '../../firebase/index';
 import './_signUp.scss';
-
+/* eslint-disable */
 class SignUp extends Component {
   constructor(props) {
     super(props);
