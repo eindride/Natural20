@@ -6,14 +6,14 @@ import './index.css';
 import './sass/style.scss';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import { store } from './store';
+import store from './redux/store';
 
-ReactDOM.render((
+ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </Provider>
-),
-  document.getElementById('root'));
+  </Provider>,
+  document.getElementById('root')
+);
 registerServiceWorker();
