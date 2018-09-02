@@ -5,16 +5,17 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { firebase } from '../../firebase/index';
+import { setSpell } from '../../redux/actions';
 
 import InformationalModal from '../../components/InformationalModal/InformationalModal';
 
-import { officialClasses, dummyContent } from '../../copy/general';
+import { officialClasses, dummyContent, spellSchools } from '../../copy/general';
 import './_spellCreatorPage.scss';
 
 class SpellCreatorPage extends React.Component {
   state = {
     name: "Spell's name",
-    level: 0,
+    level: '0',
     levelString: 'cantrip',
     school: 'abjuration',
     castingTime: '',
@@ -30,6 +31,34 @@ class SpellCreatorPage extends React.Component {
     higherLevel: '',
     modalIsOpen: false,
   };
+
+  componentWillMount() {
+    const { spell } = this.props;
+    console.log({ spell });
+    if (spell) {
+      this.setState(state => ({
+        ...state,
+        castingTime: spell.castingTime,
+        classes: spell.classes,
+        material: spell.components.material,
+        materials: spell.components.materials,
+        somatic: spell.components.somatic,
+        verbal: spell.components.verbal,
+        description: spell.description,
+        duration: spell.duration,
+        higherLevel: spell.higherLevel,
+        level: spell.level,
+        name: spell.name,
+        range: spell.range,
+        school: spell.school,
+      }));
+    }
+  }
+
+  componentWillUnmount() {
+    const { resetSpell } = this.props;
+    resetSpell();
+  }
 
   setClasses = event => {
     const { target } = event;
@@ -168,9 +197,29 @@ class SpellCreatorPage extends React.Component {
 
   handleSave = event => {
     event.preventDefault();
+    const { spell } = this.props;
+    const { db } = firebase;
+    if (spell) {
+      // if spell is not null that means this is an edit. so first delete the old doc
+      db.collection('spells')
+        .doc(`${spell.name}-${spell.userId}`)
+        .delete()
+        .then(() => {
+          console.log('Old spell was deleted succesfully!');
+          this.saveSpell();
+        })
+        .catch(error => {
+          console.log('An error occured whule deleting the old doc', error);
+        });
+    } else {
+      this.saveSpell();
+    }
+  };
+
+  saveSpell = () => {
+    const { db } = firebase;
     const { authUser } = this.props;
     if (authUser) {
-      const { db } = firebase;
       const {
         name,
         level,
@@ -214,11 +263,12 @@ class SpellCreatorPage extends React.Component {
                 classes,
                 description,
                 higherLevel,
+                creationDate: new Date(),
               })
               .then(() => {
                 console.log('Document successfully written!');
                 // maybe open a modal here that says succesfull and then redirect
-                this.props.history.push('/');
+                this.props.history.push('/spells-list');
               })
               .catch(error => {
                 console.error('Error writing document: ', error);
@@ -235,25 +285,6 @@ class SpellCreatorPage extends React.Component {
         error: 'You must be logged in to save your spell!',
       }));
     }
-  };
-
-  checkNameAvailability = name => {
-    const { db } = firebase;
-    const { authUser } = this.props;
-    let availability;
-    db.collection('spells')
-      .doc(`${name}-${authUser.uid}`)
-      .get()
-      .then(doc => {
-        if (doc.exists) {
-          console.log('already exists');
-          availability = false;
-          return availability;
-        }
-        console.log('available');
-        availability = true;
-        return availability;
-      });
   };
 
   render() {
@@ -301,19 +332,17 @@ class SpellCreatorPage extends React.Component {
             />
             <label htmlFor="input-school">School: </label>
             <select id="input-school" className="spell-creator__input--school" onChange={this.handleInputChange}>
-              <option value="abjuration">abjuration</option>
-              <option value="conjuration">conjuration</option>
-              <option value="divination">divination</option>
-              <option value="enchantment">enchantment</option>
-              <option value="evocation">evocation</option>
-              <option value="illusion">illusion</option>
-              <option value="necromancy">necromancy</option>
-              <option value="transmutation">transmutation</option>
+              {spellSchools.map(school => (
+                <option value={school} selected={school === this.state.school}>
+                  {school}
+                </option>
+              ))}
             </select>
             <label htmlFor="input-duration">Casting Time: </label>
             <input
               id="input-casting-time"
               type="text"
+              value={castingTime}
               className="spell-creator__input--casting-time"
               onChange={this.handleInputChange}
             />
@@ -335,7 +364,14 @@ class SpellCreatorPage extends React.Component {
             </fieldset>
             <label htmlFor="components">Components: </label>
             <fieldset id="components">
-              <input type="checkbox" value="verbal" name="components" id="verbal" onClick={this.setStaticComponents} />
+              <input
+                type="checkbox"
+                value="verbal"
+                name="components"
+                id="verbal"
+                onClick={this.setStaticComponents}
+                checked={verbal}
+              />
               <label htmlFor="verbal">verbal</label>
               <input
                 type="checkbox"
@@ -343,6 +379,7 @@ class SpellCreatorPage extends React.Component {
                 name="components"
                 id="somatic"
                 onClick={this.setStaticComponents}
+                checked={somatic}
               />
               <label htmlFor="somatic">somatic</label>
               <input
@@ -351,11 +388,13 @@ class SpellCreatorPage extends React.Component {
                 name="components"
                 id="material"
                 onClick={this.activateComponentsInput}
+                checked={material}
               />
               <label htmlFor="material">material</label>
               <input
                 id="input-material"
                 type="text"
+                value={materials}
                 className="spell-creator__input--meterials"
                 disabled={!material}
                 onChange={this.handleInputChange}
@@ -365,6 +404,7 @@ class SpellCreatorPage extends React.Component {
             <input
               id="input-duration"
               type="text"
+              value={duration}
               className="spell-creator__input--duration"
               onChange={this.handleInputChange}
             />
@@ -372,7 +412,14 @@ class SpellCreatorPage extends React.Component {
             <fieldset id="classes">
               {officialClasses.map(cls => (
                 <div>
-                  <input type="checkbox" value={cls} name="classes" id={`cls-${cls}`} onClick={this.setClasses} />
+                  <input
+                    type="checkbox"
+                    value={cls}
+                    name="classes"
+                    id={`cls-${cls}`}
+                    onClick={this.setClasses}
+                    checked={classes.includes(cls)}
+                  />
                   <label htmlFor={`cls-${cls}`}>{cls}</label>
                 </div>
               ))}
@@ -383,6 +430,7 @@ class SpellCreatorPage extends React.Component {
               name="spell-description"
               cols="30"
               rows="10"
+              value={description}
               onChange={this.handleInputChange}
             />
             <label htmlFor="input-higher-levels">At Higher Levels: </label>
@@ -391,6 +439,7 @@ class SpellCreatorPage extends React.Component {
               name="higher-levels"
               cols="30"
               rows="10"
+              value={higherLevel}
               onChange={this.handleInputChange}
             />
             <button onClick={this.handleSave}>Save</button>
@@ -439,10 +488,22 @@ class SpellCreatorPage extends React.Component {
 SpellCreatorPage.propTypes = {
   authUser: PropTypes.shape().isRequired,
   history: PropTypes.shape().isRequired,
+  spell: PropTypes.shape().isRequired,
+  resetSpell: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   authUser: state.authUser,
+  spell: state.spell,
 });
 
-export default withRouter(connect(mapStateToProps)(SpellCreatorPage));
+const mapDispatchToProps = dispatch => ({
+  resetSpell: () => dispatch(setSpell(null)),
+});
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(SpellCreatorPage)
+);

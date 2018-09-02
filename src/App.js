@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { firebase } from './firebase/index';
 
 import Main from './components/Main/Main';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 
-import { setLoggedInUser } from './actions';
+import { setLoggedInUser } from './redux/actions';
 
 import './App.scss';
 /* eslint-disable */

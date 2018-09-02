@@ -182,3 +182,14 @@ export const skillNames = [
   'stealth',
   'survival',
 ];
+
+export const spellSchools = [
+  'abjuration',
+  'conjuration',
+  'divination',
+  'enchantment',
+  'evocation',
+  'illusion',
+  'necromancy',
+  'transmutation',
+];
