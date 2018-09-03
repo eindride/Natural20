@@ -4,57 +4,52 @@ header {
   // height: calc(35% + 75px);
   height: 75px;
   .bar {
-    background-color: $main-color;
+    background-color: $black;
     height: 25px;
     padding: 25px;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
-      .buttonContainer {
-        .headerButton {
-          background: none;
-          border: none;
-          color: #fff;
-          font-size: $body;
-          cursor: pointer;
-          outline: none;
-        }
+      .header__auth-buttons-container {
+        border-left: 2px solid $darkGrey;
+        padding-left: 20px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+
         a:not(:last-child) {
           border-right: 2px solid #fff;
         }
       }
     }
+  .header__button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: $body;
+    cursor: pointer;
+    outline: none;
+  }
 
-  .banner {
-    height: calc(100% - 75px);
-    background-color: lightgray;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  .header__nav-container {
+    padding-right: 25px;
 
-    .menuContainer {
-      height: fit-content;
-      display: flex;
-      justify-content: flex-end;
-      padding: 25px;
+    .header__button {
+      font-size: 18px;
 
-      .menuItem {
-        background-color: rgba(0,0,0,.5);
-        border: none;
-        margin: 0 5px;
-        width: 100px;
-        height: 100px;
-        padding: 10px;
-        color: #fff;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
-
-        outline: none;
+      &:hover {
+        border-bottom: 1px solid $white;
       }
     }
+
+    a:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+
+  .header__buttons-wrapper {
+    display: flex;
+    align-items: center;
   }
 }
