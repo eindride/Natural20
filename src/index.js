@@ -1,19 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import './index.css';
 import './sass/style.scss';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import { Provider } from 'react-redux';
-import { store } from './store';
+import store from './redux/store';
 
-ReactDOM.render((
+ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </Provider>
-),
-  document.getElementById('root'));
+  </Provider>,
+  document.getElementById('root')
+);
 registerServiceWorker();

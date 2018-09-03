@@ -5,3 +5,19 @@ a {
     text-decoration: none;
     cursor: pointer;
 }
+
+.header__logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.header__logo {
+  height: 50px;
+  width: 50px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.header__title {
+  display: inline;
+}

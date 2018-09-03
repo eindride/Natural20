@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import logo from '../../assets/images/logo-white.png';
 
 import './_logo.scss';
 
-class Logo extends Component {
-    render() {
-        return (
-            <Link to="/">
-                <h1>Natural 20</h1>
-            </Link>
-        );
-    }
-}
+const Logo = () => (
+  <Link to="/" href="/">
+    <div className="header__logo-container">
+      <img src={logo} alt="logo" className="header__logo" />
+      <h1 className="header__title">Natural 20</h1>
+    </div>
+  </Link>
+);
 
 export default Logo;

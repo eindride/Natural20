@@ -1,0 +1,12 @@
+@import "../../sass/variables.scss";
+
+.monster-creator {
+	display: flex;
+	max-width: $desktop-page-width;
+	margin: 0 auto;
+}
+
+.monster-creator__form-wrapper ,
+.monster-creator__preview-wrapper {
+	flex: 1;
+}

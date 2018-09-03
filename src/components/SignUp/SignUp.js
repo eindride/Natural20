@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import { auth } from '../../firebase/index';
 import './_signUp.scss';
 
@@ -21,7 +23,8 @@ class SignUp extends Component {
     });
   }
 
-  isValid = (email, password, confirmPassword) => this.isEmailValid(email) && this.isPasswordValid(password, confirmPassword);
+  isValid = (email, password, confirmPassword) =>
+    this.isEmailValid(email) && this.isPasswordValid(password, confirmPassword);
 
   isEmailValid(email) {
     const regex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -30,7 +33,7 @@ class SignUp extends Component {
     }
     this.setState({
       ...this.state,
-      error: "Please enter a valid email address!",
+      error: 'Please enter a valid email address!',
     });
     return false;
   }
@@ -43,7 +46,7 @@ class SignUp extends Component {
       ...this.state,
       password: '',
       confirmPassword: '',
-      error: "The passwords do not match. Please try again!",
+      error: 'The passwords do not match. Please try again!',
     });
     return false;
   }
@@ -51,19 +54,14 @@ class SignUp extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const {
-      email,
-      password,
-      confirmPassword,
-    } = this.state;
+    const { email, password, confirmPassword } = this.state;
 
-    const {
-      history,
-    } = this.props;
+    const { history } = this.props;
 
     if (this.isValid(email, password, confirmPassword)) {
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(authUser => {
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
           history.push('/login');
         })
         .catch(error => {
@@ -77,25 +75,31 @@ class SignUp extends Component {
   }
 
   render() {
-    const {
-      email,
-      password,
-      confirmPassword,
-      error,
-    } = this.state;
+    const { email, password, confirmPassword, error } = this.state;
     return (
-      <div className="wrapper">
-        <h1>Sign Up</h1>
-        <form onSubmit={this.handleSubmit} className="signUpForm" noValidate>
+      <div className="signup">
+        <div className="signup__background" />
+        <div className="signup__title">Sign Up</div>
+        <form onSubmit={this.handleSubmit} className="signup__form" noValidate>
           <input type="email" placeholder="Email" name="email" onInput={this.handleInput} value={email} />
           <input type="password" placeholder="Password" name="password" onInput={this.handleInput} value={password} />
-          <input type="password" placeholder="Confirm Password" name="confirmPassword" onInput={this.handleInput} value={confirmPassword} />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            name="confirmPassword"
+            onInput={this.handleInput}
+            value={confirmPassword}
+          />
           <button type="submit">Sign Up</button>
         </form>
-        <span className={"error " + (this.state.error && "hidden")}>{error}</span>
+        <span className={`error ${this.state.error && 'hidden'}`}>{error}</span>
       </div>
     );
   }
 }
+
+SignUp.propTypes = {
+  history: PropTypes.shape().isRequired,
+};
 
 export default SignUp;

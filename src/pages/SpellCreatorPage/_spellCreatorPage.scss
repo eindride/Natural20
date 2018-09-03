@@ -1,0 +1,12 @@
+@import "../../sass/variables.scss";
+
+.spell-creator {
+	display: flex;
+	max-width: $desktop-page-width;
+	margin: 0 auto;
+}
+
+.spell-creator__form-wrapper ,
+.spell-creator__preview-wrapper {
+	flex: 1;
+}
