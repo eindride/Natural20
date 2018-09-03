@@ -312,19 +312,21 @@ class SpellCreatorPage extends React.Component {
         <InformationalModal isOpen={modalIsOpen} toggleFunc={this.toggleModal} content={dummyContent} />
         <div className="spell-creator__form-wrapper">
           <form onSubmit={event => event.preventDefault()}>
-            <label htmlFor="input-name">Spell&apos;s name: </label>
-            <input
-              id="input-name"
-              type="text"
-              className="spell-creator__input--name"
-              value={name}
-              onChange={this.handleInputChange}
-            />
+            <div className="spell-creator__input-wrapper">
+              <label htmlFor="input-name">Spell&apos;s name: </label>
+              <input
+                id="input-name"
+                type="text"
+                className="spell-creator__input-text"
+                value={name}
+                onChange={this.handleInputChange}
+              />
+            </div>
             <label htmlFor="input-level">Spell&apos;s level: </label>
             <input
               id="input-level"
               type="number"
-              className="spell-creator__input--level"
+              className="spell-creator__input-number"
               min="0"
               max="9"
               value={level}
