@@ -1,5 +1,7 @@
+@import "../../sass/_variables.scss";
+
 .footer {
-	height: 150px;
-	background: gray;
-	margin-top: 150px;
+	height: 100px;
+	background-color: $black;
+  color: $white;
 }
