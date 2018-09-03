@@ -64,14 +64,16 @@ class LogIn extends Component {
 
   render() {
     return (
-      <div className="wrapper">
-        <h1>Log In</h1>
-        <form onSubmit={this.handleSubmit} className="logInForm" noValidate>
+      <div className="login">
+        <div className="login__background" />
+        <div className="login__spacer" />
+        <div className="login__title">Log In</div>
+        <form onSubmit={this.handleSubmit} className="login__form" noValidate>
           <input type="email" placeholder="Email" name="email" value={this.state.email} onInput={this.handleInput} />
           <input type="password" placeholder="Password" name="password" value={this.state.password} onInput={this.handleInput} />
           <button type="submit">Log In</button>
         </form>
-        <span className={"error " + (this.state.error && "hidden")}>{this.state.error}</span>
+        <span className={"login__error " + (this.state.error && "login__hidden")}>{this.state.error}</span>
       </div>
     );
   }

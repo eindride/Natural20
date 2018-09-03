@@ -5,11 +5,18 @@ $white: #fff;
 $transparentBlack: rgba(0, 0, 0, 0.5);
 $lightBlack: #333;
 $lightBrown: #8a7973;
-$grey: #f2f2f2;
-$darkGrey: #d8d8d8;
-$mediumGrey: #e0e0e0;
+// $grey: #f2f2f2;
+// $darkGrey: #d8d8d8;
+// $mediumGrey: #e0e0e0;
+$darkGrey: #666;
+$mediumGrey: #999;
+$grey:#ccc;
+$lightGrey: #f5f5f5;
 $accent: #b8193f;
 
 $body: 14px;
 
 $desktop-page-width: 1240px;
+
+$headerHeight: 75px;
+$footerHeight: 100px;
