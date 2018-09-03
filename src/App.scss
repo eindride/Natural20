@@ -1,4 +1,15 @@
 @import "./sass/_variables.scss";
+@import "./pages/Home/_home.scss";
+@import "./pages/MonsterCreatorPage/_monsterCreatorPage.scss";
+@import "./pages/SpellCreatorPage/_spellCreatorPage.scss";
+@import "./pages/SpellPage/_spellPage.scss";
+@import "./pages/SpellsListPage/_spellsListPage.scss";
+@import "./components/Footer/_footer.scss";
+@import "./components/Header/_header.scss";
+@import "./components/InformationalModal/_informationalModal.scss";
+@import "./components/LogIn/_logIn.scss";
+@import "./components/Logo/_logo.scss";
+@import "./components/SignUp/_signUp.scss";
 
 .App {
   //text-align: center;
