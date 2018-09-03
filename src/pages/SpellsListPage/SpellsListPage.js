@@ -7,6 +7,8 @@ import { firebase } from '../../firebase/index';
 import Spell from './Spell';
 import { spellSchools, officialClasses } from '../../copy/general';
 
+import searchIcon from '../../assets/icons/search.svg';
+
 import './_spellsListPage.scss';
 
 class SpellsListPage extends Component {
@@ -17,13 +19,15 @@ class SpellsListPage extends Component {
     school: 'any',
     cls: 'any',
     searchText: '',
+    searching: false,
+    searchingFor: '',
   };
 
   componentDidMount() {
     this.queryData();
   }
 
-  componentWillUpdate() {}
+  componentWillUpdate() { }
 
   queryData = () => {
     const { db } = firebase;
@@ -76,11 +80,15 @@ class SpellsListPage extends Component {
   };
 
   filterUserSpells = () => {
-    this.setState(state => ({
-      ...state,
-      userSpells: true,
-    }));
-    this.queryData();
+    this.setState(
+      state => ({
+        ...state,
+        userSpells: !state.userSpells,
+      }),
+      () => {
+        this.queryData();
+      }
+    );
   };
 
   handleChangeInput = event => {
@@ -124,6 +132,11 @@ class SpellsListPage extends Component {
 
   handleSearchSubmit = event => {
     event.preventDefault();
+    this.setState(state => ({
+      ...state,
+      searching: state.searchText.length !== 0,
+      searchingFor: state.searchText,
+    }));
     this.queryData();
   };
 
@@ -133,47 +146,95 @@ class SpellsListPage extends Component {
     history.push(`/spell/${spell.name}-${spell.userId}`);
   };
 
+  handleCancelSearch = () => {
+    this.setState(
+      state => ({
+        ...state,
+        searching: false,
+        searchingFor: '',
+        searchText: '',
+      }),
+      () => {
+        this.queryData();
+      }
+    );
+  };
+
   render() {
-    const { spells } = this.state;
+    const { spells, searchText, searching, searchingFor, userSpells } = this.state;
     return (
       <div className="spells-list">
-        <form onSubmit={this.handleSearchSubmit}>
-          <input id="input-search" type="text" onChange={this.handleSearchInput} />
+        <form className="spells-list__search-bar-container" onSubmit={this.handleSearchSubmit} autoComplete="off">
+          <input
+            id="input-search"
+            className="spells-list__search-bar"
+            type="text"
+            placeholder="Search..."
+            value={searchText}
+            onChange={this.handleSearchInput}
+          />
+          <div onClick={this.handleSearchSubmit} onKeyDown={this.handleSearchSubmit} role="button" tabIndex={0}>
+            <img src={searchIcon} alt="searchIcon" className="spells-list__search-icon" />
+          </div>
         </form>
-        <button onClick={this.filterUserSpells}>Show only my spells</button>
-        <select id="input-level" onChange={this.handleChangeInput}>
-          <option value="any">any</option>
-          {Array.from(Array(10).keys()).map((nr, index) => {
-            const key = `lvl-${index}`;
-            return (
-              <option value={nr} key={key}>
-                {nr}
-              </option>
-            );
-          })}
-        </select>
-        <select id="input-school" onChange={this.handleChangeInput}>
-          <option value="any">any</option>
-          {spellSchools.map((school, index) => {
-            const key = `school-${index}`;
-            return (
-              <option value={school} key={key}>
-                {school}
-              </option>
-            );
-          })}
-        </select>
-        <select id="input-classes" onChange={this.handleChangeInput}>
-          <option value="any">any</option>
-          {officialClasses.map((cls, index) => {
-            const key = `class-${index}`;
-            return (
-              <option value={cls} key={key}>
-                {cls}
-              </option>
-            );
-          })}
-        </select>
+        <div className={`spells-list__search-text ${!searching && 'spells-list__hidden'}`}>
+          <p>
+            Searching for: <span className="spells-list__search-item">{searchingFor}</span>
+            <div
+              className="spells-list__close-button"
+              onClick={this.handleCancelSearch}
+              onKeyDown={this.handleCancelSearch}
+              role="button"
+              tabIndex={0}
+            >
+              x
+            </div>
+          </p>
+        </div>
+        <div className="spells-list__filters-container">
+          <button
+            className={`spells-list__filter-button ${userSpells && 'spells-list__button-active'}`}
+            onClick={this.filterUserSpells}
+          >
+            {userSpells ? 'Show all spells' : 'Show only my spells'}
+          </button>
+          <span className="spells-list__filter-label">Level:</span>
+          <select id="input-level" className="spells-list__filter" onChange={this.handleChangeInput}>
+            <option value="any">any</option>
+            {Array.from(Array(10).keys()).map((nr, index) => {
+              const key = `lvl-${index}`;
+              return (
+                <option value={nr} key={key}>
+                  {nr}
+                </option>
+              );
+            })}
+          </select>
+          <span className="spells-list__filter-label">School:</span>
+          <select id="input-school" className="spells-list__filter" onChange={this.handleChangeInput}>
+            <option value="any">any</option>
+            {spellSchools.map((school, index) => {
+              const key = `school-${index}`;
+              return (
+                <option value={school} key={key}>
+                  {school}
+                </option>
+              );
+            })}
+          </select>
+          <span className="spells-list__filter-label">Class:</span>
+          <select id="input-classes" className="spells-list__filter" onChange={this.handleChangeInput}>
+            <option value="any">any</option>
+            {officialClasses.map((cls, index) => {
+              const key = `class-${index}`;
+              return (
+                <option value={cls} key={key}>
+                  {cls}
+                </option>
+              );
+            })}
+          </select>
+        </div>
         {spells.map((spell, index) => {
           const key = `spell-${index}`;
           return <Spell key={key} onClick={this.handleClickSpell} spell={spell} />;
