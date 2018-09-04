@@ -47,7 +47,7 @@ class Spell extends Component {
       <div
         className="spells-list__spell-container"
         onClick={this.handleClick}
-        onKeyDown={this.handleClick}
+        onKeyDown={() => null}
         role="button"
         tabIndex={0}
       >
