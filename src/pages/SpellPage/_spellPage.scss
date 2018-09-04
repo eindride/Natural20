@@ -5,6 +5,17 @@
   margin: 0 auto;
 }
 
+.spell-page__preview-container {
+  display: flex;
+
+  .spell-page__image-container {
+    width: 400px;
+    max-height: 500px;
+    background-size: cover;
+    background-position: center;
+  }
+}
+
 .spell-page__preview-wrapper {
   width: 50%;
   max-width: 570px;

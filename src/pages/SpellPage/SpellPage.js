@@ -9,6 +9,9 @@ import { setSpell } from '../../redux/actions';
 import { dummyComments } from '../../copy/general';
 import { stringifyLevel } from '../../utils';
 
+import image1 from '../../assets/images/dm-tools-background.jpg';
+import image2 from '../../assets/images/spell-creator-background.jpg';
+
 class SpellPage extends Component {
   state = {
     spell: {
@@ -45,6 +48,7 @@ class SpellPage extends Component {
           this.setState(state => ({
             ...state,
             spell: doc.data(),
+            image: this.getRandomImage(),
           }));
         } else {
           console.log('No such document exists!');
@@ -62,6 +66,11 @@ class SpellPage extends Component {
         }));
       });
   }
+
+  getRandomImage = () => {
+    const imagesArray = [image1, image2];
+    return imagesArray[Math.floor(Math.random() * Math.floor(imagesArray.length))];
+  };
 
   handleEdit = () => {
     console.log('clicked on edit');
@@ -116,7 +125,8 @@ class SpellPage extends Component {
   };
 
   render() {
-    const { spell, error, commentBody } = this.state;
+    console.log(this.getRandomImage());
+    const { spell, error, commentBody, image } = this.state;
     const { authUser } = this.props;
     const { name, level, school, components, description, higherLevel, castingTime, range, duration, classes } = spell;
     return (
@@ -146,42 +156,45 @@ class SpellPage extends Component {
           </div>
         )}
         {spell ? (
-          <div className="spell-creator__preview-wrapper spell-page__preview-wrapper">
-            <h3 className="spell-creator__name">{name || "Spell's name"}</h3>
-            <p className="spell-creator__level">
-              {stringifyLevel(level) || 'cantrip'} {school || 'abjuration'}
-            </p>
-            <div className="spell-creator__separator" />
-            <p className="spell-creator__attribute">
-              Casting Time:{' '}
-              <span className="spell-creator__attribute-value spell-creator__casting-time">{castingTime}</span>
-            </p>
-            <p className="spell-creator__attribute">
-              Range: <span className="spell-creator__attribute-value spell-creator__range">{range}</span>
-            </p>
-            <p className="spell-creator__attribute">
-              Components:{' '}
-              <span className="spell-creator__attribute-value spell-creator__components">
-                {components.verbal && 'V '}
-                {components.somatic && 'S '}
-                {components.material && `M(${components.materials})`}
-              </span>
-            </p>
-            <p className="spell-creator__attribute">
-              Duration: <span className="spell-creator__attribute-value spell-creator__duration">{duration}</span>
-            </p>
-            <p className="spell-creator__attribute">
-              Classes:{' '}
-              <span className="spell-creator__attribute-value spell-creator__classes">{classes.join(', ')}</span>
-            </p>
-            <div className="spell-creator__separator" />
-            <p className="spell-creator__description">{description}</p>
-            {higherLevel && (
-              <p className="spell-creator__attribute">
-                At Higher Levels:{' '}
-                <span className="spell-creator__attribute-value spell-creator__higher-levels">{higherLevel}</span>
+          <div className="spell-page__preview-container">
+            <div className="spell-creator__preview-wrapper spell-page__preview-wrapper">
+              <h3 className="spell-creator__name">{name || "Spell's name"}</h3>
+              <p className="spell-creator__level">
+                {stringifyLevel(level) || 'cantrip'} {school || 'abjuration'}
               </p>
-            )}
+              <div className="spell-creator__separator" />
+              <p className="spell-creator__attribute">
+                Casting Time:{' '}
+                <span className="spell-creator__attribute-value spell-creator__casting-time">{castingTime}</span>
+              </p>
+              <p className="spell-creator__attribute">
+                Range: <span className="spell-creator__attribute-value spell-creator__range">{range}</span>
+              </p>
+              <p className="spell-creator__attribute">
+                Components:{' '}
+                <span className="spell-creator__attribute-value spell-creator__components">
+                  {components.verbal && 'V '}
+                  {components.somatic && 'S '}
+                  {components.material && `M(${components.materials})`}
+                </span>
+              </p>
+              <p className="spell-creator__attribute">
+                Duration: <span className="spell-creator__attribute-value spell-creator__duration">{duration}</span>
+              </p>
+              <p className="spell-creator__attribute">
+                Classes:{' '}
+                <span className="spell-creator__attribute-value spell-creator__classes">{classes.join(', ')}</span>
+              </p>
+              <div className="spell-creator__separator" />
+              <p className="spell-creator__description">{description}</p>
+              {higherLevel && (
+                <p className="spell-creator__attribute">
+                  At Higher Levels:{' '}
+                  <span className="spell-creator__attribute-value spell-creator__higher-levels">{higherLevel}</span>
+                </p>
+              )}
+            </div>
+            <div className="spell-page__image-container" style={{ backgroundImage: `url(${image})` }} />
           </div>
         ) : (
           !error && <h1>Loading...</h1>
