@@ -259,7 +259,27 @@
 .footer {
   height: 100px;
   background-color: #000;
-  color: #fff; }
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+  .footer .footer__disclaimer-container {
+    flex: 1;
+    padding-left: 50px; }
+    .footer .footer__disclaimer-container p {
+      margin: 3px 0;
+      font-size: 12px; }
+  .footer .footer__social-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 50px; }
+    .footer .footer__social-container .footer__social-icon {
+      width: 32px;
+      height: 32px;
+      margin: 0 10px;
+      cursor: pointer; }
 
 header {
   height: 75px; }
