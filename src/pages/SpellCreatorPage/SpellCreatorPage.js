@@ -51,6 +51,7 @@ class SpellCreatorPage extends React.Component {
         duration: spell.duration,
         higherLevel: spell.higherLevel,
         level: spell.level,
+        levelString: stringifyLevel(spell.level),
         name: spell.name,
         range: spell.range,
         school: spell.school,
