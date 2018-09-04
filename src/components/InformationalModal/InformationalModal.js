@@ -3,11 +3,17 @@ import PropTypes from 'prop-types';
 
 import './_informationalModal.scss';
 
-const Title = ({ content }) => <h2 className="imodal__title">{content}</h2>;
+const Title = ({ content }) => (
+  <h2 className="imodal__title">{content}</h2>
+);
 
-const Subtitle = ({ content }) => <h3 className="imodal__subtitle">{content}</h3>;
+const Subtitle = ({ content }) => (
+  <h3 className="imodal__subtitle">{content}</h3>
+);
 
-const Paragraph = ({ content }) => <p className="imodal__p">{content}</p>;
+const Paragraph = ({ content }) => (
+  <p className="imodal__p">{content}</p>
+);
 
 const List = ({ content }) => (
   <ul className="imodal__ul">
@@ -38,19 +44,12 @@ class InformationalModal extends React.Component {
     }
   };
 
-  handleClick = () => {
-    const { toggleFunc } = this.props;
-    toggleFunc(null);
-  };
-
   render() {
-    const { isOpen, content } = this.props;
+    const { isOpen, toggleFunc, content } = this.props;
     return (
       <div className={`imodal__overlay ${!isOpen ? ' imodal__hidden' : ''}`}>
         <div className="imodal__container">
-          <button className="imodal__close-button" onClick={this.handleClick}>
-            x
-          </button>
+          <button className="imodal__close-button" onClick={toggleFunc}>x</button>
           {content && content.map(this.mapContent)}
           <hr className="imodal__separator" />
         </div>
