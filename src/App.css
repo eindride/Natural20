@@ -1,0 +1,580 @@
+.home__wrapper {
+  max-width: 1240px;
+  margin: 0 auto; }
+
+.home__carousel-placeholder {
+  height: 500px;
+  background: pink; }
+
+.home__grid {
+  display: grid;
+  height: 1000px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-areas: "character monster" "character monster" "character monster" "spell monster" "spell tools" "spell tools" "spell tools"; }
+
+.home__grid--character,
+.home__grid--monster,
+.home__grid--spell,
+.home__grid--tools {
+  cursor: pointer;
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; }
+
+.home__grid--character {
+  grid-area: character;
+  background-image: url("assets/images/character_creator_background.jpg"); }
+
+.home__grid--monster {
+  grid-area: monster;
+  background-image: url("assets/images/monster-creator-background.jpg"); }
+
+.home__grid--spell {
+  grid-area: spell;
+  background-image: url("assets/images/spell-creator-background.jpg"); }
+
+.home__grid--tools {
+  grid-area: tools;
+  background-image: url("assets/images/dm-tools-background.jpg"); }
+
+.home__grid--element-overlay {
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - 40px);
+  height: 15%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0));
+  transition: height .3s ease-out; }
+
+.home__grid--overlay-title {
+  color: #fff; }
+
+.home__grid--overlay-description {
+  color: #fff; }
+
+.home__hidden {
+  display: none; }
+
+.monster-creator {
+  display: flex;
+  max-width: 1240px;
+  margin: 0 auto; }
+
+.monster-creator__form-wrapper,
+.monster-creator__preview-wrapper {
+  flex: 1; }
+
+.spell-creator {
+  display: flex;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-top: 50px; }
+
+.spell-creator__form-wrapper,
+.spell-creator__preview-wrapper {
+  flex: 1;
+  max-height: calc(100vh - 50px - 75px - 100px);
+  overflow-y: auto; }
+
+.spell-creator__input-wrapper {
+  position: relative; }
+  .spell-creator__input-wrapper label {
+    font-size: 16px;
+    color: #666; }
+  .spell-creator__input-wrapper fieldset {
+    border: none;
+    display: inline-block; }
+    .spell-creator__input-wrapper fieldset label {
+      margin: 0 10px 0 5px;
+      color: #000; }
+  .spell-creator__input-wrapper .spell-creator__components-fieldset {
+    display: block; }
+  .spell-creator__input-wrapper .spell-creator__input-text {
+    border: none;
+    border-bottom: 1px solid #666;
+    padding-left: 5px;
+    padding-bottom: 3px;
+    font-size: 18px;
+    width: 150px; }
+  .spell-creator__input-wrapper .spell-creator__input-number {
+    border: none;
+    border-bottom: 1px solid #666;
+    padding-left: 5px;
+    padding-bottom: 3px;
+    font-size: 18px;
+    width: 50px; }
+  .spell-creator__input-wrapper .spell-creator__input-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    border-bottom: 1px solid #999;
+    border-radius: 0;
+    background-color: #fff;
+    width: 100px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    margin: 0 10px; }
+  .spell-creator__input-wrapper .spell-creator__class-wrapper {
+    display: inline-block;
+    min-width: 120px; }
+  .spell-creator__input-wrapper .spell-creator__infoButton {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    right: 20%;
+    top: 50%;
+    transform: translateY(-50%); }
+
+.spell-creator__textbox-wrapper label {
+  font-size: 16px;
+  color: #666; }
+
+.spell-creator__textbox-wrapper .spell-creator__textbox {
+  display: block;
+  margin-left: 50px;
+  width: calc(100% - 100px);
+  border: none;
+  border-top: 1px solid #999;
+  border-left: 1px solid #999; }
+
+.spell-creator__separator {
+  width: 80%;
+  height: 1px;
+  background-color: #666;
+  margin: 15px 0; }
+
+.spell-creator__preview-wrapper {
+  padding: 0 50px; }
+  .spell-creator__preview-wrapper .spell-creator__name {
+    font-size: 42px;
+    font-weight: 500;
+    margin: 0; }
+  .spell-creator__preview-wrapper .spell-creator__level {
+    font-style: italic;
+    font-size: 14px; }
+  .spell-creator__preview-wrapper .spell-creator__attribute {
+    font-weight: 600; }
+    .spell-creator__preview-wrapper .spell-creator__attribute .spell-creator__attribute-value {
+      font-weight: normal; }
+
+.spell-page {
+  max-width: 1240px;
+  margin: 0 auto; }
+
+.spell-page__preview-wrapper {
+  width: 50%;
+  max-width: 570px;
+  margin: 0 auto;
+  margin-bottom: 100px; }
+
+.spell-page__buttons-container {
+  width: 100%;
+  padding: 25px 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center; }
+  .spell-page__buttons-container .spell-page__button {
+    border: none;
+    color: #000;
+    background-color: #fff;
+    padding: 0 10px;
+    font-size: 12px;
+    cursor: pointer; }
+    .spell-page__buttons-container .spell-page__button:not(:first-child) {
+      border-left: 1px solid #000; }
+    .spell-page__buttons-container .spell-page__button:hover {
+      text-decoration: underline; }
+
+.spell-page__comments-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  .spell-page__comments-section .spell-page__guidance-text {
+    color: #999; }
+  .spell-page__comments-section .spell-page__textbox {
+    width: 80%;
+    border: none;
+    border-top: 1px solid #666;
+    border-left: 1px solid #666;
+    margin: 20px 10%; }
+  .spell-page__comments-section .spell-page__post-button {
+    float: right;
+    border: none;
+    color: #fff;
+    background-color: #000;
+    border-radius: 20px;
+    padding: 7px 15px;
+    font-size: 14px;
+    margin-right: 10%;
+    cursor: pointer; }
+  .spell-page__comments-section .spell-page__comments-container {
+    width: 60%;
+    margin-top: 50px; }
+    .spell-page__comments-section .spell-page__comments-container .spell-page__comment {
+      border-left: 1px solid #000;
+      border-right: 1px solid #000;
+      padding: 5px 20px;
+      margin-bottom: 50px; }
+      .spell-page__comments-section .spell-page__comments-container .spell-page__comment .spell-page__comment-author {
+        font-weight: 600;
+        color: #666; }
+        .spell-page__comments-section .spell-page__comments-container .spell-page__comment .spell-page__comment-author span {
+          font-weight: normal;
+          color: #999;
+          font-size: 10px; }
+      .spell-page__comments-section .spell-page__comments-container .spell-page__comment .spell-page__comment-body {
+        padding-left: 50px; }
+
+.spells-list {
+  padding: 50px 5%; }
+
+.spells-list__search-bar-container {
+  display: flex;
+  justify-content: center; }
+
+.spells-list__search-bar {
+  border: none;
+  border-bottom: 3px solid #999;
+  color: #666;
+  width: 80%;
+  text-align: center;
+  font-size: 32px; }
+  .spells-list__search-bar::placeholder {
+    color: #ccc; }
+
+.spells-list__search-icon {
+  width: 32px;
+  height: 32px; }
+
+.spells-list__search-text {
+  text-align: center;
+  color: #666; }
+
+.spells-list__search-item {
+  color: #000; }
+
+.spells-list__close-button {
+  color: #666;
+  font-size: 18px;
+  display: inline-block;
+  margin-left: 20px;
+  width: 25px;
+  height: 25px;
+  cursor: pointer; }
+
+.spells-list__filters-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px; }
+  .spells-list__filters-container .spells-list__filter-button {
+    border: 1px solid #000;
+    border-radius: 20px;
+    padding: 5px;
+    font-size: 14px;
+    width: 150px;
+    margin: 0 10px; }
+    .spells-list__filters-container .spells-list__filter-button.spells-list__button-active {
+      background-color: #000;
+      color: #fff; }
+  .spells-list__filters-container .spells-list__filter {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    border-bottom: 1px solid #999;
+    border-radius: 0;
+    background-color: #fff;
+    width: 100px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    margin: 0 10px; }
+  .spells-list__filters-container .spells-list__filter-label {
+    font-size: 12px;
+    color: #666; }
+
+.spells-list__spell-container {
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  padding: 0 20px;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer; }
+  .spells-list__spell-container .spells-list__author {
+    font-size: 12px;
+    color: #666; }
+  .spells-list__spell-container .spells-list__date {
+    font-size: 10px; }
+  .spells-list__spell-container .spells-list__comment-icon-container {
+    display: flex;
+    align-items: center; }
+  .spells-list__spell-container .spells-list__comment-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px; }
+
+.spells-list__hidden {
+  visibility: hidden; }
+
+.footer {
+  height: 100px;
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+  .footer .footer__disclaimer-container {
+    flex: 1;
+    padding-left: 50px; }
+    .footer .footer__disclaimer-container p {
+      margin: 3px 0;
+      font-size: 12px; }
+  .footer .footer__social-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 50px; }
+    .footer .footer__social-container .footer__social-icon {
+      width: 32px;
+      height: 32px;
+      margin: 0 10px;
+      cursor: pointer; }
+
+header {
+  height: 75px; }
+  header .bar {
+    background-color: #000;
+    height: 25px;
+    padding: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; }
+    header .bar .header__auth-buttons-container {
+      border-left: 2px solid #666;
+      padding-left: 20px;
+      height: 40px;
+      display: flex;
+      align-items: center; }
+      header .bar .header__auth-buttons-container a:not(:last-child) {
+        border-right: 2px solid #fff; }
+  header .header__button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none; }
+  header .header__nav-container {
+    padding-right: 25px; }
+    header .header__nav-container .header__button {
+      font-size: 18px; }
+      header .header__nav-container .header__button:hover {
+        border-bottom: 1px solid #fff; }
+    header .header__nav-container a:not(:last-child) {
+      margin-right: 20px; }
+  header .header__buttons-wrapper {
+    display: flex;
+    align-items: center; }
+
+.imodal__overlay {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999; }
+
+.imodal__container {
+  position: relative;
+  background: #fff;
+  width: 50%;
+  height: fit-content;
+  max-height: 70%;
+  overflow: auto;
+  padding: 50px;
+  border-radius: 5px; }
+
+.imodal__close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  background: #000;
+  color: #fff;
+  height: 40px;
+  width: 40px;
+  text-transform: uppercase;
+  font-size: 16px; }
+
+.imodal__title {
+  border-bottom: 1px solid #666;
+  width: 80%;
+  padding-bottom: 5px; }
+
+.imodal__ul {
+  list-style: none; }
+
+.imodal__li {
+  margin-bottom: 15px; }
+
+.imodal__li-title {
+  font-weight: bold;
+  margin-right: 5px; }
+
+.imodal__separator {
+  width: 80%;
+  color: #666;
+  margin-left: 0;
+  margin-top: 40px; }
+
+.imodal__hidden {
+  display: none; }
+
+.login__hidden {
+  display: none; }
+
+.login {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100%;
+  padding-top: 10%; }
+  .login .login__background {
+    position: absolute;
+    background: url("assets/images/login-background.jpg");
+    background-size: cover;
+    background-position: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1; }
+  .login .login__title {
+    background: #666;
+    color: #fff;
+    margin-top: 0;
+    height: 50px;
+    font-size: 20px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    padding: 0 25px; }
+  .login .login__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+    background-color: #fff;
+    border: 2px solid #666; }
+    .login .login__form input {
+      height: 40px;
+      width: 300px;
+      margin-bottom: 25px;
+      padding: 12px;
+      font-size: 18px;
+      border: none;
+      border-bottom: 2px solid #999; }
+    .login .login__form button {
+      border: none;
+      color: #fff;
+      background-color: #000;
+      width: 300px;
+      margin-top: 25px;
+      padding: 20px;
+      font-size: 18px; }
+  .login .login__error {
+    color: red;
+    display: block; }
+
+a {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer; }
+
+.header__logo-container {
+  display: flex;
+  align-items: center; }
+
+.header__logo {
+  height: 50px;
+  width: 50px;
+  display: inline-block;
+  margin-right: 5px; }
+
+.header__title {
+  display: inline; }
+
+.hidden {
+  display: none; }
+
+.signup {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100%;
+  padding-top: 8%; }
+  .signup .signup__background {
+    position: absolute;
+    background: url("assets/images/signup-background.jpg");
+    background-size: cover;
+    background-position: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1; }
+  .signup .signup__title {
+    background: #666;
+    color: #fff;
+    margin-top: 0;
+    height: 50px;
+    font-size: 20px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    padding: 0 25px; }
+  .signup .signup__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+    background-color: #fff;
+    border: 2px solid #666; }
+    .signup .signup__form input {
+      height: 40px;
+      width: 300px;
+      margin-bottom: 25px;
+      padding: 12px;
+      font-size: 18px;
+      border: none;
+      border-bottom: 2px solid #999; }
+    .signup .signup__form button {
+      border: none;
+      color: #fff;
+      background-color: #000;
+      width: 300px;
+      margin-top: 25px;
+      padding: 20px;
+      font-size: 18px; }
+  .signup .error {
+    color: red;
+    display: block; }
+
+.App {
+  height: 100%; }
+
+main {
+  min-height: calc(100% - 75px - 100px); }
