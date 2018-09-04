@@ -27,7 +27,7 @@ class SpellsListPage extends Component {
     this.queryData();
   }
 
-  componentWillUpdate() { }
+  componentWillUpdate() {}
 
   queryData = () => {
     const { db } = firebase;
@@ -173,7 +173,7 @@ class SpellsListPage extends Component {
             value={searchText}
             onChange={this.handleSearchInput}
           />
-          <div onClick={this.handleSearchSubmit} onKeyDown={this.handleSearchSubmit} role="button" tabIndex={0}>
+          <div onClick={this.handleSearchSubmit} onKeyDown={() => null} role="button" tabIndex={0}>
             <img src={searchIcon} alt="searchIcon" className="spells-list__search-icon" />
           </div>
         </form>
@@ -183,7 +183,7 @@ class SpellsListPage extends Component {
             <div
               className="spells-list__close-button"
               onClick={this.handleCancelSearch}
-              onKeyDown={this.handleCancelSearch}
+              onKeyDown={() => null}
               role="button"
               tabIndex={0}
             >
