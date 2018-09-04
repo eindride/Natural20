@@ -8,8 +8,10 @@ import { firebase } from '../../firebase/index';
 import { setSpell } from '../../redux/actions';
 
 import InformationalModal from '../../components/InformationalModal/InformationalModal';
+import InfoButton from '../../components/InfoButton/InfoButton';
 
-import { officialClasses, dummyContent, spellSchools } from '../../copy/general';
+import { officialClasses, spellSchools } from '../../copy/general';
+import spellInfoCopy from '../../copy/spellInfo';
 import './_spellCreatorPage.scss';
 
 class SpellCreatorPage extends React.Component {
@@ -176,6 +178,7 @@ class SpellCreatorPage extends React.Component {
   };
 
   savePDF = () => {
+    const { name } = this.state;
     const doc = new JSPdf();
     const result = document.querySelector('.spell-creator__preview-wrapper');
     let imgData;
@@ -183,15 +186,16 @@ class SpellCreatorPage extends React.Component {
       html2canvas(result).then(canvas => {
         imgData = canvas.toDataURL('image/jpeg');
         doc.addImage(imgData, 'JPEG', 15, 40, 180, 180);
-        doc.save('sample-file.pdf');
+        doc.save(`${name}.pdf`);
       });
     }
   };
 
-  toggleModal = () => {
+  toggleModal = content => {
     this.setState(state => ({
       ...state,
       modalIsOpen: !state.modalIsOpen,
+      modalContent: content,
     }));
   };
 
@@ -305,11 +309,12 @@ class SpellCreatorPage extends React.Component {
       higherLevel,
       castingTime,
       modalIsOpen,
+      modalContent,
     } = this.state;
 
     return (
       <div className="spell-creator">
-        <InformationalModal isOpen={modalIsOpen} toggleFunc={this.toggleModal} content={dummyContent} />
+        <InformationalModal isOpen={modalIsOpen} toggleFunc={this.toggleModal} content={modalContent} />
         <div className="spell-creator__form-wrapper">
           <form onSubmit={event => event.preventDefault()}>
             <div className="spell-creator__input-wrapper">
@@ -322,128 +327,181 @@ class SpellCreatorPage extends React.Component {
                 onChange={this.handleInputChange}
               />
             </div>
-            <label htmlFor="input-level">Spell&apos;s level: </label>
-            <input
-              id="input-level"
-              type="number"
-              className="spell-creator__input-number"
-              min="0"
-              max="9"
-              value={level}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-school">School: </label>
-            <select id="input-school" className="spell-creator__input--school" onChange={this.handleInputChange}>
-              {spellSchools.map(school => (
-                <option value={school} selected={school === this.state.school}>
-                  {school}
-                </option>
-              ))}
-            </select>
-            <label htmlFor="input-duration">Casting Time: </label>
-            <input
-              id="input-casting-time"
-              type="text"
-              value={castingTime}
-              className="spell-creator__input--casting-time"
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="range">Range: </label>
-            <fieldset id="range">
-              <input type="radio" value="touch" name="range" id="range-touch" onClick={this.setStaticRange} />
-              <label htmlFor="range-touch">touch</label>
-              <input type="radio" value="unlimited" name="range" id="range-unlimited" onClick={this.setStaticRange} />
-              <label htmlFor="range-unlimited">unlimited</label>
-              <input type="radio" value="value" name="range" id="range-value" onClick={this.activateRangeInput} />
-              <label htmlFor="range-value">value</label>
+
+            <div className="spell-creator__separator" />
+
+            <div className="spell-creator__input-wrapper">
+              <label htmlFor="input-level">Spell&apos;s level: </label>
               <input
-                id="input-range"
+                id="input-level"
                 type="number"
-                className="spell-creator__input--range"
-                disabled={rangeInputDisabled}
+                className="spell-creator__input-number"
+                min="0"
+                max="9"
+                value={level}
                 onChange={this.handleInputChange}
               />
-            </fieldset>
-            <label htmlFor="components">Components: </label>
-            <fieldset id="components">
+              <InfoButton onClick={this.toggleModal} content={spellInfoCopy.level} />
+            </div>
+
+            <div className="spell-creator__separator" />
+
+            <div className="spell-creator__input-wrapper">
+              <label htmlFor="input-school">School: </label>
+              <select id="input-school" className="spell-creator__input-select" onChange={this.handleInputChange}>
+                {spellSchools.map(school => (
+                  <option value={school} selected={school === this.state.school}>
+                    {school}
+                  </option>
+                ))}
+              </select>
+              <InfoButton onClick={this.toggleModal} content={spellInfoCopy.schools} />
+            </div>
+
+            <div className="spell-creator__separator" />
+
+            <div className="spell-creator__input-wrapper">
+              <label htmlFor="input-duration">Casting Time: </label>
               <input
-                type="checkbox"
-                value="verbal"
-                name="components"
-                id="verbal"
-                onClick={this.setStaticComponents}
-                checked={verbal}
-              />
-              <label htmlFor="verbal">verbal</label>
-              <input
-                type="checkbox"
-                value="somatic"
-                name="components"
-                id="somatic"
-                onClick={this.setStaticComponents}
-                checked={somatic}
-              />
-              <label htmlFor="somatic">somatic</label>
-              <input
-                type="checkbox"
-                value="material"
-                name="components"
-                id="material"
-                onClick={this.activateComponentsInput}
-                checked={material}
-              />
-              <label htmlFor="material">material</label>
-              <input
-                id="input-material"
+                id="input-casting-time"
                 type="text"
-                value={materials}
-                className="spell-creator__input--meterials"
-                disabled={!material}
+                value={castingTime}
+                className="spell-creator__input-text"
                 onChange={this.handleInputChange}
               />
-            </fieldset>
-            <label htmlFor="input-duration">Duration: </label>
-            <input
-              id="input-duration"
-              type="text"
-              value={duration}
-              className="spell-creator__input--duration"
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="classes">Classes: </label>
-            <fieldset id="classes">
-              {officialClasses.map(cls => (
-                <div>
-                  <input
-                    type="checkbox"
-                    value={cls}
-                    name="classes"
-                    id={`cls-${cls}`}
-                    onClick={this.setClasses}
-                    checked={classes.includes(cls)}
-                  />
-                  <label htmlFor={`cls-${cls}`}>{cls}</label>
-                </div>
-              ))}
-            </fieldset>
-            <label htmlFor="input-description">Description: </label>
-            <textarea
-              id="input-description"
-              name="spell-description"
-              cols="30"
-              rows="10"
-              value={description}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-higher-levels">At Higher Levels: </label>
-            <textarea
-              id="input-higher-level"
-              name="higher-levels"
-              cols="30"
-              rows="10"
-              value={higherLevel}
-              onChange={this.handleInputChange}
-            />
+              <InfoButton onClick={this.toggleModal} content={spellInfoCopy.castingTime} />
+            </div>
+
+            <div className="spell-creator__separator" />
+
+            <div className="spell-creator__input-wrapper">
+              <label htmlFor="range">Range: </label>
+              <fieldset id="range">
+                <input type="radio" value="touch" name="range" id="range-touch" onClick={this.setStaticRange} />
+                <label htmlFor="range-touch">touch</label>
+                <input type="radio" value="unlimited" name="range" id="range-unlimited" onClick={this.setStaticRange} />
+                <label htmlFor="range-unlimited">unlimited</label>
+                <input type="radio" value="value" name="range" id="range-value" onClick={this.activateRangeInput} />
+                <label htmlFor="range-value">value</label>
+                <input
+                  id="input-range"
+                  type="number"
+                  className="spell-creator__input-number"
+                  disabled={rangeInputDisabled}
+                  onChange={this.handleInputChange}
+                />
+              </fieldset>
+              <InfoButton onClick={this.toggleModal} content={spellInfoCopy.range} />
+            </div>
+
+            <div className="spell-creator__separator" />
+
+            <div className="spell-creator__input-wrapper">
+              <label htmlFor="components">Components: </label>
+              <fieldset id="components" className="spell-creator__components-fieldset">
+                <input
+                  type="checkbox"
+                  value="verbal"
+                  name="components"
+                  id="verbal"
+                  onClick={this.setStaticComponents}
+                  checked={verbal}
+                />
+                <label htmlFor="verbal">verbal</label>
+                <input
+                  type="checkbox"
+                  value="somatic"
+                  name="components"
+                  id="somatic"
+                  onClick={this.setStaticComponents}
+                  checked={somatic}
+                />
+                <label htmlFor="somatic">somatic</label>
+                <input
+                  type="checkbox"
+                  value="material"
+                  name="components"
+                  id="material"
+                  onClick={this.activateComponentsInput}
+                  checked={material}
+                />
+                <label htmlFor="material">material</label>
+                <input
+                  id="input-material"
+                  type="text"
+                  value={materials}
+                  className="spell-creator__input-text"
+                  disabled={!material}
+                  onChange={this.handleInputChange}
+                />
+              </fieldset>
+              <InfoButton onClick={this.toggleModal} content={spellInfoCopy.components} />
+            </div>
+
+            <div className="spell-creator__separator" />
+
+            <div className="spell-creator__input-wrapper">
+              <label htmlFor="input-duration">Duration: </label>
+              <input
+                id="input-duration"
+                type="text"
+                value={duration}
+                className="spell-creator__input-text"
+                onChange={this.handleInputChange}
+              />
+              <InfoButton onClick={this.toggleModal} content={spellInfoCopy.duration} />
+            </div>
+
+            <div className="spell-creator__separator" />
+
+            <div className="spell-creator__input-wrapper">
+              <label htmlFor="classes">Classes: </label>
+              <fieldset id="classes">
+                {officialClasses.map(cls => (
+                  <div className="spell-creator__class-wrapper">
+                    <input
+                      type="checkbox"
+                      value={cls}
+                      name="classes"
+                      id={`cls-${cls}`}
+                      onClick={this.setClasses}
+                      checked={classes.includes(cls)}
+                    />
+                    <label htmlFor={`cls-${cls}`}>{cls}</label>
+                  </div>
+                ))}
+              </fieldset>
+            </div>
+
+            <div className="spell-creator__separator" />
+
+            <div className="spell-creator__textbox-wrapper">
+              <label htmlFor="input-description">Description: </label>
+              <textarea
+                id="input-description"
+                className="spell-creator__textbox"
+                name="spell-description"
+                cols="30"
+                rows="10"
+                value={description}
+                onChange={this.handleInputChange}
+              />
+            </div>
+
+            <div className="spell-creator__separator" />
+
+            <div className="spell-creator__textbox-wrapper">
+              <label htmlFor="input-higher-levels">At Higher Levels: </label>
+              <textarea
+                id="input-higher-level"
+                className="spell-creator__textbox"
+                name="higher-levels"
+                cols="30"
+                rows="10"
+                value={higherLevel}
+                onChange={this.handleInputChange}
+              />
+            </div>
             <button onClick={this.handleSave}>Save</button>
             <button onClick={this.savePDF}>Download PDF</button>
           </form>
@@ -455,6 +513,7 @@ class SpellCreatorPage extends React.Component {
           <p className="spell-creator__level">
             {levelString || 'cantrip'} {school || 'abjuration'}
           </p>
+          <div className="spell-creator__separator" />
           <p className="spell-creator__attribute">
             Casting Time:{' '}
             <span className="spell-creator__attribute-value spell-creator__casting-time">{castingTime}</span>
@@ -476,11 +535,14 @@ class SpellCreatorPage extends React.Component {
           <p className="spell-creator__attribute">
             Classes: <span className="spell-creator__attribute-value spell-creator__classes">{classes.join(', ')}</span>
           </p>
+          <div className="spell-creator__separator" />
           <p className="spell-creator__description">{description}</p>
-          <p className="spell-creator__attribute">
-            At Higher Levels:{' '}
-            <span className="spell-creator__attribute-value spell-creator__higher-levels">{higherLevel}</span>
-          </p>
+          {higherLevel && (
+            <p className="spell-creator__attribute">
+              At Higher Levels:{' '}
+              <span className="spell-creator__attribute-value spell-creator__higher-levels">{higherLevel}</span>
+            </p>
+          )}
         </div>
       </div>
     );
