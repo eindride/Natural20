@@ -12,6 +12,7 @@ import InfoButton from '../../components/InfoButton/InfoButton';
 
 import { officialClasses, spellSchools } from '../../copy/general';
 import spellInfoCopy from '../../copy/spellInfo';
+import { stringifyLevel } from '../../utils';
 import './_spellCreatorPage.scss';
 
 class SpellCreatorPage extends React.Component {
@@ -50,6 +51,7 @@ class SpellCreatorPage extends React.Component {
         duration: spell.duration,
         higherLevel: spell.higherLevel,
         level: spell.level,
+        levelString: stringifyLevel(spell.level),
         name: spell.name,
         range: spell.range,
         school: spell.school,
@@ -106,7 +108,7 @@ class SpellCreatorPage extends React.Component {
         attribute = 'level';
         this.setState(state => ({
           ...state,
-          levelString: this.stringifyLevel(value),
+          levelString: stringifyLevel(value),
         }));
         break;
       case 'input-school':
@@ -142,25 +144,6 @@ class SpellCreatorPage extends React.Component {
         [attribute]: value,
       }));
     }
-  };
-
-  stringifyLevel = level => {
-    if (parseInt(level, 10) === 0) {
-      return 'cantrip';
-    }
-    if (parseInt(level, 10) === 1) {
-      return '1st level';
-    }
-    if (parseInt(level, 10) === 2) {
-      return '2nd level';
-    }
-    if (parseInt(level, 10) === 3) {
-      return '3rd level';
-    }
-    if (parseInt(level, 10) >= 4) {
-      return `${level}th level`;
-    }
-    return null;
   };
 
   activateRangeInput = () => {

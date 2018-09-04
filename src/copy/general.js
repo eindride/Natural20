@@ -195,3 +195,24 @@ export const spellSchools = [
 ];
 
 export const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+
+export const dummyComments = [
+  {
+    author: 'user1',
+    date: '2018, 1 sep, 15:21',
+    message:
+      'Bacon ipsum dolor amet pastrami pork fatback burgdoggen beef. Porchetta hamburger picanha fatback filet mignon pork loin pastrami. Short loin cupim pig flank, buffalo chicken jerky chuck kielbasa tri-tip cow filet mignon rump. Porchetta meatball tenderloin pork loin. Landjaeger capicola chicken, pancetta meatloaf pastrami tri-tip doner.',
+  },
+  {
+    author: 'user2',
+    date: '2018, 1 sep, 14:33',
+    message:
+      'Bacon ipsum dolor amet pastrami pork fatback burgdoggen beef. Porchetta hamburger picanha fatback filet mignon pork loin pastrami. Short loin cupim pig flank, buffalo chicken jerky chuck kielbasa tri-tip cow filet mignon rump. Porchetta meatball tenderloin pork loin. Landjaeger capicola chicken, pancetta meatloaf pastrami tri-tip doner.',
+  },
+  {
+    author: 'user1',
+    date: '2018, 1 sep, 14:30',
+    message:
+      'Bacon ipsum dolor amet pastrami pork fatback burgdoggen beef. Porchetta hamburger picanha fatback filet mignon pork loin pastrami. Short loin cupim pig flank, buffalo chicken jerky chuck kielbasa tri-tip cow filet mignon rump. Porchetta meatball tenderloin pork loin. Landjaeger capicola chicken, pancetta meatloaf pastrami tri-tip doner.',
+  },
+];
