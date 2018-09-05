@@ -1,4 +1,4 @@
-import { SET_USER, SET_SPELL } from './constants';
+import { SET_USER, SET_SPELL, SET_MONSTER } from './constants';
 
 export default function(state, action) {
   switch (action.type) {
@@ -11,6 +11,11 @@ export default function(state, action) {
       return {
         ...state,
         spell: action.payload,
+      };
+    case SET_MONSTER:
+      return {
+        ...state,
+        monster: action.payload,
       };
     default:
       return state;

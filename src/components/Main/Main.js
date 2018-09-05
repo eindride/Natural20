@@ -10,6 +10,7 @@ import MonsterCreatorPage from '../../pages/MonsterCreatorPage/MonsterCreatorPag
 import SpellsListPage from '../../pages/SpellsListPage/SpellsListPage';
 import MonstersListPage from '../../pages/MonstersListPage/MonstersListPage';
 import SpellPage from '../../pages/SpellPage/SpellPage';
+import MonsterPage from '../../pages/MonsterPage/MonsterPage';
 /* eslint-disable */
 const Main = (props) => (
   <main>
@@ -45,6 +46,9 @@ const Main = (props) => (
       )} />
       <Route path='/spell/:spellname' render={() => (
         <SpellPage />
+      )} />
+      <Route path='/monster/:monstername' render={() => (
+        <MonsterPage />
       )} />
     </Switch>
   </main>

@@ -8,10 +8,13 @@
   padding-bottom: 50px;
 }
 
-.monster-creator__form-wrapper ,
+.monster-creator__form-wrapper,
 .monster-creator__preview-wrapper {
   flex: 1;
   max-height: calc(100vh - 50px - #{$headerHeight} - #{$footerHeight});
+}
+
+.monster-creator__form-wrapper {
   overflow-y: auto;
 }
 

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { firebase } from '../../firebase/index';
+import { setMonster } from '../../redux/actions';
 
 import InformationalModal from '../../components/InformationalModal/InformationalModal';
 import InfoButton from '../../components/InfoButton/InfoButton';
@@ -89,6 +90,45 @@ class MonsterCreatorPage extends React.Component {
     challenge: '0',
     modalIsOpen: false,
   };
+
+  componentWillMount() {
+    const { monster } = this.props;
+    console.log({ monster });
+    if (monster) {
+      this.setState(state => ({
+        ...state,
+        name: monster.name,
+        size: monster.size,
+        type: monster.type,
+        alignment: monster.alignment,
+        ac: monster.ac,
+        armor: monster.armor,
+        hp: monster.hp,
+        hitDice: monster.hitDice,
+        speed: monster.speed,
+        attributes: monster.attributes,
+        savingThrows: monster.savingThrows,
+        skills: monster.skills,
+        vulnerabilities: monster.vulnerabilities,
+        damageResistances: monster.damageResistances,
+        damageImmunities: monster.damageImmunities,
+        conditionImmunities: monster.conditionImmunities,
+        blindsight: monster.blindsight,
+        darkvision: monster.darkvision,
+        lowLightVision: monster.lowLightVision,
+        tremorsense: monster.tremorsense,
+        truesight: monster.truesight,
+        passivePerception: monster.passivePerception,
+        languages: monster.languages,
+        challenge: monster.challenge,
+      }));
+    }
+  }
+
+  componentWillUnmount() {
+    const { resetMonster } = this.props;
+    resetMonster();
+  }
 
   setVulnerability = event => {
     const { value } = event.target;
@@ -806,7 +846,9 @@ class MonsterCreatorPage extends React.Component {
               <label htmlFor="input-size">Size: </label>
               <select id="input-size" className="monster-creator__input-select" onChange={this.handleInputChange}>
                 {creatureSizes.map(size => (
-                  <option value={size}>{size}</option>
+                  <option value={size} selected={size === this.state.size}>
+                    {size}
+                  </option>
                 ))}
               </select>
               <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.size} />
@@ -818,7 +860,9 @@ class MonsterCreatorPage extends React.Component {
               <label htmlFor="input-type">Type: </label>
               <select id="input-type" className="monster-creator__input-select" onChange={this.handleInputChange}>
                 {creatureTypes.map(type => (
-                  <option value={type}>{type}</option>
+                  <option value={type} selected={type === this.state.type}>
+                    {type}
+                  </option>
                 ))}
               </select>
               <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.type} />
@@ -830,7 +874,9 @@ class MonsterCreatorPage extends React.Component {
               <label htmlFor="input-alignment">Alignment: </label>
               <select id="input-alignment" className="monster-creator__input-select" onChange={this.handleInputChange}>
                 {alignments.map(alignment => (
-                  <option value={alignment}>{alignment}</option>
+                  <option value={alignment} selected={alignment === this.state.alignment}>
+                    {alignment}
+                  </option>
                 ))}
               </select>
               <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.alignment} />
@@ -1023,6 +1069,7 @@ class MonsterCreatorPage extends React.Component {
                       name="vulnerabilities"
                       id={`vulnerability-${type}`}
                       onClick={this.setVulnerability}
+                      checked={vulnerabilities.includes(type)}
                     />
                     <label htmlFor={`vulnerability-${type}`}>{type}</label>
                   </div>
@@ -1044,6 +1091,7 @@ class MonsterCreatorPage extends React.Component {
                       name="damage-resistances"
                       id={`resistance-${type}`}
                       onClick={this.setDamageResistances}
+                      checked={damageResistances.includes(type)}
                     />
                     <label htmlFor={`resistance-${type}`}>{type}</label>
                   </div>
@@ -1065,6 +1113,7 @@ class MonsterCreatorPage extends React.Component {
                       name="damage-immunities"
                       id={`dmg-immunity-${type}`}
                       onClick={this.setDamageImmunities}
+                      checked={damageImmunities.includes(type)}
                     />
                     <label htmlFor={`dmg-immunity-${type}`}>{type}</label>
                   </div>
@@ -1086,6 +1135,7 @@ class MonsterCreatorPage extends React.Component {
                       name="conditions"
                       id={`condition-${condition}`}
                       onClick={this.setConditions}
+                      checked={conditionImmunities.includes(condition)}
                     />
                     <label htmlFor={`condition-${condition}`}>{condition}</label>
                   </div>
@@ -1281,47 +1331,47 @@ class MonsterCreatorPage extends React.Component {
             </p>
           ) : null}
           {parseInt(blindsight, 10) ||
-          parseInt(darkvision, 10) ||
-          parseInt(lowLightVision, 10) ||
-          parseInt(lowLightVision, 10) ||
-          parseInt(tremorsense, 10) ||
-          parseInt(truesight, 10) ||
-          parseInt(passivePerception, 10) ? (
-            <p className="monster-creator__attribute">
-              Senses:{' '}
-              <span className="monster-creator__attribute-value">
-                {[
-                  {
-                    name: 'blindsight',
-                    value: parseInt(blindsight, 10),
-                  },
-                  {
-                    name: 'darkvision',
-                    value: parseInt(darkvision, 10),
-                  },
-                  {
-                    name: 'low-light vision',
-                    value: parseInt(lowLightVision, 10),
-                  },
-                  {
-                    name: 'tremorsense',
-                    value: parseInt(tremorsense, 10),
-                  },
-                  {
-                    name: 'truesight',
-                    value: parseInt(truesight, 10),
-                  },
-                  {
-                    name: 'passivePerception',
-                    value: parseInt(passivePerception, 10),
-                  },
-                ]
-                  .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
-                  .filter(el => el)
-                  .join(', ')}
-              </span>
-            </p>
-          ) : null}
+            parseInt(darkvision, 10) ||
+            parseInt(lowLightVision, 10) ||
+            parseInt(lowLightVision, 10) ||
+            parseInt(tremorsense, 10) ||
+            parseInt(truesight, 10) ||
+            parseInt(passivePerception, 10) ? (
+              <p className="monster-creator__attribute">
+                Senses:{' '}
+                <span className="monster-creator__attribute-value">
+                  {[
+                    {
+                      name: 'blindsight',
+                      value: parseInt(blindsight, 10),
+                    },
+                    {
+                      name: 'darkvision',
+                      value: parseInt(darkvision, 10),
+                    },
+                    {
+                      name: 'low-light vision',
+                      value: parseInt(lowLightVision, 10),
+                    },
+                    {
+                      name: 'tremorsense',
+                      value: parseInt(tremorsense, 10),
+                    },
+                    {
+                      name: 'truesight',
+                      value: parseInt(truesight, 10),
+                    },
+                    {
+                      name: 'passivePerception',
+                      value: parseInt(passivePerception, 10),
+                    },
+                  ]
+                    .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
+                    .filter(el => el)
+                    .join(', ')}
+                </span>
+              </p>
+            ) : null}
           {languages ? (
             <p className="monster-creator__attribute">
               Languages: <span className="monster-creator__attribute-value">{languages}</span>
@@ -1331,7 +1381,7 @@ class MonsterCreatorPage extends React.Component {
             Challenge:{' '}
             <span className="monster-creator__attribute-value">{`${challenge} (${
               challengeRating[challenge]
-            } XP)`}</span>
+              } XP)`}</span>
           </p>
           <div className="monster-creator__separator" />
         </div>
@@ -1348,7 +1398,16 @@ MonsterCreatorPage.propTypes = {
 
 const mapStateToProps = state => ({
   authUser: state.authUser,
-  monster: state.spell,
+  monster: state.monster,
 });
 
-export default withRouter(connect(mapStateToProps)(MonsterCreatorPage));
+const mapDispatchToProps = dispatch => ({
+  resetMonster: () => dispatch(setMonster(null)),
+});
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(MonsterCreatorPage)
+);
