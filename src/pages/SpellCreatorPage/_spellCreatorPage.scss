@@ -12,6 +12,9 @@
 .spell-creator__preview-wrapper {
   flex: 1;
   max-height: calc(100vh - 50px - #{$headerHeight} - #{$footerHeight});
+}
+
+.spell-creator__form-wrapper {
   overflow-y: auto;
 }
 

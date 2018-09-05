@@ -485,10 +485,13 @@ class SpellCreatorPage extends React.Component {
                 onChange={this.handleInputChange}
               />
             </div>
-            <button onClick={this.handleSave}>Save</button>
-            <button onClick={this.savePDF}>Download PDF</button>
+            <button className="monster-creator__button margin-right" onClick={this.handleSave}>
+              Save
+            </button>
+            <button className="monster-creator__button" onClick={this.savePDF}>
+              Download PDF
+            </button>
           </form>
-          <button onClick={this.toggleModal}>open modal</button>
         </div>
 
         <div className="spell-creator__preview-wrapper">

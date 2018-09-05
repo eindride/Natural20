@@ -35,6 +35,9 @@ const Header = ({ authUser }) => {
         <Logo />
         <div className="header__buttons-wrapper">
           <div className="header__nav-container">
+            <Link to="/characters-list" href="/characters-list">
+              <button className="header__button">Characters list</button>
+            </Link>
             <Link to="/creatures-list" href="/creatures-list">
               <button className="header__button">Creatures list</button>
             </Link>

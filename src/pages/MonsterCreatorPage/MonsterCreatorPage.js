@@ -1,4 +1,15 @@
 import React from 'react';
+import JSPdf from 'jspdf';
+import html2canvas from 'html2canvas';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { firebase } from '../../firebase/index';
+import { setMonster } from '../../redux/actions';
+
+import InformationalModal from '../../components/InformationalModal/InformationalModal';
+import InfoButton from '../../components/InfoButton/InfoButton';
+import monsterInfoCopy from '../../copy/creatureInfo';
 
 import {
   damageTypes,
@@ -18,24 +29,24 @@ class MonsterCreatorPage extends React.Component {
     size: '',
     type: '',
     alignment: '',
-    ac: 0,
+    ac: '0',
     armor: '',
-    hp: 0,
+    hp: '0',
     hitDice: '',
     speed: {
-      burrow: 0,
-      climb: 0,
-      fly: 0,
-      swim: 0,
-      walk: 0,
+      burrow: '0',
+      climb: '0',
+      fly: '0',
+      swim: '0',
+      walk: '0',
     },
     attributes: {
-      str: 10,
-      dex: 10,
-      con: 10,
-      int: 10,
-      wis: 10,
-      cha: 10,
+      str: '10',
+      dex: '10',
+      con: '10',
+      int: '10',
+      wis: '10',
+      cha: '10',
     },
     savingThrows: {
       str: 0,
@@ -69,15 +80,55 @@ class MonsterCreatorPage extends React.Component {
     damageResistances: [],
     damageImmunities: [],
     conditionImmunities: [],
-    blindsight: 0,
-    darkvision: 0,
-    lowLightVision: 0,
-    tremorsense: 0,
-    truesight: 0,
-    passivePerception: 0,
+    blindsight: '0',
+    darkvision: '0',
+    lowLightVision: '0',
+    tremorsense: '0',
+    truesight: '0',
+    passivePerception: '0',
     languages: '',
-    challenge: 0,
+    challenge: '0',
+    modalIsOpen: false,
   };
+
+  componentWillMount() {
+    const { monster } = this.props;
+    console.log({ monster });
+    if (monster) {
+      this.setState(state => ({
+        ...state,
+        name: monster.name,
+        size: monster.size,
+        type: monster.type,
+        alignment: monster.alignment,
+        ac: monster.ac,
+        armor: monster.armor,
+        hp: monster.hp,
+        hitDice: monster.hitDice,
+        speed: monster.speed,
+        attributes: monster.attributes,
+        savingThrows: monster.savingThrows,
+        skills: monster.skills,
+        vulnerabilities: monster.vulnerabilities,
+        damageResistances: monster.damageResistances,
+        damageImmunities: monster.damageImmunities,
+        conditionImmunities: monster.conditionImmunities,
+        blindsight: monster.blindsight,
+        darkvision: monster.darkvision,
+        lowLightVision: monster.lowLightVision,
+        tremorsense: monster.tremorsense,
+        truesight: monster.truesight,
+        passivePerception: monster.passivePerception,
+        languages: monster.languages,
+        challenge: monster.challenge,
+      }));
+    }
+  }
+
+  componentWillUnmount() {
+    const { resetMonster } = this.props;
+    resetMonster();
+  }
 
   setVulnerability = event => {
     const { value } = event.target;
@@ -563,14 +614,18 @@ class MonsterCreatorPage extends React.Component {
       .reduce((acc, value) => acc + value);
     if (sum) {
       return (
-        <div className="monster-creator__savings-wrapper">
-          {Object.keys(savingThrows)
-            .map(
-              key => (savingThrows[key] !== 0 ? `${key} ${savingThrows[key] > 0 ? '+' : ''}${savingThrows[key]}` : null)
-            )
-            .filter(el => el)
-            .join(', ')}
-        </div>
+        <p className="monster-creator__attribute">
+          Saving Throws:{' '}
+          <span className="monster-creator__attribute-value">
+            {Object.keys(savingThrows)
+              .map(
+                key =>
+                  savingThrows[key] !== 0 ? `${key} ${savingThrows[key] > 0 ? '+' : ''}${savingThrows[key]}` : null
+              )
+              .filter(el => el)
+              .join(', ')}
+          </span>
+        </p>
       );
     }
     return null;
@@ -583,15 +638,152 @@ class MonsterCreatorPage extends React.Component {
       .reduce((acc, value) => acc + value);
     if (sum) {
       return (
-        <div className="monster-creator__savings-wrapper">
-          {Object.keys(skills)
-            .map(key => (skills[key] !== 0 ? `${key} ${skills[key] > 0 ? '+' : ''}${skills[key]}` : null))
-            .filter(el => el)
-            .join(', ')}
-        </div>
+        <p className="monster-creator__attribute">
+          Skills:{' '}
+          <span className="monster-creator__attribute-value">
+            {Object.keys(skills)
+              .map(key => (skills[key] !== 0 ? `${key} ${skills[key] > 0 ? '+' : ''}${skills[key]}` : null))
+              .filter(el => el)
+              .join(', ')}
+          </span>
+        </p>
       );
     }
     return null;
+  };
+
+  toggleModal = content => {
+    this.setState(state => ({
+      ...state,
+      modalIsOpen: !state.modalIsOpen,
+      modalContent: content,
+    }));
+  };
+
+  savePDF = () => {
+    const { name } = this.state;
+    const doc = new JSPdf();
+    const result = document.querySelector('.monster-creator__preview-wrapper');
+    let imgData;
+    if (result) {
+      html2canvas(result).then(canvas => {
+        imgData = canvas.toDataURL('image/jpeg');
+        doc.addImage(imgData, 'JPEG', 15, 40, 180, 180);
+        doc.save(`${name}.pdf`);
+      });
+    }
+  };
+
+  handleSave = event => {
+    event.preventDefault();
+    const { monster } = this.props;
+    const { db } = firebase;
+    if (monster) {
+      // if spell is not null that means this is an edit. so first delete the old doc
+      db.collection('monsters')
+        .doc(`${monster.name}-${monster.userId}`)
+        .delete()
+        .then(() => {
+          console.log('Old spell was deleted succesfully!');
+          this.saveSpell();
+        })
+        .catch(error => {
+          console.log('An error occured whule deleting the old doc', error);
+        });
+    } else {
+      this.saveSpell();
+    }
+  };
+
+  saveSpell = () => {
+    const { db } = firebase;
+    const { authUser } = this.props;
+    if (authUser) {
+      const {
+        name,
+        size,
+        type,
+        alignment,
+        ac,
+        armor,
+        hp,
+        hitDice,
+        speed,
+        attributes,
+        savingThrows,
+        skills,
+        vulnerabilities,
+        damageResistances,
+        damageImmunities,
+        conditionImmunities,
+        blindsight,
+        darkvision,
+        lowLightVision,
+        tremorsense,
+        truesight,
+        passivePerception,
+        languages,
+        challenge,
+      } = this.state;
+      db.collection('monsters')
+        .doc(`${name}-${authUser.uid}`)
+        .get()
+        .then(doc => {
+          if (doc.exists) {
+            console.log('already exists');
+          } else {
+            console.log('available');
+
+            db.collection('monsters')
+              .doc(`${name}-${authUser.uid}`)
+              .set({
+                userId: authUser.uid,
+                name,
+                size,
+                type,
+                alignment,
+                ac,
+                armor,
+                hp,
+                hitDice,
+                speed,
+                attributes,
+                savingThrows,
+                skills,
+                vulnerabilities,
+                damageResistances,
+                damageImmunities,
+                conditionImmunities,
+                blindsight,
+                darkvision,
+                lowLightVision,
+                tremorsense,
+                truesight,
+                passivePerception,
+                languages,
+                challenge,
+                creationDate: new Date(),
+              })
+              .then(() => {
+                console.log('Document successfully written!');
+                // maybe open a modal here that says succesfull and then redirect
+                this.props.history.push('/creatures-list');
+              })
+              .catch(error => {
+                console.error('Error writing document: ', error);
+                this.setState(state => ({
+                  ...state,
+                  error,
+                }));
+              });
+          }
+        });
+    } else {
+      this.setState(state => ({
+        ...state,
+        error: 'You must be logged in to save your spell!',
+      }));
+    }
   };
 
   render() {
@@ -620,6 +812,8 @@ class MonsterCreatorPage extends React.Component {
       passivePerception,
       languages,
       challenge,
+      modalIsOpen,
+      modalContent,
     } = this.state;
     const attributesSign = {
       str: attributes.str < 10 ? '' : '+',
@@ -632,426 +826,588 @@ class MonsterCreatorPage extends React.Component {
 
     return (
       <div className="monster-creator">
+        <InformationalModal isOpen={modalIsOpen} toggleFunc={this.toggleModal} content={modalContent} />
         <div className="monster-creator__form-wrapper">
-          <form>
-            <label htmlFor="input-name">Monster&apos;s name: </label>
-            <input
-              id="input-name"
-              type="text"
-              className="monster-creator__input--name"
-              value={name}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-size">Size: </label>
-            <select id="input-size" className="monster-creator__input--size" onChange={this.handleInputChange}>
-              {creatureSizes.map(size => (
-                <option value={size}>{size}</option>
-              ))}
-            </select>
-            <label htmlFor="input-type">Type: </label>
-            <select id="input-type" className="monster-creator__input--type" onChange={this.handleInputChange}>
-              {creatureTypes.map(type => (
-                <option value={type}>{type}</option>
-              ))}
-            </select>
-            <label htmlFor="input-alignment">Alignment: </label>
-            <select
-              id="input-alignment"
-              className="monster-creator__input--alignment"
-              onChange={this.handleInputChange}
-            >
-              {alignments.map(alignment => (
-                <option value={alignment}>{alignment}</option>
-              ))}
-            </select>
-            <label htmlFor="input-ac">Armor Class: </label>
-            <input
-              id="input-ac"
-              type="number"
-              className="monster-creator__input--ac"
-              value={ac}
-              min={0}
-              max={30}
-              onChange={this.handleInputChange}
-            />
-            <input
-              id="input-armor"
-              type="text"
-              className="monster-creator__input--armor"
-              value={armor}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-ac">Hit Points: </label>
-            <input
-              id="input-hp"
-              type="number"
-              className="monster-creator__input--hp"
-              value={hp}
-              onChange={this.handleInputChange}
-            />
-            <input
-              id="input-hit-dice"
-              type="text"
-              className="monster-creator__input--hit-dice"
-              value={hitDice}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-walking-speed">Walking Speed: </label>
-            <input
-              id="input-walking-speed"
-              type="number"
-              className="monster-creator__input--walking-speed"
-              value={speed.walk}
-              min={0}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-flying-speed">Flying Speed: </label>
-            <input
-              id="input-flying-speed"
-              type="number"
-              className="monster-creator__input--flying-speed"
-              value={speed.fly}
-              min={0}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-swiming-speed">Swiming Speed: </label>
-            <input
-              id="input-swiming-speed"
-              type="number"
-              className="monster-creator__input--swiming-speed"
-              value={speed.swim}
-              min={0}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-climning-speed">Climbing Speed: </label>
-            <input
-              id="input-climbing-speed"
-              type="number"
-              className="monster-creator__input--climbing-speed"
-              value={speed.climb}
-              min={0}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-climning-speed">Burrowing Speed: </label>
-            <input
-              id="input-burrowing-speed"
-              type="number"
-              className="monster-creator__input--burrowing-speed"
-              value={speed.burrow}
-              min={0}
-              onChange={this.handleInputChange}
-            />
-            {shortAttributes.map(attr => (
-              <div className="monster-creator__input-wrapper">
-                <label htmlFor="input-str">{attr}: </label>
-                <input
-                  id={`input-${attr}`}
-                  type="number"
-                  className={`monster-creator__input--${attr}`}
-                  value={attributes[attr]}
-                  min={0}
-                  max={30}
-                  onChange={this.handleAttributeChange}
-                />
-              </div>
-            ))}
-            {shortAttributes.map(attr => (
-              <div className="monster-creator__input-wrapper">
-                <label htmlFor={`input-saving-${attr}`}>{attr}: </label>
-                <input
-                  id={`input-saving-${attr}`}
-                  type="number"
-                  className={`monster-creator__input--${attr}`}
-                  value={savingThrows[attr]}
-                  min={-30}
-                  max={30}
-                  onChange={this.handleSavingThrowsChange}
-                />
-              </div>
-            ))}
-            {skillNames.map(name => {
-              let processedName = name;
-              if (name === 'animal handling') {
-                processedName = 'animal-handling';
-              } else if (name === 'sleight of hand') {
-                processedName = 'sleight';
-              }
+          <form onSubmit={event => event.preventDefault()}>
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-name">Monster&apos;s name: </label>
+              <input
+                id="input-name"
+                type="text"
+                className="monster-creator__input-text"
+                value={name}
+                onChange={this.handleInputChange}
+              />
+            </div>
 
-              return (
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-size">Size: </label>
+              <select id="input-size" className="monster-creator__input-select" onChange={this.handleInputChange}>
+                {creatureSizes.map(size => (
+                  <option value={size} selected={size === this.state.size}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.size} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-type">Type: </label>
+              <select id="input-type" className="monster-creator__input-select" onChange={this.handleInputChange}>
+                {creatureTypes.map(type => (
+                  <option value={type} selected={type === this.state.type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.type} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-alignment">Alignment: </label>
+              <select id="input-alignment" className="monster-creator__input-select" onChange={this.handleInputChange}>
+                {alignments.map(alignment => (
+                  <option value={alignment} selected={alignment === this.state.alignment}>
+                    {alignment}
+                  </option>
+                ))}
+              </select>
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.alignment} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-ac">Armor Class: </label>
+              <input
+                id="input-ac"
+                type="number"
+                className="monster-creator__input-number"
+                value={ac}
+                min={0}
+                max={30}
+                onChange={this.handleInputChange}
+              />
+              <input
+                id="input-armor"
+                type="text"
+                className="monster-creator__input-text"
+                value={armor}
+                onChange={this.handleInputChange}
+              />
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.ac} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-hp">Hit Points: </label>
+              <input
+                id="input-hp"
+                type="number"
+                className="monster-creator__input-number"
+                value={hp}
+                onChange={this.handleInputChange}
+              />
+              <input
+                id="input-hit-dice"
+                type="text"
+                className="monster-creator__input-text"
+                value={hitDice}
+                onChange={this.handleInputChange}
+              />
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.hitPoints} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-walking-speed">Walking Speed: </label>
+              <input
+                id="input-walking-speed"
+                type="number"
+                className="monster-creator__input-number"
+                value={speed.walk}
+                min={0}
+                onChange={this.handleSpeedChange}
+              />
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.speed} />
+            </div>
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-flying-speed">Flying Speed: </label>
+              <input
+                id="input-flying-speed"
+                type="number"
+                className="monster-creator__input-number"
+                value={speed.fly}
+                min={0}
+                onChange={this.handleSpeedChange}
+              />
+            </div>
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-swiming-speed">Swiming Speed: </label>
+              <input
+                id="input-swiming-speed"
+                type="number"
+                className="monster-creator__input-number"
+                value={speed.swim}
+                min={0}
+                onChange={this.handleSpeedChange}
+              />
+            </div>
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-climning-speed">Climbing Speed: </label>
+              <input
+                id="input-climbing-speed"
+                type="number"
+                className="monster-creator__input-number"
+                value={speed.climb}
+                min={0}
+                onChange={this.handleSpeedChange}
+              />
+            </div>
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-climning-speed">Burrowing Speed: </label>
+              <input
+                id="input-burrowing-speed"
+                type="number"
+                className="monster-creator__input-number"
+                value={speed.burrow}
+                min={0}
+                onChange={this.handleSpeedChange}
+              />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <p className="monster-creator__section-title">Ability Scores:</p>
+            <div className="monster-creator__input-wrapper padding-left">
+              {shortAttributes.map(attr => (
                 <div className="monster-creator__input-wrapper">
-                  <label htmlFor={`input-${processedName}`}>{name}: </label>
+                  <label htmlFor="input-str">{attr}: </label>
                   <input
-                    id={`input-${processedName}`}
+                    id={`input-${attr}`}
                     type="number"
-                    className={`monster-creator__input--${processedName}`}
-                    value={skills[name]}
+                    className="monster-creator__input-number"
+                    value={attributes[attr]}
+                    min={0}
+                    max={30}
+                    onChange={this.handleAttributeChange}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <p className="monster-creator__section-title">Saving Throws:</p>
+            <div className="monster-creator__input-wrapper padding-left">
+              {shortAttributes.map(attr => (
+                <div className="monster-creator__input-wrapper">
+                  <label htmlFor={`input-saving-${attr}`}>{attr}: </label>
+                  <input
+                    id={`input-saving-${attr}`}
+                    type="number"
+                    className="monster-creator__input-number"
+                    value={savingThrows[attr]}
                     min={-30}
                     max={30}
-                    onChange={this.handleSkillsChange}
+                    onChange={this.handleSavingThrowsChange}
                   />
                 </div>
-              );
-            })}
-            <label htmlFor="vulnerabilities">Vulnerabilities: </label>
-            <fieldset id="vulnerabilities">
-              {damageTypes.map(type => (
-                <div className="monster-creator__vulnerability-wrapper">
-                  <input
-                    type="checkbox"
-                    value={type}
-                    name="vulnerabilities"
-                    id={`vulnerability-${type}`}
-                    onClick={this.setVulnerability}
-                  />
-                  <label htmlFor={`vulnerability-${type}`}>{type}</label>
-                </div>
               ))}
-            </fieldset>
-            <label htmlFor="damage-resistances">Damage Resistances: </label>
-            <fieldset id="damage-resistances">
-              {damageTypes.map(type => (
-                <div className="monster-creator__resistance-wrapper">
-                  <input
-                    type="checkbox"
-                    value={type}
-                    name="damage-resistances"
-                    id={`resistance-${type}`}
-                    onClick={this.setDamageResistances}
-                  />
-                  <label htmlFor={`resistance-${type}`}>{type}</label>
-                </div>
-              ))}
-            </fieldset>
-            <label htmlFor="damage-immunities">Damage Immunities: </label>
-            <fieldset id="damage-immunities">
-              {damageTypes.map(type => (
-                <div className="monster-creator__dmg-immunity-wrapper">
-                  <input
-                    type="checkbox"
-                    value={type}
-                    name="damage-immunities"
-                    id={`dmg-immunity-${type}`}
-                    onClick={this.setDamageImmunities}
-                  />
-                  <label htmlFor={`dmg-immunity-${type}`}>{type}</label>
-                </div>
-              ))}
-            </fieldset>
-            <label htmlFor="conditions">Condition Immunities: </label>
-            <fieldset id="conditions">
-              {conditions.map(condition => (
-                <div className="monster-creator__condition-wrapper">
-                  <input
-                    type="checkbox"
-                    value={condition}
-                    name="conditions"
-                    id={`condition-${condition}`}
-                    onClick={this.setConditions}
-                  />
-                  <label htmlFor={`condition-${condition}`}>{condition}</label>
-                </div>
-              ))}
-            </fieldset>
-            <label htmlFor="input-blindsight">Blindsight: </label>
-            <input
-              id="input-blindsight"
-              type="number"
-              className="monster-creator__input--blindsight"
-              value={blindsight}
-              min={0}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-darkvision">Darkvision: </label>
-            <input
-              id="input-darkvision"
-              type="number"
-              className="monster-creator__input--darkvision"
-              value={darkvision}
-              min={0}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-lowlight">Low-light vision: </label>
-            <input
-              id="input-lowlight"
-              type="number"
-              className="monster-creator__input--lowlight"
-              value={lowLightVision}
-              min={0}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-tremorsense">Tremorsense: </label>
-            <input
-              id="input-tremorsense"
-              type="number"
-              className="monster-creator__input--tremorsense"
-              value={tremorsense}
-              min={0}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-truesight">Truesight: </label>
-            <input
-              id="input-truesight"
-              type="number"
-              className="monster-creator__input--truesight"
-              value={truesight}
-              min={0}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-passive">Passive Perception: </label>
-            <input
-              id="input-passive"
-              type="number"
-              className="monster-creator__input--passive"
-              value={passivePerception}
-              min={0}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-languages">Languages: </label>
-            <input
-              id="input-languages"
-              type="text"
-              className="monster-creator__input--languages"
-              value={languages}
-              onChange={this.handleInputChange}
-            />
-            <label htmlFor="input-challenge">Challenge: </label>
-            <select id="input-challenge" className="spell-creator__input--challenge" onChange={this.handleInputChange}>
-              {Object.keys(challengeRating).map(challenge => (
-                <option value={challenge}>{challenge}</option>
-              ))}
-            </select>
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.savingThrows} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <p className="monster-creator__section-title">Skills:</p>
+            <div className="monster-creator__input-wrapper padding-left">
+              {skillNames.map(name => {
+                let processedName = name;
+                if (name === 'animal handling') {
+                  processedName = 'animal-handling';
+                } else if (name === 'sleight of hand') {
+                  processedName = 'sleight';
+                }
+
+                return (
+                  <div className="monster-creator__input-wrapper">
+                    <label htmlFor={`input-${processedName}`}>{name}: </label>
+                    <input
+                      id={`input-${processedName}`}
+                      type="number"
+                      className="monster-creator__input-number"
+                      value={skills[name]}
+                      min={-30}
+                      max={30}
+                      onChange={this.handleSkillsChange}
+                    />
+                  </div>
+                );
+              })}
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.skills} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="vulnerabilities">Vulnerabilities: </label>
+              <fieldset id="vulnerabilities">
+                {damageTypes.map(type => (
+                  <div className="monster-creator__checkbox-wrapper">
+                    <input
+                      type="checkbox"
+                      value={type}
+                      name="vulnerabilities"
+                      id={`vulnerability-${type}`}
+                      onClick={this.setVulnerability}
+                      checked={vulnerabilities.includes(type)}
+                    />
+                    <label htmlFor={`vulnerability-${type}`}>{type}</label>
+                  </div>
+                ))}
+              </fieldset>
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.vulnerabilities} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="damage-resistances">Damage Resistances: </label>
+              <fieldset id="damage-resistances">
+                {damageTypes.map(type => (
+                  <div className="monster-creator__checkbox-wrapper">
+                    <input
+                      type="checkbox"
+                      value={type}
+                      name="damage-resistances"
+                      id={`resistance-${type}`}
+                      onClick={this.setDamageResistances}
+                      checked={damageResistances.includes(type)}
+                    />
+                    <label htmlFor={`resistance-${type}`}>{type}</label>
+                  </div>
+                ))}
+              </fieldset>
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.vulnerabilities} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="damage-immunities">Damage Immunities: </label>
+              <fieldset id="damage-immunities">
+                {damageTypes.map(type => (
+                  <div className="monster-creator__checkbox-wrapper">
+                    <input
+                      type="checkbox"
+                      value={type}
+                      name="damage-immunities"
+                      id={`dmg-immunity-${type}`}
+                      onClick={this.setDamageImmunities}
+                      checked={damageImmunities.includes(type)}
+                    />
+                    <label htmlFor={`dmg-immunity-${type}`}>{type}</label>
+                  </div>
+                ))}
+              </fieldset>
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.vulnerabilities} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="conditions">Condition Immunities: </label>
+              <fieldset id="conditions">
+                {conditions.map(condition => (
+                  <div className="monster-creator__checkbox-wrapper">
+                    <input
+                      type="checkbox"
+                      value={condition}
+                      name="conditions"
+                      id={`condition-${condition}`}
+                      onClick={this.setConditions}
+                      checked={conditionImmunities.includes(condition)}
+                    />
+                    <label htmlFor={`condition-${condition}`}>{condition}</label>
+                  </div>
+                ))}
+              </fieldset>
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.vulnerabilities} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-blindsight">Blindsight: </label>
+              <input
+                id="input-blindsight"
+                type="number"
+                className="monster-creator__input-text"
+                value={blindsight}
+                min={0}
+                onChange={this.handleInputChange}
+              />
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.senses} />
+            </div>
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-darkvision">Darkvision: </label>
+              <input
+                id="input-darkvision"
+                type="number"
+                className="monster-creator__input-text"
+                value={darkvision}
+                min={0}
+                onChange={this.handleInputChange}
+              />
+            </div>
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-lowlight">Low-light vision: </label>
+              <input
+                id="input-lowlight"
+                type="number"
+                className="monster-creator__input-text"
+                value={lowLightVision}
+                min={0}
+                onChange={this.handleInputChange}
+              />
+            </div>
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-tremorsense">Tremorsense: </label>
+              <input
+                id="input-tremorsense"
+                type="number"
+                className="monster-creator__input-text"
+                value={tremorsense}
+                min={0}
+                onChange={this.handleInputChange}
+              />
+            </div>
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-truesight">Truesight: </label>
+              <input
+                id="input-truesight"
+                type="number"
+                className="monster-creator__input-text"
+                value={truesight}
+                min={0}
+                onChange={this.handleInputChange}
+              />
+            </div>
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-passive">Passive Perception: </label>
+              <input
+                id="input-passive"
+                type="number"
+                className="monster-creator__input-text"
+                value={passivePerception}
+                min={0}
+                onChange={this.handleInputChange}
+              />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-languages">Languages: </label>
+              <input
+                id="input-languages"
+                type="text"
+                className="monster-creator__input-text"
+                value={languages}
+                onChange={this.handleInputChange}
+              />
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.languages} />
+            </div>
+
+            <div className="monster-creator__separator" />
+
+            <div className="monster-creator__input-wrapper">
+              <label htmlFor="input-challenge">Challenge: </label>
+              <select id="input-challenge" className="monster-creator__input-select" onChange={this.handleInputChange}>
+                {Object.keys(challengeRating).map(challenge => (
+                  <option value={challenge}>{challenge}</option>
+                ))}
+              </select>
+              <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.challenge} />
+            </div>
+            <button className="monster-creator__button margin-right" onClick={this.handleSave}>
+              Save
+            </button>
+            <button className="monster-creator__button" onClick={this.savePDF}>
+              Download PDF
+            </button>
           </form>
         </div>
         <div className="monster-creator__preview-wrapper">
           <h3 className="monster-creator__name">{name || "Monster's name"}</h3>
-          <p className="monster-creator__sub-info">{`${size} ${type}, ${alignment}`}</p>
+          <p className="monster-creator__sub-info">{`${size} ${type}${alignment && ','} ${alignment}`}</p>
+          <div className="monster-creator__separator" />
           <p className="monster-creator__attribute">
-            Armor Class:{' '}
-            <span className="monster-creator__attribute-value monster-creator__classes">{`${ac} ${armor &&
-              `(${armor})`}`}</span>
+            Armor Class: <span className="monster-creator__attribute-value">{`${ac} ${armor && `(${armor})`}`}</span>
           </p>
           <p className="monster-creator__attribute">
-            Hit Points:{' '}
-            <span className="monster-creator__hp monster-creator__classes">{`${hp} ${hitDice && `(${hitDice})`}`}</span>
+            Hit Points: <span className="monster-creator__attribute-value">{`${hp} ${hitDice && `(${hitDice})`}`}</span>
           </p>
           <p className="monster-creator__attribute">
             Speed:{' '}
-            <span className="monster-creator__hp monster-creator__classes">
+            <span className="monster-creator__attribute-value">
               {Object.keys(speed)
                 .map(key => (speed[key] ? `${key} ${speed[key]} ft.` : null))
                 .filter(el => el)
                 .join(', ')}
             </span>
           </p>
-          <p className="monster-creator__attribute">
-            Str:{' '}
-            <span className="monster-creator__str monster-creator__classes">
-              {`${attributes.str} (${attributesSign.str}${Math.floor((attributes.str - 10) / 2)})`}
-            </span>
-          </p>
-          <p className="monster-creator__attribute">
-            Dex:{' '}
-            <span className="monster-creator__dex monster-creator__classes">
-              {`${attributes.dex} (${attributesSign.dex}${Math.floor((attributes.dex - 10) / 2)})`}
-            </span>
-          </p>
-          <p className="monster-creator__attribute">
-            Con:{' '}
-            <span className="monster-creator__con monster-creator__classes">
-              {`${attributes.con} (${attributesSign.con}${Math.floor((attributes.con - 10) / 2)})`}
-            </span>
-          </p>
-          <p className="monster-creator__attribute">
-            Int:{' '}
-            <span className="monster-creator__int monster-creator__classes">
-              {`${attributes.int} (${attributesSign.int}${Math.floor((attributes.int - 10) / 2)})`}
-            </span>
-          </p>
-          <p className="monster-creator__attribute">
-            Wis:{' '}
-            <span className="monster-creator__wis monster-creator__classes">
-              {`${attributes.wis} (${attributesSign.wis}${Math.floor((attributes.wis - 10) / 2)})`}
-            </span>
-          </p>
-          <p className="monster-creator__attribute">
-            Cha:{' '}
-            <span className="monster-creator__cha monster-creator__classes">
-              {`${attributes.cha} (${attributesSign.cha}${Math.floor((attributes.cha - 10) / 2)})`}
-            </span>
-          </p>
-          <p className="monster-creator__attribute">
-            Vulnerabilities:{' '}
-            <span className="monster-creator__vulnerabilities spell-creator__classes">
-              {vulnerabilities.join(', ')}
-            </span>
-          </p>
-          <p className="monster-creator__attribute">
-            Damage Resistances:{' '}
-            <span className="monster-creator__damage-resistances spell-creator__classes">
-              {damageResistances.join(', ')}
-            </span>
-          </p>
-          <p className="monster-creator__attribute">
-            Damage Immunities:{' '}
-            <span className="monster-creator__damage-immunities spell-creator__classes">
-              {damageImmunities.join(', ')}
-            </span>
-          </p>
-          <p className="monster-creator__attribute">
-            Condition Immunities:{' '}
-            <span className="monster-creator__condition-immunities spell-creator__classes">
-              {conditionImmunities.join(', ')}
-            </span>
-          </p>
-          <p className="monster-creator__attribute">
-            Senses:{' '}
-            <span className="monster-creator__senses monster-creator__classes">
-              {[
-                {
-                  name: 'blindsight',
-                  value: parseInt(blindsight, 10),
-                },
-                {
-                  name: 'darkvision',
-                  value: parseInt(darkvision, 10),
-                },
-                {
-                  name: 'low-light vision',
-                  value: parseInt(lowLightVision, 10),
-                },
-                {
-                  name: 'tremorsense',
-                  value: parseInt(tremorsense, 10),
-                },
-                {
-                  name: 'truesight',
-                  value: parseInt(truesight, 10),
-                },
-                {
-                  name: 'passivePerception',
-                  value: parseInt(passivePerception, 10),
-                },
-              ]
-                .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
-                .filter(el => el)
-                .join(', ')}
-            </span>
-          </p>
-          <p className="monster-creator__attribute">
-            Languages: <span className="monster-creator__condition-languages spell-creator__classes">{languages}</span>
-          </p>
-          <p className="monster-creator__attribute">
-            Challenge:{' '}
-            <span className="monster-creator__challenge spell-creator__classes">{`${challenge} (${
-              challengeRating[challenge]
-            } XP)`}</span>
-          </p>
+          <div className="monster-creator__separator" />
+          <div className="monster-creator__ability-container">
+            <div className="monster-creator__ability-wrapper">
+              <p className="monster-creator__attribute ">Str</p>
+              <span className="monster-creator__str monster-creator__classes">
+                {`${attributes.str} (${attributesSign.str}${Math.floor((attributes.str - 10) / 2)})`}
+              </span>
+            </div>
+            <div className="monster-creator__ability-wrapper">
+              <p className="monster-creator__attribute">Dex</p>
+              <span className="monster-creator__dex monster-creator__classes">
+                {`${attributes.dex} (${attributesSign.dex}${Math.floor((attributes.dex - 10) / 2)})`}
+              </span>
+            </div>
+            <div className="monster-creator__ability-wrapper">
+              <p className="monster-creator__attribute">Con:</p>
+              <span className="monster-creator__con monster-creator__classes">
+                {`${attributes.con} (${attributesSign.con}${Math.floor((attributes.con - 10) / 2)})`}
+              </span>
+            </div>
+            <div className="monster-creator__ability-wrapper">
+              <p className="monster-creator__attribute">Int</p>
+              <span className="monster-creator__int monster-creator__classes">
+                {`${attributes.int} (${attributesSign.int}${Math.floor((attributes.int - 10) / 2)})`}
+              </span>
+            </div>
+            <div className="monster-creator__ability-wrapper">
+              <p className="monster-creator__attribute">Wis</p>
+              <span className="monster-creator__wis monster-creator__classes">
+                {`${attributes.wis} (${attributesSign.wis}${Math.floor((attributes.wis - 10) / 2)})`}
+              </span>
+            </div>
+            <div className="monster-creator__ability-wrapper">
+              <p className="monster-creator__attribute">Cha</p>
+              <span className="monster-creator__cha monster-creator__classes">
+                {`${attributes.cha} (${attributesSign.cha}${Math.floor((attributes.cha - 10) / 2)})`}
+              </span>
+            </div>
+          </div>
+          <div className="monster-creator__separator" />
           {this.displaySavingThrows()}
           {this.displaySkills()}
+          {vulnerabilities.length ? (
+            <p className="monster-creator__attribute">
+              Vulnerabilities: <span className="monster-creator__attribute-value">{vulnerabilities.join(', ')}</span>
+            </p>
+          ) : null}
+          {damageResistances.length ? (
+            <p className="monster-creator__attribute">
+              Damage Resistances:{' '}
+              <span className="monster-creator__attribute-value">{damageResistances.join(', ')}</span>
+            </p>
+          ) : null}
+          {damageImmunities.length ? (
+            <p className="monster-creator__attribute">
+              Damage Immunities: <span className="monster-creator__attribute-value">{damageImmunities.join(', ')}</span>
+            </p>
+          ) : null}
+          {conditionImmunities.length ? (
+            <p className="monster-creator__attribute">
+              Condition Immunities:{' '}
+              <span className="monster-creator__attribute-value">{conditionImmunities.join(', ')}</span>
+            </p>
+          ) : null}
+          {parseInt(blindsight, 10) ||
+            parseInt(darkvision, 10) ||
+            parseInt(lowLightVision, 10) ||
+            parseInt(lowLightVision, 10) ||
+            parseInt(tremorsense, 10) ||
+            parseInt(truesight, 10) ||
+            parseInt(passivePerception, 10) ? (
+              <p className="monster-creator__attribute">
+                Senses:{' '}
+                <span className="monster-creator__attribute-value">
+                  {[
+                    {
+                      name: 'blindsight',
+                      value: parseInt(blindsight, 10),
+                    },
+                    {
+                      name: 'darkvision',
+                      value: parseInt(darkvision, 10),
+                    },
+                    {
+                      name: 'low-light vision',
+                      value: parseInt(lowLightVision, 10),
+                    },
+                    {
+                      name: 'tremorsense',
+                      value: parseInt(tremorsense, 10),
+                    },
+                    {
+                      name: 'truesight',
+                      value: parseInt(truesight, 10),
+                    },
+                    {
+                      name: 'passivePerception',
+                      value: parseInt(passivePerception, 10),
+                    },
+                  ]
+                    .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
+                    .filter(el => el)
+                    .join(', ')}
+                </span>
+              </p>
+            ) : null}
+          {languages ? (
+            <p className="monster-creator__attribute">
+              Languages: <span className="monster-creator__attribute-value">{languages}</span>
+            </p>
+          ) : null}
+          <p className="monster-creator__attribute">
+            Challenge:{' '}
+            <span className="monster-creator__attribute-value">{`${challenge} (${
+              challengeRating[challenge]
+              } XP)`}</span>
+          </p>
+          <div className="monster-creator__separator" />
         </div>
       </div>
     );
   }
 }
 
-export default MonsterCreatorPage;
+MonsterCreatorPage.propTypes = {
+  monster: PropTypes.shape().isRequired,
+  authUser: PropTypes.shape().isRequired,
+  history: PropTypes.shape().isRequired,
+};
+
+const mapStateToProps = state => ({
+  authUser: state.authUser,
+  monster: state.monster,
+});
+
+const mapDispatchToProps = dispatch => ({
+  resetMonster: () => dispatch(setMonster(null)),
+});
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(MonsterCreatorPage)
+);
