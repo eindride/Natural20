@@ -8,6 +8,7 @@ import LogIn from '../LogIn/LogIn';
 import SpellCreatorPage from '../../pages/SpellCreatorPage/SpellCreatorPage';
 import MonsterCreatorPage from '../../pages/MonsterCreatorPage/MonsterCreatorPage';
 import SpellsListPage from '../../pages/SpellsListPage/SpellsListPage';
+import MonstersListPage from '../../pages/MonstersListPage/MonstersListPage';
 import SpellPage from '../../pages/SpellPage/SpellPage';
 /* eslint-disable */
 const Main = (props) => (
@@ -38,6 +39,9 @@ const Main = (props) => (
       )} />
       <Route path='/spells-list' render={() => (
         <SpellsListPage />
+      )} />
+      <Route path='/creatures-list' render={() => (
+        <MonstersListPage />
       )} />
       <Route path='/spell/:spellname' render={() => (
         <SpellPage />

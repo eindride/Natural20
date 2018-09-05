@@ -436,6 +436,98 @@
 .spells-list__hidden {
   visibility: hidden; }
 
+.monsters-list {
+  padding: 50px 5%; }
+
+.monsters-list__search-bar-container {
+  display: flex;
+  justify-content: center; }
+
+.monsters-list__search-bar {
+  border: none;
+  border-bottom: 3px solid #999;
+  color: #666;
+  width: 80%;
+  text-align: center;
+  font-size: 32px; }
+  .monsters-list__search-bar::placeholder {
+    color: #ccc; }
+
+.monsters-list__search-icon {
+  width: 32px;
+  height: 32px; }
+
+.monsters-list__search-text {
+  text-align: center;
+  color: #666; }
+
+.monsters-list__search-item {
+  color: #000; }
+
+.monsters-list__close-button {
+  color: #666;
+  font-size: 18px;
+  display: inline-block;
+  margin-left: 20px;
+  width: 25px;
+  height: 25px;
+  cursor: pointer; }
+
+.monsters-list__filters-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px; }
+  .monsters-list__filters-container .monsters-list__filter-button {
+    border: 1px solid #000;
+    border-radius: 20px;
+    padding: 5px;
+    font-size: 14px;
+    width: 170px;
+    margin: 0 10px; }
+    .monsters-list__filters-container .monsters-list__filter-button.monsters-list__button-active {
+      background-color: #000;
+      color: #fff; }
+  .monsters-list__filters-container .monsters-list__filter {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    border-bottom: 1px solid #999;
+    border-radius: 0;
+    background-color: #fff;
+    width: 100px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    margin: 0 10px; }
+  .monsters-list__filters-container .monsters-list__filter-label {
+    font-size: 12px;
+    color: #666; }
+
+.monsters-list__monster-container {
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  padding: 0 20px;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer; }
+  .monsters-list__monster-container .monsters-list__author {
+    font-size: 12px;
+    color: #666; }
+  .monsters-list__monster-container .monsters-list__date {
+    font-size: 10px; }
+  .monsters-list__monster-container .monsters-list__comment-icon-container {
+    display: flex;
+    align-items: center; }
+  .monsters-list__monster-container .monsters-list__comment-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px; }
+
+.monsters-list__hidden {
+  visibility: hidden; }
+
 .footer {
   height: 100px;
   background-color: #000;
