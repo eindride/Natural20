@@ -1,24 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// import { firebase } from '../../firebase/index';
+import { firebase } from '../../firebase/index';
 import { monthNames } from '../../copy/general';
 import commentIcon from '../../assets/icons/comment.svg';
 import './_spellsListPage.scss';
 
 class Spell extends Component {
-  // getUserName = userId => {
-  //   firebase.admin
-  //     .auth()
-  //     .getUser(userId)
-  //     .then(userRecord => {
-  //       // See the UserRecord reference doc for the contents of userRecord.
-  //       console.log('Successfully fetched user data:', userRecord.toJSON());
-  //     })
-  //     .catch(error => {
-  //       console.log('Error fetching user data:', error);
-  //     });
-  // };
+  state = {
+    username: '',
+  };
+
+  getUsername = userId => {
+    if (this.state.username === '') {
+      const { db } = firebase;
+      db.collection('users')
+        .where('userId', '==', userId)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            this.setState(state => ({
+              ...state,
+              username: doc.data().username,
+            }));
+          });
+        });
+    }
+  };
 
   handleClick = () => {
     const { spell, onClick } = this.props;
@@ -43,6 +51,8 @@ class Spell extends Component {
   render() {
     const { spell } = this.props;
     const { year, month, day, hour, minute } = this.parseDate(spell.creationDate);
+    this.getUsername(spell.userId);
+    const { username } = this.state;
     return (
       <div
         className="spells-list__spell-container"
@@ -53,7 +63,7 @@ class Spell extends Component {
       >
         <div>
           <p>
-            {spell.name} <span className="spells-list__author">by placeholder</span>
+            {spell.name} <span className="spells-list__author">by {username}</span>
           </p>
           <p className="spells-list__date">Last update: {`${year}, ${day} ${month}, ${hour}:${minute}`}</p>
         </div>
