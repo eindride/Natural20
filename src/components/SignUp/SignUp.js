@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { auth } from '../../firebase/index';
+import { auth, firebase } from '../../firebase/index';
 import './_signUp.scss';
 
 class SignUp extends Component {
@@ -9,6 +9,7 @@ class SignUp extends Component {
     super(props);
     this.state = {
       email: '',
+      username: '',
       password: '',
       confirmPassword: '',
     };
@@ -61,7 +62,9 @@ class SignUp extends Component {
     if (this.isValid(email, password, confirmPassword)) {
       auth
         .createUserWithEmailAndPassword(email, password)
-        .then(() => {
+        .then(user => {
+          console.log({ user });
+          this.saveUserToDb(user.uid);
           history.push('/login');
         })
         .catch(error => {
@@ -74,14 +77,38 @@ class SignUp extends Component {
     }
   }
 
+  saveUserToDb = userId => {
+    const { db } = firebase;
+    const { email, username } = this.state;
+    db.collection('users')
+      .doc(username)
+      .set({
+        email,
+        username,
+        userId,
+        role: 'user',
+      })
+      .then(() => {
+        console.log('User saved to DB');
+      })
+      .catch(error => {
+        console.log('Could not save user to DB: ', error);
+        this.this.setState(state => ({
+          ...state,
+          error,
+        }));
+      });
+  };
+
   render() {
-    const { email, password, confirmPassword, error } = this.state;
+    const { email, username, password, confirmPassword, error } = this.state;
     return (
       <div className="signup">
         <div className="signup__background" />
         <div className="signup__title">Sign Up</div>
         <form onSubmit={this.handleSubmit} className="signup__form" noValidate>
           <input type="email" placeholder="Email" name="email" onInput={this.handleInput} value={email} />
+          <input type="text" placeholder="Username" name="username" onInput={this.handleInput} value={username} />
           <input type="password" placeholder="Password" name="password" onInput={this.handleInput} value={password} />
           <input
             type="password"
