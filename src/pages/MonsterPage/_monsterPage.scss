@@ -100,3 +100,25 @@
     }
   }
 }
+
+.monster-page__comment-buttons-container {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  float: right;
+
+  .monster-page__button {
+    @include button ($black, $white);
+    padding: 0 10px;
+    font-size: 12px;
+    cursor: pointer;
+
+    &:not(:first-child) {
+      border-left: 1px solid $black;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
