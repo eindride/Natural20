@@ -216,3 +216,15 @@ export const dummyComments = [
       'Bacon ipsum dolor amet pastrami pork fatback burgdoggen beef. Porchetta hamburger picanha fatback filet mignon pork loin pastrami. Short loin cupim pig flank, buffalo chicken jerky chuck kielbasa tri-tip cow filet mignon rump. Porchetta meatball tenderloin pork loin. Landjaeger capicola chicken, pancetta meatloaf pastrami tri-tip doner.',
   },
 ];
+
+export const officialRaces = [
+  'dragonborn',
+  'dwarf',
+  'elf',
+  'gnome',
+  'half elf',
+  'half orc',
+  'halfling',
+  'human',
+  'tiefling',
+];

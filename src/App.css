@@ -184,11 +184,11 @@
 
 .spell-creator__form-wrapper,
 .spell-creator__preview-wrapper {
-  flex: 1;
-  max-height: calc(100vh - 50px - 75px - 100px); }
+  flex: 1; }
 
 .spell-creator__form-wrapper {
-  overflow-y: auto; }
+  overflow-y: auto;
+  max-height: calc(100vh - 50px - 75px - 100px); }
 
 .spell-creator__input-wrapper {
   position: relative; }
@@ -271,6 +271,85 @@
     font-weight: 600; }
     .spell-creator__preview-wrapper .spell-creator__attribute .spell-creator__attribute-value {
       font-weight: normal; }
+
+.character-creator {
+  display: flex;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-top: 50px;
+  padding-bottom: 50px; }
+
+.character-creator__form-wrapper,
+.character-creator__preview-wrapper {
+  flex: 1; }
+
+.character-creator__form-wrapper {
+  overflow-y: auto;
+  max-height: calc(100vh - 50px - 75px - 100px); }
+
+.character-creator__input-wrapper {
+  position: relative; }
+  .character-creator__input-wrapper label {
+    font-size: 16px;
+    color: #666; }
+  .character-creator__input-wrapper fieldset {
+    border: none;
+    display: block; }
+    .character-creator__input-wrapper fieldset label {
+      margin: 0 10px 0 5px;
+      color: #000; }
+  .character-creator__input-wrapper .character-creator__components-fieldset {
+    display: block; }
+  .character-creator__input-wrapper .character-creator__checkbox-wrapper {
+    display: inline-block;
+    min-width: 145px; }
+  .character-creator__input-wrapper .character-creator__input-text {
+    border: none;
+    border-bottom: 1px solid #666;
+    padding-left: 5px;
+    padding-bottom: 3px;
+    font-size: 18px;
+    width: 150px; }
+  .character-creator__input-wrapper .character-creator__input-number {
+    border: none;
+    border-bottom: 1px solid #666;
+    padding-left: 5px;
+    padding-bottom: 3px;
+    font-size: 18px;
+    width: 50px; }
+  .character-creator__input-wrapper .character-creator__input-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    border-bottom: 1px solid #999;
+    border-radius: 0;
+    background-color: #fff;
+    width: 100px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    margin: 0 10px; }
+  .character-creator__input-wrapper .character-creator__infoButton {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    right: 20%;
+    top: 50%;
+    transform: translateY(-50%); }
+
+.character-creator__separator {
+  width: 80%;
+  height: 1px;
+  background-color: #666;
+  margin: 15px 0; }
+
+.character-creator__dice-icon {
+  width: 32px;
+  height: 32px; }
+
+.character-creator__dice-icon-container {
+  display: inline-block;
+  cursor: pointer; }
 
 .spell-page {
   max-width: 1240px;

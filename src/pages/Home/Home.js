@@ -33,7 +33,7 @@ class Home extends Component {
       <div className="home__wrapper">
         <div className="home__carousel-placeholder">Carousel will be here</div>
         <div className="home__grid">
-          <div className="home__grid--character" onMouseOver={this.mouseEnterOverlay} onMouseLeave={this.mouseLeaveOverlay}>
+          <div className="home__grid--character" onMouseOver={this.mouseEnterOverlay} onMouseLeave={this.mouseLeaveOverlay} onClick={() => history.push('/character-creator')}>
             <div className="home__grid--element-overlay">
               <h3 className="home__grid--overlay-title">Character Creator</h3>
               <p className="home__grid--overlay-description home__hidden">Bacon ipsum dolor amet kevin</p>

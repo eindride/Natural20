@@ -7,6 +7,7 @@ import Home from '../../pages/Home/Home';
 import LogIn from '../LogIn/LogIn';
 import SpellCreatorPage from '../../pages/SpellCreatorPage/SpellCreatorPage';
 import MonsterCreatorPage from '../../pages/MonsterCreatorPage/MonsterCreatorPage';
+import CharacterCreatorPage from '../../pages/CharacterCreatorPage/CharacterCreatorPage';
 import SpellsListPage from '../../pages/SpellsListPage/SpellsListPage';
 import MonstersListPage from '../../pages/MonstersListPage/MonstersListPage';
 import SpellPage from '../../pages/SpellPage/SpellPage';
@@ -37,6 +38,9 @@ const Main = (props) => (
       )} />
       <Route path='/monster-creator' render={() => (
         <MonsterCreatorPage />
+      )} />
+      <Route path='/character-creator' render={() => (
+        <CharacterCreatorPage />
       )} />
       <Route path='/spells-list' render={() => (
         <SpellsListPage />

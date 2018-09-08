@@ -1,6 +1,6 @@
 @import "../../sass/variables.scss";
 
-.spell-creator {
+.character-creator {
 	display: flex;
 	max-width: $desktop-page-width;
   margin: 0 auto;
@@ -8,17 +8,17 @@
   padding-bottom: 50px;
 }
 
-.spell-creator__form-wrapper ,
-.spell-creator__preview-wrapper {
+.character-creator__form-wrapper ,
+.character-creator__preview-wrapper {
   flex: 1;
 }
 
-.spell-creator__form-wrapper {
+.character-creator__form-wrapper {
   overflow-y: auto;
   max-height: calc(100vh - 50px - #{$headerHeight} - #{$footerHeight});
 }
 
-.spell-creator__input-wrapper {
+.character-creator__input-wrapper {
   position: relative;
   label {
     font-size: 16px;
@@ -27,7 +27,7 @@
 
   fieldset {
     border: none;
-    display: inline-block;
+    display: block;
 
     label {
       margin: 0 10px 0 5px;
@@ -35,11 +35,16 @@
     }
   }
 
-  .spell-creator__components-fieldset {
+  .character-creator__components-fieldset {
     display: block;
   }
 
-  .spell-creator__input-text {
+  .character-creator__checkbox-wrapper {
+    display: inline-block;
+    min-width: 145px;
+  }
+
+  .character-creator__input-text {
     border: none;
     border-bottom: 1px solid $darkGrey;
     padding-left: 5px;
@@ -48,7 +53,7 @@
     width: 150px;
   }
 
-  .spell-creator__input-number {
+  .character-creator__input-number {
     border: none;
     border-bottom: 1px solid $darkGrey;
     padding-left: 5px;
@@ -57,7 +62,7 @@
     width: 50px;
   }
 
-  .spell-creator__input-select {
+  .character-creator__input-select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -71,12 +76,7 @@
     margin: 0 10px;
   }
 
-  .spell-creator__class-wrapper {
-    display: inline-block;
-    min-width: 120px;
-  }
-
-  .spell-creator__infoButton {
+  .character-creator__infoButton {
     width: 18px;
     height: 18px;
     position: absolute;
@@ -86,48 +86,19 @@
   }
 }
 
-.spell-creator__textbox-wrapper {
-  label {
-    font-size: 16px;
-    color: $darkGrey;
-  }
-
-  .spell-creator__textbox {
-    display: block;
-    margin-left: 50px;
-    width: calc(100% - 100px);
-    border: none;
-    border-top: 1px solid $mediumGrey;
-    border-left: 1px solid $mediumGrey;
-  }
-}
-
-.spell-creator__separator {
+.character-creator__separator {
   width: 80%;
   height: 1px;
   background-color: $darkGrey;
   margin: 15px 0;
 }
 
-.spell-creator__preview-wrapper {
-  padding: 0 50px;
+.character-creator__dice-icon {
+  width: 32px;
+  height: 32px;
+}
 
-  .spell-creator__name {
-    font-size: 42px;
-    font-weight: 500;
-    margin: 0;
-  }
-
-  .spell-creator__level {
-    font-style: italic;
-    font-size: 14px;
-  }
-
-  .spell-creator__attribute {
-    font-weight: 600;
-
-    .spell-creator__attribute-value {
-      font-weight: normal;
-    }
-  }
+.character-creator__dice-icon-container {
+  display: inline-block;
+  cursor: pointer;
 }
