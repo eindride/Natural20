@@ -6,7 +6,7 @@ import html2canvas from 'html2canvas';
 import { connect } from 'react-redux';
 import { firebase } from '../../firebase/index';
 import { setMonster } from '../../redux/actions';
-import { dummyComments, challengeRating } from '../../copy/general';
+import { monthNames, challengeRating } from '../../copy/general';
 
 class MonsterPage extends Component {
   state = {
@@ -71,6 +71,8 @@ class MonsterPage extends Component {
     },
     error: null,
     commentBody: '',
+    comments: [],
+    editBody: null,
   };
 
   componentDidMount() {
@@ -86,6 +88,34 @@ class MonsterPage extends Component {
             ...state,
             monster: doc.data(),
           }));
+          db.collection('posts')
+            .where('postId', '==', monstername)
+            .orderBy('creationDate', 'desc')
+            .get()
+            .then(querySnapshot => {
+              const results = querySnapshot.docs.map(doc => ({
+                ...doc.data(),
+                commentId: doc.id,
+              }));
+              const promises = results.map(result => this.getUsername(result.userId));
+              Promise.all(promises)
+                .then(usernames => {
+                  const finalResults = results.map((result, index) => ({
+                    ...result,
+                    username: usernames[index],
+                  }));
+                  this.setState(state => ({
+                    ...state,
+                    comments: finalResults,
+                  }));
+                })
+                .catch(error => {
+                  console.error('There was a problem while queriing usernames', error);
+                });
+            })
+            .catch(error => {
+              console.log('An error occured while quering the comments', error);
+            });
         } else {
           console.log('No such document exists!');
           this.setState(state => ({
@@ -102,6 +132,31 @@ class MonsterPage extends Component {
         }));
       });
   }
+
+  getUsername = userId =>
+    new Promise(resolve => {
+      const { db } = firebase;
+      db.collection('users')
+        .where('userId', '==', userId)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            resolve(doc.data().username);
+          });
+        })
+        .catch(error => {
+          console.log({ error });
+        });
+    });
+
+  parseDate = date => {
+    const year = date.getFullYear();
+    const month = monthNames[date.getMonth()];
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    return `${year}, ${day} ${month}, ${hour}:${minute}`;
+  };
 
   handleEdit = () => {
     console.log('clicked on edit');
@@ -155,6 +210,14 @@ class MonsterPage extends Component {
     }));
   };
 
+  handleEditTextboxChange = event => {
+    const { value } = event.target;
+    this.setState(state => ({
+      ...state,
+      editBody: value,
+    }));
+  };
+
   displaySavingThrows = () => {
     const { savingThrows } = this.state.monster;
     const sum = Object.keys(savingThrows)
@@ -200,8 +263,88 @@ class MonsterPage extends Component {
     return null;
   };
 
+  handlePostComment = () => {
+    const { commentBody } = this.state;
+    const { authUser } = this.props;
+    const { monstername } = this.props.match.params;
+    const { db } = firebase;
+    db.collection('posts')
+      .doc(`${monstername}-${authUser.uid}-${this.generateRandomId()}`)
+      .set({
+        userId: authUser.uid,
+        postId: monstername,
+        message: commentBody,
+        creationDate: new Date(),
+      })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(error => {
+        console.log('There was a problem posting the comment', error);
+        this.setState(state => ({
+          ...state,
+          postError: error,
+        }));
+      });
+  };
+
+  generateRandomId = () =>
+    Math.random()
+      .toString(36)
+      .replace(/[^a-z]+/g, '')
+      .substr(2, 10);
+
+  handleClickEdit = index => {
+    this.setState(state => ({
+      ...state,
+      editComment: index,
+      editBody: state.comments[index].message,
+    }));
+  };
+
+  handleSaveEdit = () => {
+    const { comments, editComment } = this.state;
+    const { editBody } = this.state;
+    const { db } = firebase;
+    db.collection('posts')
+      .doc(comments[editComment].commentId)
+      .update({
+        message: editBody,
+      })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(error => {
+        console.log('There was a problem posting the comment', error);
+        this.setState(state => ({
+          ...state,
+          postError: error,
+        }));
+      });
+  };
+
+  handleDeleteComment = index => {
+    const { db } = firebase;
+    const { commentId } = this.state.comments[index];
+    db.collection('posts')
+      .doc(commentId)
+      .delete()
+      .then(() => {
+        console.log('Document deleted');
+        window.location.reload();
+      })
+      .catch(error => {
+        console.log('An error occured while deleting', error);
+        this.setState(state => ({
+          ...state,
+          deleteError: 'A problem occured while deleting the comment',
+        }));
+      });
+  };
+
   render() {
-    const { monster, error, commentBody } = this.state;
+    const { monster, error, commentBody, comments, editComment, editBody } = this.state;
+    console.log({ comments });
     const { authUser } = this.props;
     const {
       name,
@@ -353,47 +496,47 @@ class MonsterPage extends Component {
                 </p>
               ) : null}
               {parseInt(blindsight, 10) ||
-              parseInt(darkvision, 10) ||
-              parseInt(lowLightVision, 10) ||
-              parseInt(lowLightVision, 10) ||
-              parseInt(tremorsense, 10) ||
-              parseInt(truesight, 10) ||
-              parseInt(passivePerception, 10) ? (
-                <p className="monster-creator__attribute">
-                  Senses:{' '}
-                  <span className="monster-creator__attribute-value">
-                    {[
-                      {
-                        name: 'blindsight',
-                        value: parseInt(blindsight, 10),
-                      },
-                      {
-                        name: 'darkvision',
-                        value: parseInt(darkvision, 10),
-                      },
-                      {
-                        name: 'low-light vision',
-                        value: parseInt(lowLightVision, 10),
-                      },
-                      {
-                        name: 'tremorsense',
-                        value: parseInt(tremorsense, 10),
-                      },
-                      {
-                        name: 'truesight',
-                        value: parseInt(truesight, 10),
-                      },
-                      {
-                        name: 'passivePerception',
-                        value: parseInt(passivePerception, 10),
-                      },
-                    ]
-                      .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
-                      .filter(el => el)
-                      .join(', ')}
-                  </span>
-                </p>
-              ) : null}
+                parseInt(darkvision, 10) ||
+                parseInt(lowLightVision, 10) ||
+                parseInt(lowLightVision, 10) ||
+                parseInt(tremorsense, 10) ||
+                parseInt(truesight, 10) ||
+                parseInt(passivePerception, 10) ? (
+                  <p className="monster-creator__attribute">
+                    Senses:{' '}
+                    <span className="monster-creator__attribute-value">
+                      {[
+                        {
+                          name: 'blindsight',
+                          value: parseInt(blindsight, 10),
+                        },
+                        {
+                          name: 'darkvision',
+                          value: parseInt(darkvision, 10),
+                        },
+                        {
+                          name: 'low-light vision',
+                          value: parseInt(lowLightVision, 10),
+                        },
+                        {
+                          name: 'tremorsense',
+                          value: parseInt(tremorsense, 10),
+                        },
+                        {
+                          name: 'truesight',
+                          value: parseInt(truesight, 10),
+                        },
+                        {
+                          name: 'passivePerception',
+                          value: parseInt(passivePerception, 10),
+                        },
+                      ]
+                        .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
+                        .filter(el => el)
+                        .join(', ')}
+                    </span>
+                  </p>
+                ) : null}
               {languages ? (
                 <p className="monster-creator__attribute">
                   Languages: <span className="monster-creator__attribute-value">{languages}</span>
@@ -403,14 +546,14 @@ class MonsterPage extends Component {
                 Challenge:{' '}
                 <span className="monster-creator__attribute-value">{`${challenge} (${
                   challengeRating[challenge]
-                } XP)`}</span>
+                  } XP)`}</span>
               </p>
               <div className="monster-creator__separator" />
             </div>
           </div>
         ) : (
-          !error && <h1>Loading...</h1>
-        )}
+            !error && <h1>Loading...</h1>
+          )}
         {monster && (
           <div className="monster-page__comments-section">
             <div className="monster-page__input-container">
@@ -424,16 +567,45 @@ class MonsterPage extends Component {
                 value={commentBody}
                 onChange={this.handleTextboxChange}
               />
-              <button className="monster-page__post-button">Comment</button>
+              <button className="monster-page__post-button" onClick={this.handlePostComment}>
+                Comment
+              </button>
             </div>
 
             <div className="monster-page__comments-container">
-              {dummyComments.map(comment => (
+              {comments.map((comment, index) => (
                 <div className="monster-page__comment">
                   <p className="monster-page__comment-author">
-                    {comment.author} <span>- {comment.date}</span>
+                    {comment.username} <span>- {this.parseDate(comment.creationDate)}</span>
+                    <div className="monster-page__comment-buttons-container">
+                      {comment.userId === authUser.uid && (
+                        <button className="monster-page__button" onClick={this.handleClickEdit.bind(this, index)}>
+                          Edit
+                        </button>
+                      )}
+                      {comment.userId === authUser.uid && (
+                        <button className="monster-page__button" onClick={this.handleDeleteComment.bind(this, index)}>
+                          Delete
+                        </button>
+                      )}
+                    </div>
                   </p>
-                  <p className="monster-page__comment-body">{comment.message}</p>
+                  {editComment === index ? (
+                    <div className="monster-page__input-container">
+                      <textarea
+                        className="monster-page__textbox"
+                        cols="30"
+                        rows="10"
+                        value={editBody}
+                        onChange={this.handleEditTextboxChange}
+                      />
+                      <button className="monster-page__post-button" onClick={this.handleSaveEdit}>
+                        Save
+                      </button>
+                    </div>
+                  ) : (
+                      <p className="monster-page__comment-body">{comment.message}</p>
+                    )}
                 </div>
               ))}
             </div>

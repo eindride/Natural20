@@ -6,7 +6,7 @@ import html2canvas from 'html2canvas';
 import { connect } from 'react-redux';
 import { firebase } from '../../firebase/index';
 import { setSpell } from '../../redux/actions';
-import { dummyComments } from '../../copy/general';
+import { monthNames } from '../../copy/general';
 import { stringifyLevel } from '../../utils';
 
 import image1 from '../../assets/images/dm-tools-background.jpg';
@@ -34,6 +34,8 @@ class SpellPage extends Component {
     },
     error: null,
     commentBody: '',
+    comments: [],
+    editComment: null,
   };
 
   componentDidMount() {
@@ -50,6 +52,34 @@ class SpellPage extends Component {
             spell: doc.data(),
             image: this.getRandomImage(),
           }));
+          db.collection('posts')
+            .where('postId', '==', spellname)
+            .orderBy('creationDate', 'desc')
+            .get()
+            .then(querySnapshot => {
+              const results = querySnapshot.docs.map(doc => ({
+                ...doc.data(),
+                commentId: doc.id,
+              }));
+              const promises = results.map(result => this.getUsername(result.userId));
+              Promise.all(promises)
+                .then(usernames => {
+                  const finalResults = results.map((result, index) => ({
+                    ...result,
+                    username: usernames[index],
+                  }));
+                  this.setState(state => ({
+                    ...state,
+                    comments: finalResults,
+                  }));
+                })
+                .catch(error => {
+                  console.error('There was a problem while queriing usernames', error);
+                });
+            })
+            .catch(error => {
+              console.log('An error occured while quering the comments', error);
+            });
         } else {
           console.log('No such document exists!');
           this.setState(state => ({
@@ -72,12 +102,32 @@ class SpellPage extends Component {
     return imagesArray[Math.floor(Math.random() * Math.floor(imagesArray.length))];
   };
 
+  getUsername = userId =>
+    new Promise(resolve => {
+      const { db } = firebase;
+      db.collection('users')
+        .where('userId', '==', userId)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            resolve(doc.data().username);
+          });
+        })
+        .catch(error => {
+          console.log({ error });
+        });
+    });
+
   handleEdit = () => {
     console.log('clicked on edit');
     // save spell to redux
     const { setSpellToStore, history } = this.props;
+    const { spellname } = this.props.match.params;
     const { spell } = this.state;
-    setSpellToStore(spell);
+    setSpellToStore({
+      ...spell,
+      spellId: spellname,
+    });
     // navigate to spell generator
     history.push('/spell-creator');
   };
@@ -124,9 +174,105 @@ class SpellPage extends Component {
     }));
   };
 
+  handleEditTextboxChange = event => {
+    const { value } = event.target;
+    this.setState(state => ({
+      ...state,
+      editBody: value,
+    }));
+  };
+
+  handlePostComment = () => {
+    const { commentBody } = this.state;
+    const { authUser } = this.props;
+    const { spellname } = this.props.match.params;
+    const { db } = firebase;
+    db.collection('posts')
+      .doc(`${spellname}-${authUser.uid}-${this.generateRandomId()}`)
+      .set({
+        userId: authUser.uid,
+        postId: spellname,
+        message: commentBody,
+        creationDate: new Date(),
+      })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(error => {
+        console.log('There was a problem posting the comment', error);
+        this.setState(state => ({
+          ...state,
+          postError: error,
+        }));
+      });
+  };
+
+  generateRandomId = () =>
+    Math.random()
+      .toString(36)
+      .replace(/[^a-z]+/g, '')
+      .substr(2, 10);
+
+  parseDate = date => {
+    const year = date.getFullYear();
+    const month = monthNames[date.getMonth()];
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    return `${year}, ${day} ${month}, ${hour}:${minute}`;
+  };
+
+  handleClickEdit = index => {
+    this.setState(state => ({
+      ...state,
+      editComment: index,
+      editBody: state.comments[index].message,
+    }));
+  };
+
+  handleSaveEdit = () => {
+    const { comments, editComment } = this.state;
+    const { editBody } = this.state;
+    const { db } = firebase;
+    db.collection('posts')
+      .doc(comments[editComment].commentId)
+      .update({
+        message: editBody,
+      })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(error => {
+        console.log('There was a problem posting the comment', error);
+        this.setState(state => ({
+          ...state,
+          postError: error,
+        }));
+      });
+  };
+
+  handleDeleteComment = index => {
+    const { db } = firebase;
+    const { commentId } = this.state.comments[index];
+    db.collection('posts')
+      .doc(commentId)
+      .delete()
+      .then(() => {
+        console.log('Document deleted');
+        window.location.reload();
+      })
+      .catch(error => {
+        console.log('An error occured while deleting', error);
+        this.setState(state => ({
+          ...state,
+          deleteError: 'A problem occured while deleting the comment',
+        }));
+      });
+  };
+
   render() {
     console.log(this.getRandomImage());
-    const { spell, error, commentBody, image } = this.state;
+    const { spell, error, commentBody, image, comments, editComment, editBody } = this.state;
     const { authUser } = this.props;
     const { name, level, school, components, description, higherLevel, castingTime, range, duration, classes } = spell;
     return (
@@ -212,16 +358,45 @@ class SpellPage extends Component {
                 value={commentBody}
                 onChange={this.handleTextboxChange}
               />
-              <button className="spell-page__post-button">Comment</button>
+              <button className="spell-page__post-button" onClick={this.handlePostComment}>
+                Comment
+              </button>
             </div>
 
             <div className="spell-page__comments-container">
-              {dummyComments.map(comment => (
+              {comments.map((comment, index) => (
                 <div className="spell-page__comment">
                   <p className="spell-page__comment-author">
-                    {comment.author} <span>- {comment.date}</span>
+                    {comment.username} <span>- {this.parseDate(comment.creationDate)}</span>
+                    <div className="spell-page__comment-buttons-container">
+                      {comment.userId === authUser.uid && (
+                        <button className="spell-page__button" onClick={this.handleClickEdit.bind(this, index)}>
+                          Edit
+                        </button>
+                      )}
+                      {comment.userId === authUser.uid && (
+                        <button className="spell-page__button" onClick={this.handleDeleteComment.bind(this, index)}>
+                          Delete
+                        </button>
+                      )}
+                    </div>
                   </p>
-                  <p className="spell-page__comment-body">{comment.message}</p>
+                  {editComment === index ? (
+                    <div className="spell-page__input-container">
+                      <textarea
+                        className="spell-page__textbox"
+                        cols="30"
+                        rows="10"
+                        value={editBody}
+                        onChange={this.handleEditTextboxChange}
+                      />
+                      <button className="spell-page__post-button" onClick={this.handleSaveEdit}>
+                        Save
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="spell-page__comment-body">{comment.message}</p>
+                  )}
                 </div>
               ))}
             </div>

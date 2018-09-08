@@ -348,6 +348,23 @@
       .spell-page__comments-section .spell-page__comments-container .spell-page__comment .spell-page__comment-body {
         padding-left: 50px; }
 
+.spell-page__comment-buttons-container {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  float: right; }
+  .spell-page__comment-buttons-container .spell-page__button {
+    border: none;
+    color: #000;
+    background-color: #fff;
+    padding: 0 10px;
+    font-size: 12px;
+    cursor: pointer; }
+    .spell-page__comment-buttons-container .spell-page__button:not(:first-child) {
+      border-left: 1px solid #000; }
+    .spell-page__comment-buttons-container .spell-page__button:hover {
+      text-decoration: underline; }
+
 .monster-page {
   max-width: 1240px;
   margin: 0 auto; }
@@ -423,6 +440,23 @@
           font-size: 10px; }
       .monster-page__comments-section .monster-page__comments-container .monster-page__comment .monster-page__comment-body {
         padding-left: 50px; }
+
+.monster-page__comment-buttons-container {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  float: right; }
+  .monster-page__comment-buttons-container .monster-page__button {
+    border: none;
+    color: #000;
+    background-color: #fff;
+    padding: 0 10px;
+    font-size: 12px;
+    cursor: pointer; }
+    .monster-page__comment-buttons-container .monster-page__button:not(:first-child) {
+      border-left: 1px solid #000; }
+    .monster-page__comment-buttons-container .monster-page__button:hover {
+      text-decoration: underline; }
 
 .spells-list {
   padding: 50px 5%; }
