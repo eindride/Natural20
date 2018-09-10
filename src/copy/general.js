@@ -162,6 +162,8 @@ export const alignments = [
 
 export const shortAttributes = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 
+export const attributeNames = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charismas'];
+
 export const skillNames = [
   'acrobatics',
   'animal handling',
@@ -228,3 +230,60 @@ export const officialRaces = [
   'human',
   'tiefling',
 ];
+
+export const skillAttributes = {
+  acrobatics: {
+    attribute: 'dex',
+  },
+  'animal handling': {
+    attribute: 'wis',
+  },
+  arcana: {
+    attribute: 'int',
+  },
+  athletics: {
+    attribute: 'str',
+  },
+  deception: {
+    attribute: 'cha',
+  },
+  history: {
+    attribute: 'int',
+  },
+  insight: {
+    attribute: 'wis',
+  },
+  intimidation: {
+    attribute: 'cha',
+  },
+  investigation: {
+    attribute: 'int',
+  },
+  medicine: {
+    attribute: 'wis',
+  },
+  nature: {
+    attribute: 'int',
+  },
+  perception: {
+    attribute: 'wis',
+  },
+  performance: {
+    attribute: 'cha',
+  },
+  persuasion: {
+    attribute: 'cha',
+  },
+  religion: {
+    attribute: 'int',
+  },
+  'sleight of hand': {
+    attribute: 'dex',
+  },
+  stealth: {
+    attribute: 'dex',
+  },
+  survival: {
+    attribute: 'wis',
+  },
+};

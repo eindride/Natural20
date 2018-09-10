@@ -22,7 +22,7 @@ export const classInfo = {
     packChoices: [],
     equipment: {
       weapons: ['greataxe', 'handaxe', 'javelin'],
-      armor: [''],
+      armor: [],
       pack: ['explorer'],
       other: '',
     },
@@ -682,16 +682,22 @@ export const weaponsInfo = {
 
 export const armorsInfo = {
   leather: {
+    name: 'leather armor',
     baseAC: 11,
     modifierLimit: 999,
   },
   scale: {
-    base: 14,
+    name: 'scale mail',
+    baseAC: 14,
     modifierLimit: 2,
   },
   chain: {
-    base: 16,
+    name: 'chain mail',
+    baseAC: 16,
     modifierLimit: 0,
+  },
+  shield: {
+    name: 'shield',
   },
 };
 
