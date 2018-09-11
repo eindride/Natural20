@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import JSPdf from 'jspdf';
 import html2canvas from 'html2canvas';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import InformationalModal from '../../components/InformationalModal/InformationalModal';
+import { firebase } from '../../firebase/index';
+
+import { setCharacter } from '../../redux/actions';
 
 import {
   officialClasses,
@@ -42,6 +48,32 @@ class CharacterComponentPage extends Component {
     chosenPack: '',
     languages: '',
   };
+
+  componentWillMount() {
+    const { character } = this.props;
+    console.log({ character });
+    if (character) {
+      this.setState(state => ({
+        ...state,
+        name: character.name,
+        characterClass: character.characterClass,
+        level: character.level,
+        race: character.race,
+        alignment: character.alignment,
+        attributes: character.attributes,
+        skills: character.skills,
+        chosenWeapon: character.chooseWeapon,
+        chosenArmor: character.chooseArmor,
+        chosenPack: character.chosenPack,
+        languages: character.languages,
+      }));
+    }
+  }
+
+  componentWillUnmount() {
+    const { resetCharacter } = this.props;
+    resetCharacter();
+  }
 
   setSkills = event => {
     const { value } = event.target;
@@ -276,6 +308,91 @@ class CharacterComponentPage extends Component {
         doc.addImage(imgData, 'JPEG', 15, 40, 180, 180);
         doc.save(`${name}.pdf`);
       });
+    }
+  };
+
+  handleSave = event => {
+    event.preventDefault();
+    const { character } = this.props;
+    const { db } = firebase;
+    if (character) {
+      // if character is not null that means this is an edit. so first delete the old doc
+      db.collection('monsters')
+        .doc(`${character.name}-${character.userId}`)
+        .delete()
+        .then(() => {
+          console.log('Old character was deleted succesfully!');
+          this.saveCharacter();
+        })
+        .catch(error => {
+          console.log('An error occured while deleting the old doc', error);
+        });
+    } else {
+      this.saveCharacter();
+    }
+  };
+
+  saveCharacter = () => {
+    const { db } = firebase;
+    const { authUser } = this.props;
+    if (authUser) {
+      const {
+        name,
+        characterClass,
+        level,
+        race,
+        alignment,
+        attributes,
+        skills,
+        chosenWeapon,
+        chosenArmor,
+        chosenPack,
+        languages,
+      } = this.state;
+      db.collection('characters')
+        .doc(`${name}-${authUser.uid}`)
+        .get()
+        .then(doc => {
+          if (doc.exists) {
+            console.log('already exists');
+          } else {
+            console.log('available');
+
+            db.collection('characters')
+              .doc(`${name}-${authUser.uid}`)
+              .set({
+                userId: authUser.uid,
+                name,
+                characterClass,
+                level,
+                race,
+                alignment,
+                attributes,
+                skills,
+                chosenWeapon,
+                chosenArmor,
+                chosenPack,
+                languages,
+                creationDate: new Date(),
+              })
+              .then(() => {
+                console.log('Document successfully written!');
+                this.props.history.push('/characters-list');
+              })
+              .catch(error => {
+                console.error('Error writing document: ', error);
+                this.setState(state => ({
+                  ...state,
+                  error,
+                }));
+              });
+          }
+        });
+    } else {
+      this.setState(state => ({
+        ...state,
+        error: 'You must be logged in to save your character!',
+      }));
     }
   };
 
@@ -712,4 +829,25 @@ class CharacterComponentPage extends Component {
   }
 }
 
-export default CharacterComponentPage;
+CharacterComponentPage.propTypes = {
+  character: PropTypes.shape().isRequired,
+  authUser: PropTypes.shape().isRequired,
+  history: PropTypes.shape().isRequired,
+  resetCharacter: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+  authUser: state.authUser,
+  monster: state.monster,
+});
+
+const mapDispatchToProps = dispatch => ({
+  resetCharacter: () => dispatch(setCharacter(null)),
+});
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(CharacterComponentPage)
+);

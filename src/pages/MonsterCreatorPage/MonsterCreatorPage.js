@@ -679,23 +679,23 @@ class MonsterCreatorPage extends React.Component {
     const { monster } = this.props;
     const { db } = firebase;
     if (monster) {
-      // if spell is not null that means this is an edit. so first delete the old doc
+      // if monster is not null that means this is an edit. so first delete the old doc
       db.collection('monsters')
         .doc(`${monster.name}-${monster.userId}`)
         .delete()
         .then(() => {
-          console.log('Old spell was deleted succesfully!');
-          this.saveSpell();
+          console.log('Old monster was deleted succesfully!');
+          this.saveMonster();
         })
         .catch(error => {
-          console.log('An error occured whule deleting the old doc', error);
+          console.log('An error occured while deleting the old doc', error);
         });
     } else {
-      this.saveSpell();
+      this.saveMonster();
     }
   };
 
-  saveSpell = () => {
+  saveMonster = () => {
     const { db } = firebase;
     const { authUser } = this.props;
     if (authUser) {
@@ -781,7 +781,7 @@ class MonsterCreatorPage extends React.Component {
     } else {
       this.setState(state => ({
         ...state,
-        error: 'You must be logged in to save your spell!',
+        error: 'You must be logged in to save your monster!',
       }));
     }
   };
@@ -1331,47 +1331,47 @@ class MonsterCreatorPage extends React.Component {
             </p>
           ) : null}
           {parseInt(blindsight, 10) ||
-            parseInt(darkvision, 10) ||
-            parseInt(lowLightVision, 10) ||
-            parseInt(lowLightVision, 10) ||
-            parseInt(tremorsense, 10) ||
-            parseInt(truesight, 10) ||
-            parseInt(passivePerception, 10) ? (
-              <p className="monster-creator__attribute">
-                Senses:{' '}
-                <span className="monster-creator__attribute-value">
-                  {[
-                    {
-                      name: 'blindsight',
-                      value: parseInt(blindsight, 10),
-                    },
-                    {
-                      name: 'darkvision',
-                      value: parseInt(darkvision, 10),
-                    },
-                    {
-                      name: 'low-light vision',
-                      value: parseInt(lowLightVision, 10),
-                    },
-                    {
-                      name: 'tremorsense',
-                      value: parseInt(tremorsense, 10),
-                    },
-                    {
-                      name: 'truesight',
-                      value: parseInt(truesight, 10),
-                    },
-                    {
-                      name: 'passivePerception',
-                      value: parseInt(passivePerception, 10),
-                    },
-                  ]
-                    .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
-                    .filter(el => el)
-                    .join(', ')}
-                </span>
-              </p>
-            ) : null}
+          parseInt(darkvision, 10) ||
+          parseInt(lowLightVision, 10) ||
+          parseInt(lowLightVision, 10) ||
+          parseInt(tremorsense, 10) ||
+          parseInt(truesight, 10) ||
+          parseInt(passivePerception, 10) ? (
+            <p className="monster-creator__attribute">
+              Senses:{' '}
+              <span className="monster-creator__attribute-value">
+                {[
+                  {
+                    name: 'blindsight',
+                    value: parseInt(blindsight, 10),
+                  },
+                  {
+                    name: 'darkvision',
+                    value: parseInt(darkvision, 10),
+                  },
+                  {
+                    name: 'low-light vision',
+                    value: parseInt(lowLightVision, 10),
+                  },
+                  {
+                    name: 'tremorsense',
+                    value: parseInt(tremorsense, 10),
+                  },
+                  {
+                    name: 'truesight',
+                    value: parseInt(truesight, 10),
+                  },
+                  {
+                    name: 'passivePerception',
+                    value: parseInt(passivePerception, 10),
+                  },
+                ]
+                  .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
+                  .filter(el => el)
+                  .join(', ')}
+              </span>
+            </p>
+          ) : null}
           {languages ? (
             <p className="monster-creator__attribute">
               Languages: <span className="monster-creator__attribute-value">{languages}</span>
@@ -1381,7 +1381,7 @@ class MonsterCreatorPage extends React.Component {
             Challenge:{' '}
             <span className="monster-creator__attribute-value">{`${challenge} (${
               challengeRating[challenge]
-              } XP)`}</span>
+            } XP)`}</span>
           </p>
           <div className="monster-creator__separator" />
         </div>

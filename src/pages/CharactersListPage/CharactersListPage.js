@@ -4,21 +4,16 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import { firebase } from '../../firebase/index';
-import Monster from './Monster';
+import Character from './Character';
 
 import searchIcon from '../../assets/icons/search.svg';
 import { creatureSizes, creatureTypes, alignments, challengeRating } from '../../copy/general';
 
-import './_monstersListPage.scss';
+import './_charactersListPage.scss';
 
 class MonstersListPage extends Component {
   state = {
-    monsters: [],
-    userMonsters: false,
-    size: 'any',
-    type: 'any',
-    alignment: 'any',
-    challenge: 'any',
+    characters: [],
     searchText: '',
     searching: false,
     searchingFor: '',
@@ -30,7 +25,7 @@ class MonstersListPage extends Component {
 
   queryData = () => {
     const { db } = firebase;
-    let query = db.collection('monsters');
+    let query = db.collection('characters');
     query = this.applyFiltersToQuery(query);
     query
       .orderBy('creationDate', 'desc')
@@ -40,46 +35,22 @@ class MonstersListPage extends Component {
         const filteredResults = results;
         this.setState(state => ({
           ...state,
-          monsters: filteredResults,
+          characters: filteredResults,
         }));
       });
   };
 
   applyFiltersToQuery = query => {
     let filteredQuery = query;
-    const { userMonsters, size, type, alignment, challenge, searchText } = this.state;
+    const { searchText } = this.state;
     const { authUser } = this.props;
-    if (userMonsters && authUser) {
+    if (authUser) {
       filteredQuery = filteredQuery.where('userId', '==', authUser.uid);
-    }
-    if (size !== 'any') {
-      filteredQuery = filteredQuery.where('size', '==', size);
-    }
-    if (type !== 'any') {
-      filteredQuery = filteredQuery.where('type', '==', type);
-    }
-    if (alignment !== 'any') {
-      filteredQuery = filteredQuery.where('alignment', '==', alignment);
-    }
-    if (challenge !== 'any') {
-      filteredQuery = filteredQuery.where('challenge', '==', challenge);
     }
     if (searchText.length) {
       filteredQuery = filteredQuery.where('name', '==', searchText);
     }
     return filteredQuery;
-  };
-
-  filterUserMonsters = () => {
-    this.setState(
-      state => ({
-        ...state,
-        userMonsters: !state.userMonsters,
-      }),
-      () => {
-        this.queryData();
-      }
-    );
   };
 
   handleChangeInput = event => {
@@ -89,18 +60,6 @@ class MonstersListPage extends Component {
     switch (event.target.id) {
       case 'input-search':
         attribute = 'searchText';
-        break;
-      case 'input-size':
-        attribute = 'size';
-        break;
-      case 'input-type':
-        attribute = 'type';
-        break;
-      case 'input-alignment':
-        attribute = 'alignment';
-        break;
-      case 'input-challenge':
-        attribute = 'challenge';
         break;
       default:
         return;
@@ -134,10 +93,10 @@ class MonstersListPage extends Component {
     this.queryData();
   };
 
-  handleClickMonster = monster => {
-    console.log({ monster });
+  handleClickCharacter = character => {
+    console.log({ character });
     const { history } = this.props;
-    history.push(`/monster/${monster.name}-${monster.userId}`);
+    history.push(`/character/${character.name}-${character.userId}`);
   };
 
   handleCancelSearch = () => {
@@ -155,28 +114,28 @@ class MonstersListPage extends Component {
   };
 
   render() {
-    const { monsters, searchText, searching, searchingFor, userMonsters } = this.state;
-    console.log({ monsters });
+    const { characters, searchText, searching, searchingFor } = this.state;
+    console.log({ characters });
     return (
-      <div className="monsters-list">
-        <form className="monsters-list__search-bar-container" onSubmit={this.handleSearchSubmit} autoComplete="off">
+      <div className="characters-list">
+        <form className="characters-list__search-bar-container" onSubmit={this.handleSearchSubmit} autoComplete="off">
           <input
             id="input-search"
-            className="monsters-list__search-bar"
+            className="characters-list__search-bar"
             type="text"
             placeholder="Search..."
             value={searchText}
             onChange={this.handleSearchInput}
           />
           <div onClick={this.handleSearchSubmit} onKeyDown={() => null} role="button" tabIndex={0}>
-            <img src={searchIcon} alt="searchIcon" className="monsters-list__search-icon" />
+            <img src={searchIcon} alt="searchIcon" className="characters-list__search-icon" />
           </div>
         </form>
-        <div className={`monsters-list__search-text ${!searching && 'monsters-list__hidden'}`}>
+        <div className={`characters-list__search-text ${!searching && 'characters-list__hidden'}`}>
           <p>
-            Searching for: <span className="monsters-list__search-item">{searchingFor}</span>
+            Searching for: <span className="characters-list__search-item">{searchingFor}</span>
             <div
-              className="monsters-list__close-button"
+              className="characters-list__close-button"
               onClick={this.handleCancelSearch}
               onKeyDown={() => null}
               role="button"
@@ -186,15 +145,15 @@ class MonstersListPage extends Component {
             </div>
           </p>
         </div>
-        <div className="monsters-list__filters-container">
+        <div className="characters-list__filters-container">
           <button
-            className={`monsters-list__filter-button ${userMonsters && 'monsters-list__button-active'}`}
-            onClick={this.filterUserMonsters}
+            className={`characters-list__filter-button ${userMonsters && 'characters-list__button-active'}`}
+            onClick={this.filterUserSpells}
           >
             {userMonsters ? 'Show all monsters' : 'Show only my monsters'}
           </button>
-          <span className="monsters-list__filter-label">Size:</span>
-          <select id="input-size" className="monsters-list__filter" onChange={this.handleChangeInput}>
+          <span className="characters-list__filter-label">Size:</span>
+          <select id="input-size" className="characters-list__filter" onChange={this.handleChangeInput}>
             <option value="any">any</option>
             {creatureSizes.map((size, index) => {
               const key = `size-${index}`;
@@ -205,8 +164,8 @@ class MonstersListPage extends Component {
               );
             })}
           </select>
-          <span className="monsters-list__filter-label">Type:</span>
-          <select id="input-type" className="monsters-list__filter" onChange={this.handleChangeInput}>
+          <span className="characters-list__filter-label">Type:</span>
+          <select id="input-type" className="characters-list__filter" onChange={this.handleChangeInput}>
             <option value="any">any</option>
             {creatureTypes.map((type, index) => {
               const key = `type-${index}`;
@@ -217,8 +176,8 @@ class MonstersListPage extends Component {
               );
             })}
           </select>
-          <span className="monsters-list__filter-label">Alignment:</span>
-          <select id="input-alignment" className="monsters-list__filter" onChange={this.handleChangeInput}>
+          <span className="characters-list__filter-label">Alignment:</span>
+          <select id="input-alignment" className="characters-list__filter" onChange={this.handleChangeInput}>
             <option value="any">any</option>
             {alignments.map((alignment, index) => {
               const key = `alignment-${index}`;
@@ -229,8 +188,8 @@ class MonstersListPage extends Component {
               );
             })}
           </select>
-          <span className="monsters-list__filter-label">Challenge:</span>
-          <select id="input-challenge" className="monsters-list__filter" onChange={this.handleChangeInput}>
+          <span className="characters-list__filter-label">Challenge:</span>
+          <select id="input-challenge" className="characters-list__filter" onChange={this.handleChangeInput}>
             <option value="any">any</option>
             {Object.keys(challengeRating).map((challenge, index) => {
               const key = `challenge-${index}`;
@@ -242,8 +201,8 @@ class MonstersListPage extends Component {
             })}
           </select>
         </div>
-        {monsters.map((monster, index) => {
-          const key = `monsters-${index}`;
+        {characters.map((monster, index) => {
+          const key = `characters-${index}`;
           return <Monster key={key} onClick={this.handleClickMonster} monster={monster} />;
         })}
       </div>

@@ -11,6 +11,8 @@ export default createStore(
   {
     authUser: null,
     spell: null,
+    monster: null,
+    character: null,
   },
   devMiddleware()
 );
