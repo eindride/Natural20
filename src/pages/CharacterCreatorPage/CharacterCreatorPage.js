@@ -33,6 +33,7 @@ class CharacterComponentPage extends Component {
     characterClass: 'barbarian',
     level: '1',
     race: 'dragonborn',
+    subRace: '',
     alignment: 'lawful good',
     attributes: {
       str: '10',
@@ -59,11 +60,12 @@ class CharacterComponentPage extends Component {
         characterClass: character.characterClass,
         level: character.level,
         race: character.race,
+        subRace: character.subRace,
         alignment: character.alignment,
         attributes: character.attributes,
         skills: character.skills,
-        chosenWeapon: character.chooseWeapon,
-        chosenArmor: character.chooseArmor,
+        chosenWeapon: character.chosenWeapon,
+        chosenArmor: character.chosenArmor,
         chosenPack: character.chosenPack,
         languages: character.languages,
       }));
@@ -317,7 +319,7 @@ class CharacterComponentPage extends Component {
     const { db } = firebase;
     if (character) {
       // if character is not null that means this is an edit. so first delete the old doc
-      db.collection('monsters')
+      db.collection('characters')
         .doc(`${character.name}-${character.userId}`)
         .delete()
         .then(() => {
@@ -341,6 +343,7 @@ class CharacterComponentPage extends Component {
         characterClass,
         level,
         race,
+        subRace,
         alignment,
         attributes,
         skills,
@@ -366,6 +369,7 @@ class CharacterComponentPage extends Component {
                 characterClass,
                 level,
                 race,
+                subRace,
                 alignment,
                 attributes,
                 skills,
@@ -412,6 +416,8 @@ class CharacterComponentPage extends Component {
       chosenArmor,
       chosenPack,
     } = this.state;
+
+    console.log(this.state.subRace);
 
     const attributesSign = {
       str: attributes.str < 10 ? '' : '+',
@@ -490,7 +496,7 @@ class CharacterComponentPage extends Component {
                     onChange={this.handleInputChange}
                   >
                     {raceInfo[race].subRaces.map(subrace => (
-                      <option value={subrace.name} selected={subrace === this.state.subRace}>
+                      <option value={subrace.name} selected={subrace.name === this.state.subRace}>
                         {subrace.name}
                       </option>
                     ))}
@@ -585,6 +591,7 @@ class CharacterComponentPage extends Component {
                           name="weapon"
                           id={`weapon-${weapon}`}
                           onClick={this.chooseWeapon}
+                          checked={chosenWeapon === weapon}
                         />
                         <label htmlFor={`weapon-${weapon}`}>
                           {weapon} ({weaponsInfo[weapon].damage} {weaponsInfo[weapon].type} damage)
@@ -610,6 +617,7 @@ class CharacterComponentPage extends Component {
                           name="armor"
                           id={`armor-${armor}`}
                           onClick={this.chooseArmor}
+                          checked={chosenArmor === armor}
                         />
                         <label htmlFor={`armor-${armor}`}>{armorsInfo[armor].name}</label>
                       </div>
@@ -627,7 +635,14 @@ class CharacterComponentPage extends Component {
                   <fieldset id="pack">
                     {classInfo[characterClass].packChoices.map(pack => (
                       <div>
-                        <input type="radio" value={pack} name="pack" id={`pack-${pack}`} onClick={this.choosePack} />
+                        <input
+                          type="radio"
+                          value={pack}
+                          name="pack"
+                          id={`pack-${pack}`}
+                          onClick={this.choosePack}
+                          checked={chosenPack === pack}
+                        />
                         <label htmlFor={`pack-${pack}`}>{pack}</label>
                       </div>
                     ))}
@@ -759,7 +774,7 @@ class CharacterComponentPage extends Component {
                   <div
                     className={`character-creator__check ${
                       classInfo[characterClass].savingThrows[shortAttributes[index]] ? 'checked' : null
-                    }`}
+                      }`}
                   />
                   <div className="character-creator__saving-skill-value">
                     {this.calculateSavingBonus(shortAttributes[index])}
@@ -838,7 +853,7 @@ CharacterComponentPage.propTypes = {
 
 const mapStateToProps = state => ({
   authUser: state.authUser,
-  monster: state.monster,
+  character: state.character,
 });
 
 const mapDispatchToProps = dispatch => ({

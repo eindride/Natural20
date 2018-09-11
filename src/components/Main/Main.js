@@ -12,6 +12,8 @@ import SpellsListPage from '../../pages/SpellsListPage/SpellsListPage';
 import MonstersListPage from '../../pages/MonstersListPage/MonstersListPage';
 import SpellPage from '../../pages/SpellPage/SpellPage';
 import MonsterPage from '../../pages/MonsterPage/MonsterPage';
+import CharactersListPage from '../../pages/CharactersListPage/CharactersListPage';
+import CharacterPage from '../../pages/CharacterPage/CharacterPage';
 /* eslint-disable */
 const Main = (props) => (
   <main>
@@ -42,6 +44,9 @@ const Main = (props) => (
       <Route path='/character-creator' render={() => (
         <CharacterCreatorPage />
       )} />
+      <Route path='/characters-list' render={() => (
+        <CharactersListPage />
+      )} />
       <Route path='/spells-list' render={() => (
         <SpellsListPage />
       )} />
@@ -53,6 +58,9 @@ const Main = (props) => (
       )} />
       <Route path='/monster/:monstername' render={() => (
         <MonsterPage />
+      )} />
+      <Route path='/character/:charactername' render={() => (
+        <CharacterPage />
       )} />
     </Switch>
   </main>
