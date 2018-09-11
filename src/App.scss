@@ -2,6 +2,7 @@
 @import "./pages/Home/_home.scss";
 @import "./pages/MonsterCreatorPage/_monsterCreatorPage.scss";
 @import "./pages/SpellCreatorPage/_spellCreatorPage.scss";
+@import "./pages/CharacterCreatorPage/_characterCreatorPage.scss";
 @import "./pages/SpellPage/_spellPage.scss";
 @import "./pages/MonsterPage/_monsterPage.scss";
 @import "./pages/SpellsListPage/_spellsListPage.scss";
@@ -12,6 +13,8 @@
 @import "./components/LogIn/_logIn.scss";
 @import "./components/Logo/_logo.scss";
 @import "./components/SignUp/_signUp.scss";
+@import "./pages/CharactersListPage/_charactersListPage.scss";
+@import "./pages/CharacterPage/_characterPage.scss";
 
 .App {
   //text-align: center;

@@ -679,23 +679,23 @@ class MonsterCreatorPage extends React.Component {
     const { monster } = this.props;
     const { db } = firebase;
     if (monster) {
-      // if spell is not null that means this is an edit. so first delete the old doc
+      // if monster is not null that means this is an edit. so first delete the old doc
       db.collection('monsters')
         .doc(`${monster.name}-${monster.userId}`)
         .delete()
         .then(() => {
-          console.log('Old spell was deleted succesfully!');
-          this.saveSpell();
+          console.log('Old monster was deleted succesfully!');
+          this.saveMonster();
         })
         .catch(error => {
-          console.log('An error occured whule deleting the old doc', error);
+          console.log('An error occured while deleting the old doc', error);
         });
     } else {
-      this.saveSpell();
+      this.saveMonster();
     }
   };
 
-  saveSpell = () => {
+  saveMonster = () => {
     const { db } = firebase;
     const { authUser } = this.props;
     if (authUser) {
@@ -781,7 +781,7 @@ class MonsterCreatorPage extends React.Component {
     } else {
       this.setState(state => ({
         ...state,
-        error: 'You must be logged in to save your spell!',
+        error: 'You must be logged in to save your monster!',
       }));
     }
   };
@@ -1281,7 +1281,7 @@ class MonsterCreatorPage extends React.Component {
               </span>
             </div>
             <div className="monster-creator__ability-wrapper">
-              <p className="monster-creator__attribute">Con:</p>
+              <p className="monster-creator__attribute">Con</p>
               <span className="monster-creator__con monster-creator__classes">
                 {`${attributes.con} (${attributesSign.con}${Math.floor((attributes.con - 10) / 2)})`}
               </span>
