@@ -1,0 +1,75 @@
+@import "../../sass/variables.scss";
+@import '../../sass/_mixins.scss';
+
+.modal__overlay {
+	position: absolute;
+	background: $transparentBlack;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	display: flex;
+	justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.modal {
+	position: relative;
+	background: $white;
+	width: 25%;
+	height: fit-content;
+	max-height: 70%;
+	overflow: auto;
+	padding: 50px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.modal__title {
+  align-self: center;
+}
+
+.modal__hidden {
+  display: none;
+}
+
+.modal__input-wrapper {
+  position: relative;
+  margin-bottom: 15px;
+  label {
+    font-size: 16px;
+    color: $darkGrey;
+  }
+
+  .modal__input-text {
+    border: none;
+    border-bottom: 1px solid $darkGrey;
+    padding-left: 5px;
+    padding-bottom: 3px;
+    font-size: 18px;
+    width: 150px;
+  }
+
+  .modal__input-number {
+    border: none;
+    border-bottom: 1px solid $darkGrey;
+    padding-left: 5px;
+    padding-bottom: 3px;
+    font-size: 18px;
+    width: 50px;
+  }
+}
+
+.modal_button {
+  @include button ($white, $black);
+  width: 100px;
+  margin-top: 25px;
+  padding: 20px;
+  font-size: 18px;
+  text-align: center;
+  align-self: center;
+}

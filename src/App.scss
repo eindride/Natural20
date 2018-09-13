@@ -15,6 +15,9 @@
 @import "./components/SignUp/_signUp.scss";
 @import "./pages/CharactersListPage/_charactersListPage.scss";
 @import "./pages/CharacterPage/_characterPage.scss";
+@import "./components/InitiativeModal/_initiativeModal.scss";
+@import "./pages/InitiativeTracker/_initiativeTracker.scss";
+@import "./components/InitiativeItem/_initiativeItem.scss";
 
 .App {
   //text-align: center;

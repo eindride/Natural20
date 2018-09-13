@@ -14,6 +14,7 @@ import SpellPage from '../../pages/SpellPage/SpellPage';
 import MonsterPage from '../../pages/MonsterPage/MonsterPage';
 import CharactersListPage from '../../pages/CharactersListPage/CharactersListPage';
 import CharacterPage from '../../pages/CharacterPage/CharacterPage';
+import InitiativeTracker from '../../pages/InitiativeTracker/InitiativeTracker';
 /* eslint-disable */
 const Main = (props) => (
   <main>
@@ -61,6 +62,9 @@ const Main = (props) => (
       )} />
       <Route path='/character/:charactername' render={() => (
         <CharacterPage />
+      )} />
+      <Route path='/initiative-tracker' render={() => (
+        <InitiativeTracker />
       )} />
     </Switch>
   </main>

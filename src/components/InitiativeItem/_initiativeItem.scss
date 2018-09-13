@@ -1,0 +1,141 @@
+@import "../../sass/_variables.scss";
+
+.item {
+  width: 60%;
+  position: relative;
+  transition: margin-bottom 0.15s ease-out;
+  margin: 0 auto;
+  margin-bottom: 25px;
+
+  &.extended {
+    margin-bottom: 125px;
+  }
+
+  &.large {
+    width: 80%;
+  }
+}
+
+.item__wrapper {
+  border: 1px solid $black;
+  border-top: 0;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  padding: 0 25px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  background-color: $white;
+  position: relative;
+  z-index: 2;
+
+  &:focus {
+    outline: none;
+  }
+
+  .item__name {
+    span.item__initiative {
+      color: $darkGrey;
+      font-size: 22px;
+      margin-right: 10px;
+    }
+
+    span {
+      color: $darkGrey;
+      font-size: 12px;
+    }
+  }
+
+  .item__close,
+  .item__heart {
+    width: 24px;
+    height: 24px
+  }
+
+  .item__close-container {
+    cursor: pointer;
+  }
+
+  .item__health-container {
+    display: flex;
+    align-items: center;
+
+    span {
+      font-size: 18px;
+      margin-left: 10px;
+    }
+  }
+}
+
+.item__options {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  border: 1px solid $black;
+  border-top: 0;
+  border-bottom-left-radius: 20%;
+  border-bottom-right-radius: 20%;
+  padding: 0 25px;
+  height: 0;
+  transition: height 0.15s ease-out;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &.extended {
+    height: 100px;
+  }
+
+  .item__input-container {
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+
+    label {
+      color: $darkGrey;
+      margin-right: 10px;
+    }
+
+    input {
+      width: 50px;
+      font-size: 16px;
+      border: none;
+      border-bottom: 1px solid $darkGrey;
+    }
+  }
+
+  .item__conditions-container {
+    margin-top: 50px;
+
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border: none;
+      border-bottom: 1px solid $mediumGrey;
+      border-radius: 0;
+      background-color: $white;
+      width: 100px;
+      padding-bottom: 3px;
+      padding-left: 5px;
+      margin: 0 10px;
+    }
+  }
+
+  .item__input-button-container {
+    cursor: pointer;
+  }
+
+  .item__input-button {
+    width: 24px;
+    height: 24px;
+    margin: 0 5px;
+  }
+}
+
+.hidden {
+  display: none;
+}

@@ -1,0 +1,52 @@
+@import "../../sass/_variables.scss";
+
+.tracker {
+  position: relative;
+  width: 100%;
+  padding: 25px 0;
+
+  .tracker__menu-container {
+    position: absolute;
+    top: 200px;
+    right: 5%;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .tracker__plus {
+      border: 2px solid $nero;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      position: relative;
+      margin-bottom: 25px;
+
+      span {
+        font-size: 30px;
+        position: absolute;
+        top: 46%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .tracker__next {
+      border: none;
+      background-color: $nero;
+      color: $white;
+      padding: 25px;
+      font-size: 20px;
+      border-radius: 10px;
+    }
+  }
+
+  .tracker__container {
+    margin: 0 auto;
+    width: 60%;
+    border-left: 1px solid $black;
+    border-right: 1px solid $black;
+    min-height: calc(100vh - #{$headerHeight} - #{$footerHeight} - 150px);
+    padding: 50px;
+  }
+}
