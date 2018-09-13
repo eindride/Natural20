@@ -51,7 +51,7 @@ class Home extends Component {
               <p className="home__grid--overlay-description home__hidden">Bacon ipsum dolor amet kevin</p>
             </div>
           </div>
-          <div className="home__grid--tools" onMouseOver={this.mouseEnterOverlay} onMouseLeave={this.mouseLeaveOverlay}>
+          <div className="home__grid--tools" onMouseOver={this.mouseEnterOverlay} onMouseLeave={this.mouseLeaveOverlay} onClick={() => history.push('/initiative-tracker')}>
             <div className="home__grid--element-overlay">
               <h3 className="home__grid--overlay-title">DM Tools</h3>
               <p className="home__grid--overlay-description home__hidden">Bacon ipsum dolor amet kevin</p>
