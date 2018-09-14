@@ -86,6 +86,7 @@ class InitiativeTracker extends Component {
       <div className="tracker">
         <InitiativeModal isOpen={modalIsOpen} toggleFunc={this.toggleModal} submitFunc={this.handleAddNewItem} />
         <div className="tracker__container">
+          {!items.length ? <div className="no-results">Start adding creatures to the initiative</div> : null}
           {items.slice(currentItem, items.length).map((item, index) => {
             const key = `item-${index + currentItem}`;
             return (

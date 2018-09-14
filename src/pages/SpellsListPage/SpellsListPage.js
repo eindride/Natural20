@@ -27,7 +27,7 @@ class SpellsListPage extends Component {
     this.queryData();
   }
 
-  componentWillUpdate() {}
+  componentWillUpdate() { }
 
   queryData = () => {
     const { db } = firebase;
@@ -239,6 +239,7 @@ class SpellsListPage extends Component {
           const key = `spell-${index}`;
           return <Spell key={key} onClick={this.handleClickSpell} spell={spell} />;
         })}
+        {!spells.length ? <div className="no-results">No results</div> : null}
       </div>
     );
   }

@@ -222,30 +222,31 @@ class CharacterPage extends Component {
     return (
       <div className="monster-page">
         {error && (
-          <div>
+          <div className="monster-page__error">
             <h1>{error}</h1>
           </div>
         )}
-        {character && (
-          <div className="monster-page__buttons-container">
-            {authUser &&
-              authUser.uid === character.userId && (
-                <button className="monster-page__button" onClick={this.handleEdit}>
-                  Edit
-                </button>
-              )}
-            {authUser &&
-              authUser.uid === character.userId && (
-                <button className="monster-page__button" onClick={this.handleDelete}>
-                  Delete
-                </button>
-              )}
-            <button className="monster-page__button" onClick={this.savePDF}>
-              Download PDF
-            </button>
-          </div>
-        )}
-        {character ? (
+        {!error &&
+          character && (
+            <div className="monster-page__buttons-container">
+              {authUser &&
+                authUser.uid === character.userId && (
+                  <button className="monster-page__button" onClick={this.handleEdit}>
+                    Edit
+                  </button>
+                )}
+              {authUser &&
+                authUser.uid === character.userId && (
+                  <button className="monster-page__button" onClick={this.handleDelete}>
+                    Delete
+                  </button>
+                )}
+              <button className="monster-page__button" onClick={this.savePDF}>
+                Download PDF
+              </button>
+            </div>
+          )}
+        {!error && character.name ? (
           <div className="character-page__preview-container">
             <div className="character-creator__preview-wrapper character-page__preview-wrapper">
               <div className="character-creator__info-wrapper">

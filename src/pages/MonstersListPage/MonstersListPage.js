@@ -246,6 +246,7 @@ class MonstersListPage extends Component {
           const key = `monsters-${index}`;
           return <Monster key={key} onClick={this.handleClickMonster} monster={monster} />;
         })}
+        {!monsters.length ? <div className="no-results">No results</div> : null}
       </div>
     );
   }

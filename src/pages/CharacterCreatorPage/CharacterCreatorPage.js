@@ -48,6 +48,7 @@ class CharacterComponentPage extends Component {
     chosenArmor: '',
     chosenPack: '',
     languages: '',
+    error: null,
   };
 
   componentWillMount() {
@@ -357,7 +358,13 @@ class CharacterComponentPage extends Component {
         .get()
         .then(doc => {
           if (doc.exists) {
-            console.log('already exists');
+            this.setState(
+              state => ({
+                ...state,
+                error: 'A character already exists with this name!',
+              }),
+              () => console.log('already exists')
+            );
           } else {
             console.log('available');
 
@@ -668,6 +675,9 @@ class CharacterComponentPage extends Component {
             <button className="monster-creator__button" onClick={this.savePDF}>
               Download PDF
             </button>
+            <span className={`character-creator__error ${!this.state.error && 'character-creator__hidden'}`}>
+              {this.state.error}
+            </span>
           </form>
         </div>
         <div className="character-creator__preview-wrapper">
@@ -774,7 +784,7 @@ class CharacterComponentPage extends Component {
                   <div
                     className={`character-creator__check ${
                       classInfo[characterClass].savingThrows[shortAttributes[index]] ? 'checked' : null
-                      }`}
+                    }`}
                   />
                   <div className="character-creator__saving-skill-value">
                     {this.calculateSavingBonus(shortAttributes[index])}

@@ -47,7 +47,7 @@ class Home extends Component {
         <div className="home__hero">
           <h1>Welcome, adventurer!</h1>
           <p>
-            So you find yourself at the beginning of a new quest. Is your character prepared? What monsters will you encounter? What spells will you use to defeat yor enemies? Grab your gear and let the story unfold.
+            So you find yourself at the beginning of a new quest. Is your character prepared? What monsters will you encounter? What spells will you use to defeat your enemies? Grab your gear and let the story unfold.
           </p>
           <div className="home__arrow-container" onClick={this.handleScrollDown}>
             <img src={arrowDown} alt="arrow down icon" />
