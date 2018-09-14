@@ -1,16 +1,51 @@
 @import "../../sass/variables.scss";
 
 .home__wrapper {
-	max-width: $desktop-page-width;
-	margin: 0 auto;
 }
 
-.home__carousel-placeholder {
-	height: 500px;
-	background: pink;
+.home__hero {
+  height: calc(100vh - #{$headerHeight});
+  background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+  background-image: url('assets/images/hero.jpg');
+  position: relative;
+
+  h1 {
+    color: $white;
+    font-size: 46px;
+    position: absolute;
+    top: 25%;
+    left: 5%;
+  }
+
+  p {
+    color: white;
+    position: absolute;
+    top: 40%;
+    left: 5%;
+    width: 30%;
+    line-height: 22px;
+  }
+
+  .home__arrow-container {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: .5;
+    cursor: pointer;
+
+    img {
+      width: 50px;
+      height: auto;
+    }
+  }
 }
 
 .home__grid {
+  max-width: $desktop-page-width;
+	margin: 0 auto;
 	display: grid;
 	height: 1000px;
 	grid-template-columns: 1fr 1fr;
@@ -67,7 +102,7 @@
 	align-items: flex-start;
 	padding: 20px;
 	background: linear-gradient(to top, rgba(0, 0, 0, .7) 50%, rgba(0, 0, 0, 0));
-	transition: height .3s ease-out;
+	transition: height .15s ease-out;
 }
 
 .home__grid--overlay-title {
