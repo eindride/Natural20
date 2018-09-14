@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { firebase } from '../../firebase/index';
 import { monthNames } from '../../copy/general';
-import commentIcon from '../../assets/icons/comment.svg';
 import './_charactersListPage.scss';
 
 class Character extends Component {
