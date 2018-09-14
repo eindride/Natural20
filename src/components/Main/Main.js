@@ -46,7 +46,11 @@ const Main = (props) => (
         <CharacterCreatorPage />
       )} />
       <Route path='/characters-list' render={() => (
-        <CharactersListPage />
+        props.authUser === null ? (
+          <Redirect to="/login" />
+        ) : (
+            <CharactersListPage />
+          )
       )} />
       <Route path='/spells-list' render={() => (
         <SpellsListPage />

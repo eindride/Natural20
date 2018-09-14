@@ -1,3 +1,5 @@
+import { firebase } from './firebase/index';
+
 export const stringifyLevel = level => {
   if (parseInt(level, 10) === 0) {
     return 'cantrip';
@@ -32,3 +34,17 @@ export const getProfiencyBonus = level => {
   }
   return 6;
 };
+
+export const isAdmin = uid =>
+  new Promise(resolve => {
+    const { db } = firebase;
+    db.collection('users')
+      .doc('admin')
+      .get()
+      .then(doc => {
+        resolve(doc.data().userId === uid);
+      })
+      .catch(error => {
+        console.log({ error });
+      });
+  });

@@ -485,9 +485,11 @@ class SpellCreatorPage extends React.Component {
                 onChange={this.handleInputChange}
               />
             </div>
-            <button className="monster-creator__button margin-right" onClick={this.handleSave}>
-              Save
-            </button>
+            {this.props.authUser && (
+              <button className="monster-creator__button margin-right" onClick={this.handleSave}>
+                Save
+              </button>
+            )}
             <button className="monster-creator__button" onClick={this.savePDF}>
               Download PDF
             </button>

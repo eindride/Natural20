@@ -669,9 +669,11 @@ class CharacterComponentPage extends Component {
                 onChange={this.handleInputChange}
               />
             </div>
-            <button className="monster-creator__button margin-right" onClick={this.handleSave}>
-              Save
-            </button>
+            {this.props.authUser && (
+              <button className="monster-creator__button margin-right" onClick={this.handleSave}>
+                Save
+              </button>
+            )}
             <button className="monster-creator__button" onClick={this.savePDF}>
               Download PDF
             </button>
@@ -784,7 +786,7 @@ class CharacterComponentPage extends Component {
                   <div
                     className={`character-creator__check ${
                       classInfo[characterClass].savingThrows[shortAttributes[index]] ? 'checked' : null
-                    }`}
+                      }`}
                   />
                   <div className="character-creator__saving-skill-value">
                     {this.calculateSavingBonus(shortAttributes[index])}

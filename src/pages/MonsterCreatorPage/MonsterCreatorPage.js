@@ -1245,9 +1245,11 @@ class MonsterCreatorPage extends React.Component {
               </select>
               <InfoButton onClick={this.toggleModal} content={monsterInfoCopy.challenge} />
             </div>
-            <button className="monster-creator__button margin-right" onClick={this.handleSave}>
-              Save
-            </button>
+            {this.props.authUser && (
+              <button className="monster-creator__button margin-right" onClick={this.handleSave}>
+                Save
+              </button>
+            )}
             <button className="monster-creator__button" onClick={this.savePDF}>
               Download PDF
             </button>
@@ -1340,47 +1342,47 @@ class MonsterCreatorPage extends React.Component {
             </p>
           ) : null}
           {parseInt(blindsight, 10) ||
-          parseInt(darkvision, 10) ||
-          parseInt(lowLightVision, 10) ||
-          parseInt(lowLightVision, 10) ||
-          parseInt(tremorsense, 10) ||
-          parseInt(truesight, 10) ||
-          parseInt(passivePerception, 10) ? (
-            <p className="monster-creator__attribute">
-              Senses:{' '}
-              <span className="monster-creator__attribute-value">
-                {[
-                  {
-                    name: 'blindsight',
-                    value: parseInt(blindsight, 10),
-                  },
-                  {
-                    name: 'darkvision',
-                    value: parseInt(darkvision, 10),
-                  },
-                  {
-                    name: 'low-light vision',
-                    value: parseInt(lowLightVision, 10),
-                  },
-                  {
-                    name: 'tremorsense',
-                    value: parseInt(tremorsense, 10),
-                  },
-                  {
-                    name: 'truesight',
-                    value: parseInt(truesight, 10),
-                  },
-                  {
-                    name: 'passivePerception',
-                    value: parseInt(passivePerception, 10),
-                  },
-                ]
-                  .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
-                  .filter(el => el)
-                  .join(', ')}
-              </span>
-            </p>
-          ) : null}
+            parseInt(darkvision, 10) ||
+            parseInt(lowLightVision, 10) ||
+            parseInt(lowLightVision, 10) ||
+            parseInt(tremorsense, 10) ||
+            parseInt(truesight, 10) ||
+            parseInt(passivePerception, 10) ? (
+              <p className="monster-creator__attribute">
+                Senses:{' '}
+                <span className="monster-creator__attribute-value">
+                  {[
+                    {
+                      name: 'blindsight',
+                      value: parseInt(blindsight, 10),
+                    },
+                    {
+                      name: 'darkvision',
+                      value: parseInt(darkvision, 10),
+                    },
+                    {
+                      name: 'low-light vision',
+                      value: parseInt(lowLightVision, 10),
+                    },
+                    {
+                      name: 'tremorsense',
+                      value: parseInt(tremorsense, 10),
+                    },
+                    {
+                      name: 'truesight',
+                      value: parseInt(truesight, 10),
+                    },
+                    {
+                      name: 'passivePerception',
+                      value: parseInt(passivePerception, 10),
+                    },
+                  ]
+                    .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
+                    .filter(el => el)
+                    .join(', ')}
+                </span>
+              </p>
+            ) : null}
           {languages ? (
             <p className="monster-creator__attribute">
               Languages: <span className="monster-creator__attribute-value">{languages}</span>
@@ -1390,7 +1392,7 @@ class MonsterCreatorPage extends React.Component {
             Challenge:{' '}
             <span className="monster-creator__attribute-value">{`${challenge} (${
               challengeRating[challenge]
-            } XP)`}</span>
+              } XP)`}</span>
           </p>
           <div className="monster-creator__separator" />
         </div>
