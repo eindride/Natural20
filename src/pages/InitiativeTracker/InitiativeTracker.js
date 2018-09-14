@@ -25,6 +25,7 @@ class InitiativeTracker extends Component {
       name,
       initiative,
       hp,
+      condition: '',
     });
     items.sort((item1, item2) => {
       const initiative1 = parseInt(item1.initiative, 10);
@@ -61,6 +62,24 @@ class InitiativeTracker extends Component {
     }));
   };
 
+  handleHPChange = (index, newHP) => {
+    const { items } = this.state;
+    items[index].hp = newHP;
+    this.setState(state => ({
+      ...state,
+      items,
+    }));
+  };
+
+  handleConditionChage = (index, newCondition) => {
+    const { items } = this.state;
+    items[index].condition = newCondition;
+    this.setState(state => ({
+      ...state,
+      items,
+    }));
+  };
+
   render() {
     const { items, modalIsOpen, currentItem } = this.state;
     return (
@@ -78,6 +97,8 @@ class InitiativeTracker extends Component {
                 hp={item.hp}
                 deleteItemFunc={this.handleDeleteItem}
                 currentItem={index === 0}
+                hpChangeFunc={this.handleHPChange}
+                conditionChangeFunc={this.handleConditionChage}
               />
             );
           })}
@@ -92,6 +113,8 @@ class InitiativeTracker extends Component {
                 hp={item.hp}
                 deleteItemFunc={this.handleDeleteItem}
                 currentItem={false}
+                hpChangeFunc={this.handleHPChange}
+                conditionChangeFunc={this.handleConditionChage}
               />
             );
           })}
