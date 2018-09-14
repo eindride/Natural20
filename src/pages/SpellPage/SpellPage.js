@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { firebase } from '../../firebase/index';
 import { setSpell } from '../../redux/actions';
 import { monthNames } from '../../copy/general';
-import { stringifyLevel } from '../../utils';
+import { stringifyLevel, isAdmin } from '../../utils';
 
 import image1 from '../../assets/images/1.jpg';
 import image2 from '../../assets/images/2.jpg';
@@ -43,6 +43,8 @@ class SpellPage extends Component {
     commentBody: '',
     comments: [],
     editComment: null,
+    userIsAdmin: false,
+    checkedForAdmin: false,
   };
 
   componentDidMount() {
@@ -103,6 +105,27 @@ class SpellPage extends Component {
         }));
       });
   }
+
+  setAdminStatus = () => {
+    const { authUser } = this.props;
+    if (authUser) {
+      isAdmin(authUser.uid).then(isAdmin => {
+        if (isAdmin) {
+          this.setState(state => ({
+            ...state,
+            userIsAdmin: true,
+            checkedForAdmin: true,
+          }));
+        } else {
+          this.setState(state => ({
+            ...state,
+            userIsAdmin: false,
+            checkedForAdmin: true,
+          }));
+        }
+      });
+    }
+  };
 
   getRandomImage = () => {
     const imagesArray = [image1, image2, image3, image4, image5, image6, image7, image8, image9];
@@ -279,9 +302,24 @@ class SpellPage extends Component {
 
   render() {
     console.log(this.getRandomImage());
-    const { spell, error, commentBody, image, comments, editComment, editBody } = this.state;
+    const {
+      spell,
+      error,
+      commentBody,
+      image,
+      comments,
+      editComment,
+      editBody,
+      checkedForAdmin,
+      userIsAdmin,
+    } = this.state;
     const { authUser } = this.props;
     const { name, level, school, components, description, higherLevel, castingTime, range, duration, classes } = spell;
+
+    if (!checkedForAdmin) {
+      this.setAdminStatus();
+    }
+
     return (
       <div className="spell-page">
         {error && (
@@ -298,7 +336,7 @@ class SpellPage extends Component {
                 </button>
               )}
             {authUser &&
-              authUser.uid === spell.userId && (
+              (authUser.uid === spell.userId || userIsAdmin) && (
                 <button className="spell-page__button" onClick={this.handleDelete}>
                   Delete
                 </button>
@@ -385,7 +423,7 @@ class SpellPage extends Component {
                           </button>
                         )}
                       {authUser &&
-                        comment.userId === authUser.uid && (
+                        (comment.userId === authUser.uid || userIsAdmin) && (
                           <button className="spell-page__button" onClick={this.handleDeleteComment.bind(this, index)}>
                             Delete
                           </button>

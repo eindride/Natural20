@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { firebase } from '../../firebase/index';
 import { setMonster } from '../../redux/actions';
 import { monthNames, challengeRating } from '../../copy/general';
+import { isAdmin } from '../../utils';
 
 class MonsterPage extends Component {
   state = {
@@ -73,6 +74,8 @@ class MonsterPage extends Component {
     commentBody: '',
     comments: [],
     editBody: null,
+    userIsAdmin: false,
+    checkedForAdmin: false,
   };
 
   componentDidMount() {
@@ -132,6 +135,27 @@ class MonsterPage extends Component {
         }));
       });
   }
+
+  setAdminStatus = () => {
+    const { authUser } = this.props;
+    if (authUser) {
+      isAdmin(authUser.uid).then(isAdmin => {
+        if (isAdmin) {
+          this.setState(state => ({
+            ...state,
+            userIsAdmin: true,
+            checkedForAdmin: true,
+          }));
+        } else {
+          this.setState(state => ({
+            ...state,
+            userIsAdmin: false,
+            checkedForAdmin: true,
+          }));
+        }
+      });
+    }
+  };
 
   getUsername = userId =>
     new Promise(resolve => {
@@ -343,8 +367,7 @@ class MonsterPage extends Component {
   };
 
   render() {
-    const { monster, error, commentBody, comments, editComment, editBody } = this.state;
-    console.log({ comments });
+    const { monster, error, commentBody, comments, editComment, editBody, userIsAdmin, checkedForAdmin } = this.state;
     const { authUser } = this.props;
     const {
       name,
@@ -380,6 +403,10 @@ class MonsterPage extends Component {
       cha: attributes.cha < 10 ? '' : '+',
     };
 
+    if (!checkedForAdmin) {
+      this.setAdminStatus();
+    }
+
     return (
       <div className="monster-page">
         {error && (
@@ -396,7 +423,7 @@ class MonsterPage extends Component {
                 </button>
               )}
             {authUser &&
-              authUser.uid === monster.userId && (
+              (authUser.uid === monster.userId || userIsAdmin) && (
                 <button className="monster-page__button" onClick={this.handleDelete}>
                   Delete
                 </button>
@@ -587,7 +614,7 @@ class MonsterPage extends Component {
                           </button>
                         )}
                       {authUser &&
-                        comment.userId === authUser.uid && (
+                        (comment.userId === authUser.uid || userIsAdmin) && (
                           <button className="monster-page__button" onClick={this.handleDeleteComment.bind(this, index)}>
                             Delete
                           </button>
