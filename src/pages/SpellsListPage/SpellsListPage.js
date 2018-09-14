@@ -27,7 +27,21 @@ class SpellsListPage extends Component {
     this.queryData();
   }
 
-  componentWillUpdate() { }
+  componentWillUpdate() {}
+
+  getCommentsNr = spellId =>
+    new Promise(resolve => {
+      const { db } = firebase;
+      db.collection('posts')
+        .where('postId', '==', spellId)
+        .get()
+        .then(querySnapshot => {
+          resolve(querySnapshot.docs.length);
+        })
+        .catch(error => {
+          console.log({ error });
+        });
+    });
 
   queryData = () => {
     const { db } = firebase;
@@ -38,7 +52,7 @@ class SpellsListPage extends Component {
       .orderBy('creationDate', 'desc')
       .get()
       .then(querySnapshot => {
-        const results = querySnapshot.docs.map(doc => doc.data());
+        const results = querySnapshot.docs.map(doc => ({ ...doc.data(), spellId: doc.id, commentsNr: 0 }));
         const filteredResults = results
           .map(result => {
             if (cls !== 'any') {
@@ -50,10 +64,31 @@ class SpellsListPage extends Component {
             return result;
           })
           .filter(el => el);
-        this.setState(state => ({
-          ...state,
-          spells: filteredResults,
-        }));
+        this.setState(
+          state => ({
+            ...state,
+            spells: filteredResults,
+          }),
+          () => {
+            const { spells } = this.state;
+            const promises = spells.map(spell => this.getCommentsNr(spell.spellId));
+            Promise.all(promises)
+              .then(commentsNrs => {
+                console.log({ commentsNrs });
+                const finalSpells = spells.map((spell, index) => ({
+                  ...spell,
+                  commentsNr: commentsNrs[index],
+                }));
+                this.setState(state => ({
+                  ...state,
+                  spells: finalSpells,
+                }));
+              })
+              .catch(error => {
+                console.error('There was a problem while quering for comments nr', error);
+              });
+          }
+        );
       });
   };
 
@@ -237,7 +272,7 @@ class SpellsListPage extends Component {
         </div>
         {spells.map((spell, index) => {
           const key = `spell-${index}`;
-          return <Spell key={key} onClick={this.handleClickSpell} spell={spell} />;
+          return <Spell key={key} onClick={this.handleClickSpell} spell={spell} commentsNr={spell.commentsNr} />;
         })}
         {!spells.length ? <div className="no-results">No results</div> : null}
       </div>

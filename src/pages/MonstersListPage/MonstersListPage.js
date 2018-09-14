@@ -28,6 +28,20 @@ class MonstersListPage extends Component {
     this.queryData();
   }
 
+  getCommentsNr = monsterId =>
+    new Promise(resolve => {
+      const { db } = firebase;
+      db.collection('posts')
+        .where('postId', '==', monsterId)
+        .get()
+        .then(querySnapshot => {
+          resolve(querySnapshot.docs.length);
+        })
+        .catch(error => {
+          console.log({ error });
+        });
+    });
+
   queryData = () => {
     const { db } = firebase;
     let query = db.collection('monsters');
@@ -36,12 +50,33 @@ class MonstersListPage extends Component {
       .orderBy('creationDate', 'desc')
       .get()
       .then(querySnapshot => {
-        const results = querySnapshot.docs.map(doc => doc.data());
+        const results = querySnapshot.docs.map(doc => ({ ...doc.data(), monsterId: doc.id, commentsNr: 0 }));
         const filteredResults = results;
-        this.setState(state => ({
-          ...state,
-          monsters: filteredResults,
-        }));
+        this.setState(
+          state => ({
+            ...state,
+            monsters: filteredResults,
+          }),
+          () => {
+            const { monsters } = this.state;
+            const promises = monsters.map(monster => this.getCommentsNr(monster.monsterId));
+            Promise.all(promises)
+              .then(commentsNrs => {
+                console.log({ commentsNrs });
+                const finalMonsters = monsters.map((spell, index) => ({
+                  ...spell,
+                  commentsNr: commentsNrs[index],
+                }));
+                this.setState(state => ({
+                  ...state,
+                  monsters: finalMonsters,
+                }));
+              })
+              .catch(error => {
+                console.error('There was a problem while quering for comments nr', error);
+              });
+          }
+        );
       });
   };
 
@@ -244,7 +279,9 @@ class MonstersListPage extends Component {
         </div>
         {monsters.map((monster, index) => {
           const key = `monsters-${index}`;
-          return <Monster key={key} onClick={this.handleClickMonster} monster={monster} />;
+          return (
+            <Monster key={key} onClick={this.handleClickMonster} monster={monster} commentsNr={monster.commentsNr} />
+          );
         })}
         {!monsters.length ? <div className="no-results">No results</div> : null}
       </div>

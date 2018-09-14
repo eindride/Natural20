@@ -496,47 +496,47 @@ class MonsterPage extends Component {
                 </p>
               ) : null}
               {parseInt(blindsight, 10) ||
-                parseInt(darkvision, 10) ||
-                parseInt(lowLightVision, 10) ||
-                parseInt(lowLightVision, 10) ||
-                parseInt(tremorsense, 10) ||
-                parseInt(truesight, 10) ||
-                parseInt(passivePerception, 10) ? (
-                  <p className="monster-creator__attribute">
-                    Senses:{' '}
-                    <span className="monster-creator__attribute-value">
-                      {[
-                        {
-                          name: 'blindsight',
-                          value: parseInt(blindsight, 10),
-                        },
-                        {
-                          name: 'darkvision',
-                          value: parseInt(darkvision, 10),
-                        },
-                        {
-                          name: 'low-light vision',
-                          value: parseInt(lowLightVision, 10),
-                        },
-                        {
-                          name: 'tremorsense',
-                          value: parseInt(tremorsense, 10),
-                        },
-                        {
-                          name: 'truesight',
-                          value: parseInt(truesight, 10),
-                        },
-                        {
-                          name: 'passivePerception',
-                          value: parseInt(passivePerception, 10),
-                        },
-                      ]
-                        .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
-                        .filter(el => el)
-                        .join(', ')}
-                    </span>
-                  </p>
-                ) : null}
+              parseInt(darkvision, 10) ||
+              parseInt(lowLightVision, 10) ||
+              parseInt(lowLightVision, 10) ||
+              parseInt(tremorsense, 10) ||
+              parseInt(truesight, 10) ||
+              parseInt(passivePerception, 10) ? (
+                <p className="monster-creator__attribute">
+                  Senses:{' '}
+                  <span className="monster-creator__attribute-value">
+                    {[
+                      {
+                        name: 'blindsight',
+                        value: parseInt(blindsight, 10),
+                      },
+                      {
+                        name: 'darkvision',
+                        value: parseInt(darkvision, 10),
+                      },
+                      {
+                        name: 'low-light vision',
+                        value: parseInt(lowLightVision, 10),
+                      },
+                      {
+                        name: 'tremorsense',
+                        value: parseInt(tremorsense, 10),
+                      },
+                      {
+                        name: 'truesight',
+                        value: parseInt(truesight, 10),
+                      },
+                      {
+                        name: 'passivePerception',
+                        value: parseInt(passivePerception, 10),
+                      },
+                    ]
+                      .map(sense => (sense.value ? `${sense.name} ${sense.value} Ft.` : null))
+                      .filter(el => el)
+                      .join(', ')}
+                  </span>
+                </p>
+              ) : null}
               {languages ? (
                 <p className="monster-creator__attribute">
                   Languages: <span className="monster-creator__attribute-value">{languages}</span>
@@ -546,31 +546,33 @@ class MonsterPage extends Component {
                 Challenge:{' '}
                 <span className="monster-creator__attribute-value">{`${challenge} (${
                   challengeRating[challenge]
-                  } XP)`}</span>
+                } XP)`}</span>
               </p>
               <div className="monster-creator__separator" />
             </div>
           </div>
         ) : (
-            !error && <h1>Loading...</h1>
-          )}
+          !error && <h1>Loading...</h1>
+        )}
         {monster && (
           <div className="monster-page__comments-section">
-            <div className="monster-page__input-container">
-              <p className="monster-page__guidance-text">
-                Have you tested this monster and have some thoughts on it? Leave a comment for others to see
-              </p>
-              <textarea
-                className="monster-page__textbox"
-                cols="30"
-                rows="10"
-                value={commentBody}
-                onChange={this.handleTextboxChange}
-              />
-              <button className="monster-page__post-button" onClick={this.handlePostComment}>
-                Comment
-              </button>
-            </div>
+            {authUser && (
+              <div className="monster-page__input-container">
+                <p className="monster-page__guidance-text">
+                  Have you tested this monster and have some thoughts on it? Leave a comment for others to see
+                </p>
+                <textarea
+                  className="monster-page__textbox"
+                  cols="30"
+                  rows="10"
+                  value={commentBody}
+                  onChange={this.handleTextboxChange}
+                />
+                <button className="monster-page__post-button" onClick={this.handlePostComment}>
+                  Comment
+                </button>
+              </div>
+            )}
 
             <div className="monster-page__comments-container">
               {comments.map((comment, index) => (
@@ -578,16 +580,18 @@ class MonsterPage extends Component {
                   <p className="monster-page__comment-author">
                     {comment.username} <span>- {this.parseDate(comment.creationDate)}</span>
                     <div className="monster-page__comment-buttons-container">
-                      {comment.userId === authUser.uid && (
-                        <button className="monster-page__button" onClick={this.handleClickEdit.bind(this, index)}>
-                          Edit
-                        </button>
-                      )}
-                      {comment.userId === authUser.uid && (
-                        <button className="monster-page__button" onClick={this.handleDeleteComment.bind(this, index)}>
-                          Delete
-                        </button>
-                      )}
+                      {authUser &&
+                        comment.userId === authUser.uid && (
+                          <button className="monster-page__button" onClick={this.handleClickEdit.bind(this, index)}>
+                            Edit
+                          </button>
+                        )}
+                      {authUser &&
+                        comment.userId === authUser.uid && (
+                          <button className="monster-page__button" onClick={this.handleDeleteComment.bind(this, index)}>
+                            Delete
+                          </button>
+                        )}
                     </div>
                   </p>
                   {editComment === index ? (
@@ -604,8 +608,8 @@ class MonsterPage extends Component {
                       </button>
                     </div>
                   ) : (
-                      <p className="monster-page__comment-body">{comment.message}</p>
-                    )}
+                    <p className="monster-page__comment-body">{comment.message}</p>
+                  )}
                 </div>
               ))}
             </div>
