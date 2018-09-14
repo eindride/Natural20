@@ -267,3 +267,11 @@
   margin-top: 0;
   font-size: 10px;
 }
+
+.character-creator__error {
+  color: red;
+  display: block;
+  max-width: 260px;
+  text-align: center;
+  margin: 25px auto;
+}

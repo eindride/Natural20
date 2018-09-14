@@ -117,9 +117,9 @@ class SignUp extends Component {
             onInput={this.handleInput}
             value={confirmPassword}
           />
+          <span className={`error ${this.state.error && 'hidden'}`}>{error}</span>
           <button type="submit">Sign Up</button>
         </form>
-        <span className={`error ${this.state.error && 'hidden'}`}>{error}</span>
       </div>
     );
   }

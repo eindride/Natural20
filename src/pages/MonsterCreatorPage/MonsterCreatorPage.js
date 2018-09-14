@@ -730,7 +730,13 @@ class MonsterCreatorPage extends React.Component {
         .get()
         .then(doc => {
           if (doc.exists) {
-            console.log('already exists');
+            this.setState(
+              state => ({
+                ...state,
+                error: 'A monster already exists with this name!',
+              }),
+              () => console.log('already exists')
+            );
           } else {
             console.log('available');
 
@@ -1245,6 +1251,9 @@ class MonsterCreatorPage extends React.Component {
             <button className="monster-creator__button" onClick={this.savePDF}>
               Download PDF
             </button>
+            <span className={`character-creator__error ${!this.state.error && 'character-creator__hidden'}`}>
+              {this.state.error}
+            </span>
           </form>
         </div>
         <div className="monster-creator__preview-wrapper">

@@ -9,8 +9,15 @@ import { setSpell } from '../../redux/actions';
 import { monthNames } from '../../copy/general';
 import { stringifyLevel } from '../../utils';
 
-import image1 from '../../assets/images/dm-tools-background.jpg';
-import image2 from '../../assets/images/spell-creator-background.jpg';
+import image1 from '../../assets/images/1.jpg';
+import image2 from '../../assets/images/2.jpg';
+import image3 from '../../assets/images/3.jpg';
+import image4 from '../../assets/images/4.jpg';
+import image5 from '../../assets/images/5.jpg';
+import image6 from '../../assets/images/6.jpg';
+import image7 from '../../assets/images/7.jpg';
+import image8 from '../../assets/images/dm-tools-background.jpg';
+import image9 from '../../assets/images/spell-creator-background.jpg';
 
 class SpellPage extends Component {
   state = {
@@ -98,7 +105,7 @@ class SpellPage extends Component {
   }
 
   getRandomImage = () => {
-    const imagesArray = [image1, image2];
+    const imagesArray = [image1, image2, image3, image4, image5, image6, image7, image8, image9];
     return imagesArray[Math.floor(Math.random() * Math.floor(imagesArray.length))];
   };
 

@@ -228,6 +228,7 @@ class MonstersListPage extends Component {
           const key = `characters-${index}`;
           return <Character key={key} onClick={this.handleClickCharacter} character={character} />;
         })}
+        {!characters.length ? <div className="no-results">No results</div> : null}
       </div>
     );
   }
