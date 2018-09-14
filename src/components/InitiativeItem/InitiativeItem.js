@@ -48,6 +48,8 @@ class InitiativeItem extends Component {
 
   handleChangeCondition = event => {
     const { value } = event.target;
+    const { index, conditionChangeFunc } = this.props;
+    conditionChangeFunc(index, value);
     this.setState(state => ({
       ...state,
       condition: value,
@@ -56,6 +58,8 @@ class InitiativeItem extends Component {
 
   addHP = () => {
     const { hp, hpChange } = this.state;
+    const { index, hpChangeFunc } = this.props;
+    hpChangeFunc(index, hp + hpChange);
     this.setState(state => ({
       ...state,
       hp: hp + hpChange,
@@ -64,6 +68,8 @@ class InitiativeItem extends Component {
 
   subtractHP = () => {
     const { hp, hpChange } = this.state;
+    const { index, hpChangeFunc } = this.props;
+    hpChangeFunc(index, hp - hpChange);
     this.setState(state => ({
       ...state,
       hp: hp - hpChange,
@@ -156,6 +162,8 @@ InitiativeItem.propTypes = {
   index: PropTypes.number.isRequired,
   initiative: PropTypes.string.isRequired,
   currentItem: PropTypes.bool.isRequired,
+  hpChangeFunc: PropTypes.func.isRequired,
+  conditionChangeFunc: PropTypes.func.isRequired,
 };
 
 export default InitiativeItem;
