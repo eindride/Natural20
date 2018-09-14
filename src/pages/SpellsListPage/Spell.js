@@ -49,7 +49,7 @@ class Spell extends Component {
   };
 
   render() {
-    const { spell } = this.props;
+    const { spell, commentsNr } = this.props;
     const { year, month, day, hour, minute } = this.parseDate(spell.creationDate);
     this.getUsername(spell.userId);
     const { username } = this.state;
@@ -69,7 +69,7 @@ class Spell extends Component {
         </div>
         <div className="spells-list__comment-icon-container">
           <img src={commentIcon} alt="commentIcon" className="spells-list__comment-icon" />
-          <span>2</span>
+          <span>{commentsNr}</span>
         </div>
       </div>
     );
@@ -79,6 +79,7 @@ class Spell extends Component {
 Spell.propTypes = {
   spell: PropTypes.shape().isRequired,
   onClick: PropTypes.func.isRequired,
+  commentsNr: PropTypes.number.isRequired,
 };
 
 export default Spell;

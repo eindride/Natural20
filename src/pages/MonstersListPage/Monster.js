@@ -49,7 +49,7 @@ class Monster extends Component {
   };
 
   render() {
-    const { monster } = this.props;
+    const { monster, commentsNr } = this.props;
     const { year, month, day, hour, minute } = this.parseDate(monster.creationDate);
     this.getUsername(monster.userId);
     const { username } = this.state;
@@ -69,7 +69,7 @@ class Monster extends Component {
         </div>
         <div className="monsters-list__comment-icon-container">
           <img src={commentIcon} alt="commentIcon" className="monsters-list__comment-icon" />
-          <span>2</span>
+          <span>{commentsNr}</span>
         </div>
       </div>
     );
@@ -79,6 +79,7 @@ class Monster extends Component {
 Monster.propTypes = {
   monster: PropTypes.shape().isRequired,
   onClick: PropTypes.func.isRequired,
+  commentsNr: PropTypes.number.isRequired,
 };
 
 export default Monster;

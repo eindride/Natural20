@@ -354,21 +354,23 @@ class SpellPage extends Component {
         )}
         {spell && (
           <div className="spell-page__comments-section">
-            <div className="spell-page__input-container">
-              <p className="spell-page__guidance-text">
-                Have you tested this spell and have some thoughts on it? Leave a comment for others to see
-              </p>
-              <textarea
-                className="spell-page__textbox"
-                cols="30"
-                rows="10"
-                value={commentBody}
-                onChange={this.handleTextboxChange}
-              />
-              <button className="spell-page__post-button" onClick={this.handlePostComment}>
-                Comment
-              </button>
-            </div>
+            {authUser && (
+              <div className="spell-page__input-container">
+                <p className="spell-page__guidance-text">
+                  Have you tested this spell and have some thoughts on it? Leave a comment for others to see
+                </p>
+                <textarea
+                  className="spell-page__textbox"
+                  cols="30"
+                  rows="10"
+                  value={commentBody}
+                  onChange={this.handleTextboxChange}
+                />
+                <button className="spell-page__post-button" onClick={this.handlePostComment}>
+                  Comment
+                </button>
+              </div>
+            )}
 
             <div className="spell-page__comments-container">
               {comments.map((comment, index) => (
@@ -376,16 +378,18 @@ class SpellPage extends Component {
                   <p className="spell-page__comment-author">
                     {comment.username} <span>- {this.parseDate(comment.creationDate)}</span>
                     <div className="spell-page__comment-buttons-container">
-                      {comment.userId === authUser.uid && (
-                        <button className="spell-page__button" onClick={this.handleClickEdit.bind(this, index)}>
-                          Edit
-                        </button>
-                      )}
-                      {comment.userId === authUser.uid && (
-                        <button className="spell-page__button" onClick={this.handleDeleteComment.bind(this, index)}>
-                          Delete
-                        </button>
-                      )}
+                      {authUser &&
+                        comment.userId === authUser.uid && (
+                          <button className="spell-page__button" onClick={this.handleClickEdit.bind(this, index)}>
+                            Edit
+                          </button>
+                        )}
+                      {authUser &&
+                        comment.userId === authUser.uid && (
+                          <button className="spell-page__button" onClick={this.handleDeleteComment.bind(this, index)}>
+                            Delete
+                          </button>
+                        )}
                     </div>
                   </p>
                   {editComment === index ? (
